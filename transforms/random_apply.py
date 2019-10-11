@@ -2,7 +2,8 @@ import random
 
 from torchvision import transforms
 
-from transforms.util import UndefinedInvertible, _Invertible
+from transforms import Identity, Compose
+from transforms.util import UndefinedInvertible
 
 
 class RandomApply(transforms.RandomApply, UndefinedInvertible):
@@ -16,14 +17,11 @@ class RandomApply(transforms.RandomApply, UndefinedInvertible):
             img = t(img)
         return img
 
-    def _invert(self, **kwargs):
+    def _invert(self):
         if self.no_tf:
-            return
-        transforms_inv = []
-        for t in self.transforms[::-1]:
-            assert isinstance(t, _Invertible), f'{t.__class__.__name__} is not an invertible class'
-            transforms_inv.append(t.invert())
-        return
+            return Identity()
+        else:
+            return Compose(self.transforms).invert()
 
     def _can_invert(self):
         return self.no_tf is not None
