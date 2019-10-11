@@ -2,10 +2,9 @@
 
 from setuptools import setup, find_packages
 
-
 setup(name='Invertible Transformations',
       version='1.0.0',
-      description='Torchvision transformations can now be reversed',
+      description='A library which makes torchvision transforms invertible in a snap',
       author='Gregoire Clement',
       author_email='mail@gregunz.io',
       url='github.com/gregunz',
