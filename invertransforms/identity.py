@@ -1,4 +1,4 @@
-from transforms import Lambda
+from invertransforms import Lambda
 
 
 class Identity(Lambda):

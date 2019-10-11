@@ -5,6 +5,7 @@ from .lambd import Lambda
 from .normalize import Normalize
 from .random_apply import RandomApply
 from .random_crop import RandomCrop
+from .random_order import RandomOrder
 from .random_rot_crop import RandomRotCrop
 from .resize import Resize
 from .to_tensor_pil_image import ToPILImage, ToTensor

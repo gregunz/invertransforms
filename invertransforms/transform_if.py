@@ -1,5 +1,5 @@
-from transforms.util import Invertible, _Invertible
-from . import Identity
+from invertransforms import Identity
+from invertransforms.util import Invertible, _Invertible
 
 
 class TransformIf(Invertible):

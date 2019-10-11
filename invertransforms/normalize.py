@@ -1,7 +1,7 @@
 import torch
 from torchvision import transforms
 
-from transforms.util import Invertible
+from invertransforms.util import Invertible
 
 
 class Normalize(transforms.Normalize, Invertible):

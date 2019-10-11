@@ -3,7 +3,7 @@ from collections import Sequence
 from torchvision import transforms
 from torchvision.transforms import functional as F
 
-from transforms.util import UndefinedInvertible
+from invertransforms.util import UndefinedInvertible
 
 
 class Crop(UndefinedInvertible):

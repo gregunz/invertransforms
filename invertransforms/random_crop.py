@@ -1,7 +1,7 @@
 from torchvision import transforms
 
-from transforms import Pad
-from transforms.util import UndefinedInvertible
+from invertransforms import Pad
+from invertransforms.util import UndefinedInvertible
 
 
 class RandomCrop(transforms.RandomCrop, UndefinedInvertible):

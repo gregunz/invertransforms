@@ -2,8 +2,8 @@ import random
 
 from torchvision import transforms
 
-from transforms import Compose
-from transforms.util import UndefinedInvertible
+from invertransforms import Compose
+from invertransforms.util import UndefinedInvertible
 
 
 class RandomOrder(transforms.RandomOrder, UndefinedInvertible):

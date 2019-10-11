@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-from transforms.util import Invertible, _Invertible
+from invertransforms.util import Invertible, _Invertible
 
 
 class Compose(transforms.Compose, Invertible):

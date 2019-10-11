@@ -2,8 +2,8 @@ import random
 
 from torchvision import transforms
 
-from transforms import Identity, Compose
-from transforms.util import UndefinedInvertible
+from invertransforms import Identity, Compose
+from invertransforms.util import UndefinedInvertible
 
 
 class RandomApply(transforms.RandomApply, UndefinedInvertible):

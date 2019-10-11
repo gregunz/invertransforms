@@ -2,7 +2,7 @@ import warnings
 
 from torchvision import transforms
 
-from transforms.util import UndefinedInvertible
+from invertransforms.util import UndefinedInvertible
 
 
 class Resize(transforms.Resize, UndefinedInvertible):
@@ -32,6 +32,6 @@ class Scale(Resize):
     """
 
     def __init__(self, *args, **kwargs):
-        warnings.warn("The use of the transforms.Scale transform is deprecated, " +
-                      "please use transforms.Resize instead.")
+        warnings.warn("The use of the invertransforms.Scale transform is deprecated, " +
+                      "please use invertransforms.Resize instead.")
         super().__init__(*args, **kwargs)

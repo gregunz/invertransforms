@@ -3,7 +3,7 @@ import random
 
 from torchvision.transforms import functional as TF
 
-from transforms.util import UndefinedInvertible
+from invertransforms.util import UndefinedInvertible
 
 
 class RandomRotCrop(UndefinedInvertible):

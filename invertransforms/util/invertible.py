@@ -21,7 +21,7 @@ class _Invertible(ABC):
 
     @abstractmethod
     def _invert(self, **kwargs):
-        return NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def _can_invert(self):

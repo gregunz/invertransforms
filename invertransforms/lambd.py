@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-from transforms.util import Invertible
+from invertransforms.util import Invertible
 
 
 class Lambda(transforms.Lambda, Invertible):
