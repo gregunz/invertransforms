@@ -17,7 +17,7 @@ class RandomOrder(transforms.RandomOrder, UndefinedInvertible):
         return img
 
     def _invert(self):
-        return Compose(transforms=[self.transforms[i] for i in self.order[::-1]])
+        return Compose(transforms=[self.transforms[i].invert() for i in self.order[::-1]])
 
     def _can_invert(self):
         return self.order is not None

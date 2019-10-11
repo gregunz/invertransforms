@@ -17,4 +17,4 @@ class TransformIf(Invertible):
         return self.transform.__repr__()
 
     def _invert(self, **kwargs):
-        return self.transform._invert(**kwargs)
+        return self.transform.invert(**kwargs)
