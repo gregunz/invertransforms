@@ -2,11 +2,9 @@
 
 from setuptools import setup, find_packages
 
-# this library version number = torchvision version number
-version = '0.4.0'
 
 setup(name='Invertible Transformations',
-      version=version,
+      version=f'1.0.0',
       description='Torchvision transformations can now be reversed',
       author='Gregoire Clement',
       author_email='mail@gregunz.io',
@@ -14,5 +12,5 @@ setup(name='Invertible Transformations',
       packages=find_packages(),
       requires=[
           'torch',
-          f'torchvision=={version}',
+          f'torchvision==0.4.0',
       ])
