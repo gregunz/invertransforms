@@ -1,14 +1,12 @@
 from collections import Sequence
 
-from torchvision import transforms
-from torchvision.transforms import functional as F
-
+from invertransforms import functional as F
+from invertransforms.pad import Pad
 from invertransforms.util import UndefinedInvertible
 
 
 class Crop(UndefinedInvertible):
-    img_w = None
-    img_h = None
+    img_h = img_w = None
 
     def __init__(self, location, size):
         if isinstance(location, int):
@@ -38,41 +36,10 @@ class Crop(UndefinedInvertible):
             self.img_w - self.crop_w - self.tl_j,
             self.img_h - self.crop_h - self.tl_i,
         )
-        return Pad(padding=padding, **kwargs)
-
-    def _can_invert(self):
-        return self.img_w is not None and self.img_h is not None
-
-
-class Pad(transforms.Pad, UndefinedInvertible):
-    img_w = None
-    img_h = None
-
-    def __call__(self, img):
-        """
-        Args:
-            img (PIL Image): Image to be padded.
-
-        Returns:
-            PIL Image: Padded image.
-        """
-        self.img_w, self.img_h = img.size
-        return super().__call__(img=img)
-
-    def _invert(self):
-        padding = self.padding
-        if isinstance(padding, int):
-            location = (padding, padding)
-        elif isinstance(padding, Sequence) and len(padding) == 2:
-            location = padding
-        elif isinstance(padding, Sequence) and len(padding) == 4:
-            location = padding[:2][::-1]
-        else:
-            raise Exception(f'Argument mismatch: padding={padding}')
-
-        size = (self.img_h, self.img_w)
-        print(location, size)
-        return Crop(location=location, size=size)
+        inverse = Pad(padding=padding, **kwargs)
+        inverse.img_w = self.crop_w
+        inverse.img_h = self.crop_h
+        return inverse
 
     def _can_invert(self):
         return self.img_w is not None and self.img_h is not None

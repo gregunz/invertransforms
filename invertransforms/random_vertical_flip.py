@@ -1,6 +1,6 @@
 from torchvision import transforms
-from torchvision.transforms import functional as F
 
+from invertransforms import functional as F
 from invertransforms.random_lambda import RandomLambda
 
 

@@ -1,4 +1,5 @@
-from invertransforms import Lambda, Identity
+from invertransforms.identity import Identity
+from invertransforms.lambd import Lambda
 from invertransforms.util import flip_coin
 
 

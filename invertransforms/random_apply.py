@@ -1,6 +1,7 @@
 from torchvision import transforms
 
-from invertransforms import Identity, Compose
+from invertransforms.compose import Compose
+from invertransforms.identity import Identity
 from invertransforms.util import UndefinedInvertible, flip_coin
 
 

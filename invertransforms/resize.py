@@ -6,7 +6,7 @@ from invertransforms.util import UndefinedInvertible
 
 
 class Resize(transforms.Resize, UndefinedInvertible):
-    img_w = img_h = None
+    img_h = img_w = None
 
     def __call__(self, img):
         """
@@ -20,7 +20,9 @@ class Resize(transforms.Resize, UndefinedInvertible):
         return super().__call__(img)
 
     def _invert(self):
-        return Resize(size=(self.img_h, self.img_w), interpolation=self.interpolation)
+        inverse = Resize(size=(self.img_h, self.img_w), interpolation=self.interpolation)
+        inverse.img_h, inverse.tw = self.size
+        return inverse
 
     def _can_invert(self):
         return self.img_w is not None and self.img_h is not None

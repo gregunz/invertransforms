@@ -5,9 +5,9 @@ class _Invertible(ABC):
     __default_invert_args = dict()
 
     def invert(self, **kwargs):
-        if not self._can_invert:
-            raise Exception('Can\'t invert-transformed before the former transformation '
-                            '(randomness needs to be defined)')
+        if not self.__still_need_forward:
+            raise InvertibleException('Can\'t invert-transformed before the former transformation '
+                                      '(randomness needs to be defined)')
 
         # keep all default invert args and override them with given kwargs
         kwargs_tmp = self.__default_invert_args.copy()
@@ -16,9 +16,6 @@ class _Invertible(ABC):
 
         return self._invert(**kwargs)
 
-    def set_invert_args(self, **kwargs):
-        self.__default_invert_args = kwargs
-
     @abstractmethod
     def _invert(self, **kwargs):
         raise NotImplementedError
@@ -26,6 +23,9 @@ class _Invertible(ABC):
     @abstractmethod
     def _can_invert(self):
         raise NotImplementedError
+
+    def __still_need_forward(self):
+        return not self._can_invert()
 
 
 class Invertible(_Invertible, ABC):
@@ -39,3 +39,8 @@ class UndefinedInvertible(_Invertible, ABC):
         # Exception instead of NotImplementedError because child class complains
         # about its implementation otherwise (PyCharm)
         raise Exception(f'Not implemented by {self.__class__.__name__}')
+
+
+class InvertibleException(Exception):
+    def __init__(self, message):
+        super().__init__(message)

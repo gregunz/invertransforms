@@ -2,7 +2,7 @@ import random
 
 from torchvision import transforms
 
-from invertransforms import Compose
+from invertransforms.compose import Compose
 from invertransforms.util import UndefinedInvertible
 
 

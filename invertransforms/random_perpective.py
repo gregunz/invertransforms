@@ -1,6 +1,6 @@
 from torchvision import transforms
-from torchvision.transforms import functional as F
 
+from invertransforms import functional as F
 from invertransforms.lambd import Lambda
 from invertransforms.util import UndefinedInvertible, flip_coin
 
@@ -26,10 +26,12 @@ class RandomPerspective(transforms.RandomPerspective, UndefinedInvertible):
         return img
 
     def _invert(self):
+        startpoints = self.__startpoints
+        endpoints = self.__endpoints
         return Lambda(
-            lambd=lambda img: F.perspective(img, self.__endpoints, self.__startpoints, self.interpolation),
-            lambd_inv=lambda img: F.perspective(img, self.__startpoints, self.__endpoints, self.interpolation),
-            repr_str=f'Perspective()'
+            lambd=lambda img: F.perspective(img, endpoints, startpoints, self.interpolation),
+            lambd_inv=lambda img: F.perspective(img, startpoints, endpoints, self.interpolation),
+            repr_str=f'PerspectiveInvert()'
         )
 
     def _can_invert(self):

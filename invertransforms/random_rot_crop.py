@@ -1,18 +1,12 @@
 import math
 import random
 
-from torchvision.transforms import functional as TF
-
+from invertransforms import functional as TF, Compose, Crop
+from invertransforms.random_rotation import rotation_inverse
 from invertransforms.util import UndefinedInvertible
 
 
 class RandomRotCrop(UndefinedInvertible):
-    def _invert(self, **kwargs):
-        pass  # todo
-
-    def _can_invert(self):
-        pass  # todo
-
     def __init__(self, degrees=(0, 360), crop_size=None):
         if isinstance(degrees, int) or isinstance(degrees, float):
             if degrees < 0:
@@ -35,6 +29,9 @@ class RandomRotCrop(UndefinedInvertible):
                 'only handling square crop for now'  # a workaround could be: upsize -> square crop -> downsize'
             assert (self.out_h is None and self.out_w is None) or (self.out_h is not None and self.out_w is not None), \
                 'cannot have only one crop size (height or width) which is None'
+
+        self.inverse_rot = None
+        self.inverse_crop = None
 
     def __call__(self, img):
         angle = random.uniform(self.degree_low, self.degree_high)
@@ -67,12 +64,15 @@ class RandomRotCrop(UndefinedInvertible):
             _rotate_coordinates((i_crop_center, j_crop_center), angle, (i_img_center, j_img_center))
 
         img = TF.rotate(img, angle, expand=True)
+        self.inverse_rot = rotation_inverse(h, w, angle, resample=False, expand=True, center=False)
         w_rot, h_rot = img.size
 
         i = i_crop_center_rot + (h_rot - h - out_h) // 2
         j = j_crop_center_rot + (w_rot - h - out_w) // 2
 
-        img = TF.crop(img, round(j), round(i), round(out_h), round(out_w))
+        crop = Crop(location=(j, i), size=(out_h, out_w))
+        img = crop(img)
+        self.inverse_crop = crop.invert()
 
         return img
 
@@ -81,6 +81,15 @@ class RandomRotCrop(UndefinedInvertible):
                f'degrees=[{self.degree_low}, {self.degree_high}], ' \
                f'crop_size=({self.out_h}, {self.out_w})' \
                f')'
+
+    def _invert(self, **kwargs):
+        return Compose([
+            self.inverse_crop,
+            self.inverse_rot,
+        ])
+
+    def _can_invert(self):
+        return self.inverse_rot is not None and self.inverse_crop is not None
 
 
 def _rotate_coordinates(coordinates, angle, center_coordinates):

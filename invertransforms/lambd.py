@@ -6,7 +6,7 @@ from invertransforms.util import Invertible
 class Lambda(transforms.Lambda, Invertible):
     def __init__(self, lambd, lambd_inv=None, repr_str=None):
         super().__init__(lambd)
-        assert repr_str is None or isinstance(repr_str, str), 'Expecting a string'
+        assert repr_str is None or isinstance(repr_str, str), 'Expecting a string for repr_str argument'
         self.__repr_str = repr_str
         if lambd_inv is None:
             lambd_inv = lambd  # todo: what's best ? -no default, -lambda x:x, lambd_inv=lambd
