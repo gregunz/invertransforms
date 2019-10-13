@@ -11,19 +11,19 @@ class Rotation(Invertible):
         self.resample = resample
         self.expand = expand
         self.center = center
-        self.img_h = self.img_w = None
+        self._img_h = self._img_w = None
 
     def __call__(self, img):
-        first_call = self.img_h is None or self.img_w is None
+        first_call = self._img_h is None or self._img_w is None
         if first_call:
-            self.img_w, self.img_h = img.size
+            self._img_w, self._img_h = img.size
         img = F.rotate(img, -self.angle, self.resample, self.expand, self.center)
         if not first_call and self.expand:
-            img = F.center_crop(img=img, output_size=(self.img_h, self.img_w))
+            img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
         return img
 
     def invert(self):
-        if (self.img_h is None or self.img_w is None) and self.expand:
+        if (self._img_h is None or self._img_w is None) and self.expand:
             raise InvertibleException(
                 'Cannot invert a transformation before it is applied'
                 ' (size of image before expanded rotation unknown).')  # note: the size could be computed
@@ -33,7 +33,7 @@ class Rotation(Invertible):
             expand=self.expand,
             center=self.center,
         )
-        rot.img_h, rot.img_w = self.img_h, self.img_w
+        rot._img_h, rot._img_w = self._img_h, self._img_w
         return rot
 
     def __repr__(self):
@@ -62,7 +62,7 @@ class RandomRotation(transforms.RandomRotation, Invertible):
         return F.rotate(img, self.angle, self.resample, self.expand, self.center)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a random transformation before it is applied.')
 
         rot = Rotation(
@@ -71,8 +71,8 @@ class RandomRotation(transforms.RandomRotation, Invertible):
             expand=self.expand,
             center=self.center,
         )
-        rot.img_h, rot.img_w = self.img_h, self.img_w
+        rot._img_h, rot._img_w = self.img_h, self.img_w
         return rot
 
-    def __can_invert(self):
+    def _can_invert(self):
         return self.angle is not None and self.img_w is not None and self.img_h is not None

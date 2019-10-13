@@ -41,24 +41,24 @@ class RandomLambda(Lambda):
     def __init__(self, lambd, tf_inv=None, p=0.5, repr_str=None):
         super().__init__(lambd=lambd, tf_inv=tf_inv, repr_str=repr_str)
         self.p = p
-        self.tf = None
+        self._transform = None
 
     def __call__(self, img):
-        self.tf = T.Identity()
+        self._transform = T.Identity()
         if flip_coin(self.p):
-            self.tf = super()
-        return self.tf.__call__(img)  # use of call because super is not callable
+            self._transform = super()
+        return self._transform.__call__(img)  # use of call because super is not callable
 
     def __repr__(self):
         if self._repr_str is not None:
             return self._repr_str
-        return f'{self.tf.__repr__()}(p={self.p})'
+        return f'{self._transform.__repr__()}(p={self.p})'
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a random transformation before it is applied.')
 
-        return self.tf.invert()
+        return self._transform.invert()
 
-    def __can_invert(self):
-        return self.tf is not None
+    def _can_invert(self):
+        return self._transform is not None

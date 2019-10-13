@@ -40,6 +40,10 @@ class Invertible(ABC):
     def __repr__(self):
         return f'{self.__class__.__name__}()'
 
+    # not very useful except for refactoring
+    def _can_invert(self):
+        return True
+
 
 class InvertibleException(Exception):
     def __init__(self, message):

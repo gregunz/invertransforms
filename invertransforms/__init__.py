@@ -11,14 +11,11 @@ from .lambd import Lambda, RandomLambda
 from .linear_transformation import LinearTransformation
 from .normalize import Normalize
 from .perpective import Perspective, RandomPerspective
-from .random_apply import RandomApply
-from .random_choice import RandomChoice
 from .random_erasing import RandomErasing
-from .random_horizontal_flip import RandomHorizontalFlip
-from .random_order import RandomOrder
+from .random_flip import RandomHorizontalFlip, RandomVerticalFlip
 from .random_resized_crop import RandomResizedCrop, RandomSizedCrop
 from .random_rot_crop import RandomRotCrop
-from .random_vertical_flip import RandomVerticalFlip
+from .random_transforms import RandomOrder, RandomChoice, RandomApply
 from .resize import Resize, Scale
 from .rotation import RandomRotation, Rotation
 from .ten_crop import TenCrop

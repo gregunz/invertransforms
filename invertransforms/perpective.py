@@ -28,9 +28,7 @@ class Perspective(Invertible):
 
 
 class RandomPerspective(transforms.RandomPerspective, Invertible):
-    __startpoints = None
-    __endpoints = None
-    __do_tf = None
+    _transform = None
 
     def __call__(self, img):
         """
@@ -40,25 +38,22 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
         Returns:
             PIL Image: Random perspectivley transformed image.
         """
-        self.__do_tf = flip_coin(self.p)
-        if self.__do_tf:
+        self._transform = T.Identity()
+        if flip_coin(self.p):
             width, height = img.size
-            self.__startpoints, self.__endpoints = self.get_params(width, height, self.distortion_scale)
-            return F.perspective(img, self.__startpoints, self.__endpoints, self.interpolation)
-        return img
-
-    def invert(self):
-        if not self.__can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
-
-        if self.__do_tf:
-            return Perspective(
-                startpoints=self.__endpoints,
-                endpoints=self.__startpoints,
+            startpoints, endpoints = self.get_params(width, height, self.distortion_scale)
+            self._transform = Perspective(
+                startpoints=startpoints,
+                endpoints=endpoints,
                 interpolation=self.interpolation,
             )
-        else:
-            return T.Identity()
+        return self._transform(img)
 
-    def __can_invert(self):
-        return self.__do_tf is not None
+    def invert(self):
+        if not self._can_invert():
+            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+
+        return self._transform.invert()
+
+    def _can_invert(self):
+        return self._transform is not None

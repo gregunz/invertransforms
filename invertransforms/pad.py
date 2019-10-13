@@ -8,7 +8,7 @@ from invertransforms.util.invertible import InvertibleException
 
 
 class Pad(transforms.Pad, Invertible):
-    img_h = img_w = None
+    _img_h = _img_w = None
 
     def __call__(self, img):
         """
@@ -18,11 +18,11 @@ class Pad(transforms.Pad, Invertible):
         Returns:
             PIL Image: Padded image.
         """
-        self.img_w, self.img_h = img.size
+        self._img_w, self._img_h = img.size
         return super().__call__(img=img)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a transformation before it is applied'
                                       ' (size of image before padding unknown).')
 
@@ -40,12 +40,12 @@ class Pad(transforms.Pad, Invertible):
         else:
             raise Exception(f'Argument mismatch: padding={padding}')
 
-        size = (self.img_h, self.img_w)
+        size = (self._img_h, self._img_w)
         location = (pad_top, pad_left)
         inverse = T.Crop(location=location, size=size)
-        inverse.img_h = pad_top + self.img_h + pad_bottom
-        inverse.img_w = pad_left + self.img_w + pad_right
+        inverse._img_h = pad_top + self._img_h + pad_bottom
+        inverse._img_w = pad_left + self._img_w + pad_right
         return inverse
 
-    def __can_invert(self):
-        return self.img_w is not None and self.img_h is not None
+    def _can_invert(self):
+        return self._img_w is not None and self._img_h is not None

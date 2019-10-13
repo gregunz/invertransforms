@@ -6,7 +6,7 @@ from invertransforms.util.invertible import InvertibleException
 
 
 class CenterCrop(transforms.CenterCrop, Invertible):
-    img_h = img_w = None
+    _img_h = _img_w = None
 
     def __call__(self, img):
         """
@@ -16,20 +16,19 @@ class CenterCrop(transforms.CenterCrop, Invertible):
         Returns:
             PIL Image: Cropped image.
         """
-        self.img_w, self.img_h = img.size
+        self._img_w, self._img_h = img.size
         return F.center_crop(img, self.size)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a transformation before it is applied'
                                       ' (size before cropping is unknown).')
 
-        inverse = CenterCrop(size=(self.img_h, self.img_w))  # center crop with bigger crop size is like padding
+        inverse = CenterCrop(size=(self._img_h, self._img_w))  # center crop with bigger crop size is like padding
         th, tw = self.size
-        inverse.img_w = tw
-        inverse.img_h = th
+        inverse._img_w = tw
+        inverse._img_h = th
         return inverse
 
-    def __can_invert(self):
-        return self.img_h is not None and self.img_w is not None
-
+    def _can_invert(self):
+        return self._img_h is not None and self._img_w is not None

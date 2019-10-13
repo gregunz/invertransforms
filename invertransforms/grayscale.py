@@ -14,20 +14,20 @@ class Grayscale(transforms.Grayscale, Invertible):
 
 
 class RandomGrayscale(transforms.RandomGrayscale, Invertible):
-    __tf = None
+    _transform = None
 
     def __call__(self, img):
-        self.__tf = T.Identity()
+        self._transform = T.Identity()
         if flip_coin(self.p):
             num_output_channels = 1 if img.mode == 'L' else 3
-            self.__tf = Grayscale(num_output_channels=num_output_channels)
-        return self.__tf(img)
+            self._transform = Grayscale(num_output_channels=num_output_channels)
+        return self._transform(img)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a random transformation before it is applied.')
 
-        return self.__tf.invert()
+        return self._transform.invert()
 
-    def __can_invert(self):
-        return self.__tf is not None
+    def _can_invert(self):
+        return self._transform is not None

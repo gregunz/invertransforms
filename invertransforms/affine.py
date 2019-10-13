@@ -23,24 +23,24 @@ class Affine(Invertible):
 
 
 class RandomAffine(transforms.RandomAffine, Invertible):
-    matrix = None
+    _matrix = None
 
     def get_params(self, degrees, translate, scale_ranges, shears, img_size):
         params = super().get_params(degrees, translate, scale_ranges, shears, img_size)
         center = (img_size[0] * 0.5 + 0.5, img_size[1] * 0.5 + 0.5)
         angle, translate, scale, shear = params
-        self.matrix = _get_inverse_affine_matrix(center, angle, translate, scale, shear)
+        self._matrix = _get_inverse_affine_matrix(center, angle, translate, scale, shear)
         return params
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a random transformation before it is applied.')
 
-        matrix_inv = invert_affine_matrix(self.matrix)
+        matrix_inv = invert_affine_matrix(self._matrix)
         return Affine(matrix_inv)
 
-    def __can_invert(self):
-        return self.matrix is not None
+    def _can_invert(self):
+        return self._matrix is not None
 
 
 def affine_with_matrix(img, matrix, resample=0, fillcolor=None):

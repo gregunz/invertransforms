@@ -26,6 +26,6 @@ class TestPad(InvertibleTestCase):
     def test_padding_mismatch(self):
         tf = T.Pad(0)
         tf.padding = None
-        tf.img_h, tf.img_w = self.img_size
+        tf._img_h, tf._img_w = self.img_size
         with self.assertRaises(Exception):
             tf.invert()

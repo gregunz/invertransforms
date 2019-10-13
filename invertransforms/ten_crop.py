@@ -9,7 +9,7 @@ from invertransforms.util.invertible import InvertibleException
 
 
 class TenCrop(transforms.TenCrop, Invertible):
-    five_crop = five_crop_flip = None
+    _five_crop = _five_crop_flip = None
 
     def flip(self, img):
         if isinstance(img, Sequence):
@@ -21,21 +21,21 @@ class TenCrop(transforms.TenCrop, Invertible):
             return F.hflip(img)
 
     def __call__(self, img):
-        self.five_crop = T.FiveCrop(self.size)
-        self.five_crop_flip = T.FiveCrop(self.size)
+        self._five_crop = T.FiveCrop(self.size)
+        self._five_crop_flip = T.FiveCrop(self.size)
 
-        first_five = self.five_crop(img)
-        second_five = self.five_crop_flip(self.flip(img))
+        first_five = self._five_crop(img)
+        second_five = self._five_crop_flip(self.flip(img))
 
         return first_five + second_five
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a transformation before it is applied'
                                       ' (size before cropping is unknown).')
 
-        five_crop = self.five_crop
-        five_crop_flip = self.five_crop_flip
+        five_crop = self._five_crop
+        five_crop_flip = self._five_crop_flip
         return T.Lambda(
             lambd=lambda imgs: five_crop.invert()(imgs[:5]) + self.flip(five_crop_flip.invert()(imgs[5:])),
             tf_inv=lambda imgs: five_crop.invert().inverse(imgs[:5]) + five_crop_flip.invert().inverse(
@@ -43,5 +43,5 @@ class TenCrop(transforms.TenCrop, Invertible):
             repr_str='TenCropInvert()',
         )
 
-    def __can_invert(self):
-        return self.five_crop is not None and self.five_crop_flip is not None
+    def _can_invert(self):
+        return self._five_crop is not None and self._five_crop_flip is not None

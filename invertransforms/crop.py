@@ -9,7 +9,7 @@ from invertransforms.util.invertible import InvertibleException
 
 
 class Crop(Invertible):
-    img_h = img_w = None
+    _img_h = _img_w = None
 
     def __init__(self, location, size):
         if isinstance(location, int):
@@ -29,27 +29,27 @@ class Crop(Invertible):
         return f'{self.__class__.__name__}(location=({self.tl_i}, {self.tl_j}), size=({self.crop_h}, {self.crop_w}))'
 
     def __call__(self, img):
-        self.img_w, self.img_h = img.size
+        self._img_w, self._img_h = img.size
         return F.crop(img, self.tl_i, self.tl_j, self.crop_h, self.crop_w)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a transformation before it is applied'
                                       ' (size before cropping is unknown).')
 
         padding = (
             self.tl_j,
             self.tl_i,
-            self.img_w - self.crop_w - self.tl_j,
-            self.img_h - self.crop_h - self.tl_i,
+            self._img_w - self.crop_w - self.tl_j,
+            self._img_h - self.crop_h - self.tl_i,
         )
         inverse = T.Pad(padding=padding)
-        inverse.img_w = self.crop_w
-        inverse.img_h = self.crop_h
+        inverse._img_w = self.crop_w
+        inverse._img_h = self.crop_h
         return inverse
 
-    def __can_invert(self):
-        return self.img_w is not None and self.img_h is not None
+    def _can_invert(self):
+        return self._img_w is not None and self._img_h is not None
 
 
 class RandomCrop(transforms.RandomCrop, Invertible):
@@ -62,15 +62,15 @@ class RandomCrop(transforms.RandomCrop, Invertible):
         return params
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a random transformation before it is applied')
 
         crop = Crop(
             location=(self.tl_i, self.tl_j),
             size=self.size,
         )
-        crop.img_h, crop.img_w = self.img_h, self.img_w
+        crop._img_h, crop._img_w = self.img_h, self.img_w
         return crop.invert()
 
-    def __can_invert(self):
+    def _can_invert(self):
         return self.img_h is not None or self.img_w is not None or self.tl_i is not None or self.tl_j is not None

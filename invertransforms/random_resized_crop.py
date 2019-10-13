@@ -8,7 +8,7 @@ from invertransforms.util.invertible import InvertibleException
 
 
 class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
-    tf = None
+    _transform = None
 
     def __call__(self, img):
         """
@@ -19,20 +19,20 @@ class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
             PIL Image: Randomly cropped and resized image.
         """
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self.tf = T.Compose([
+        self._transform = T.Compose([
             T.Crop(location=(i, j), size=(h, w)),
             T.Resize(size=self.size, interpolation=self.interpolation),
         ])
-        return self.tf(img)
+        return self._transform(img)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a random transformation before it is applied.')
 
-        return self.tf.invert()
+        return self._transform.invert()
 
-    def __can_invert(self):
-        return self.tf is not None
+    def _can_invert(self):
+        return self._transform is not None
 
 
 class RandomSizedCrop(RandomResizedCrop):

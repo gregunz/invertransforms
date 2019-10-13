@@ -14,7 +14,7 @@ class FiveCrop(transforms.FiveCrop, Invertible):
         return F.five_crop(img, self.size)
 
     def invert(self):
-        if not self.__can_invert():
+        if not self._can_invert():
             raise InvertibleException('Cannot invert a transformation before it is applied'
                                       ' (size before the cropping is unknown).')
 
@@ -32,8 +32,8 @@ class FiveCrop(transforms.FiveCrop, Invertible):
         tfs = []
         for padding in [pad_tl, pad_tr, pad_bl, pad_br, pad_center]:
             tf = T.Pad(padding)
-            tf.img_h = crop_h
-            tf.img_w = crop_w
+            tf._img_h = crop_h
+            tf._img_w = crop_w
             tfs.append(tf)
 
         def invert_crops(crops):
@@ -50,5 +50,5 @@ class FiveCrop(transforms.FiveCrop, Invertible):
             repr_str=f'FiveCropInvert()',
         )
 
-    def __can_invert(self):
+    def _can_invert(self):
         return self.img_w is not None and self.img_h is not None
