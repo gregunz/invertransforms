@@ -22,7 +22,7 @@ class CenterCrop(transforms.CenterCrop, Invertible):
     def invert(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
-                                      ' (size before cropping is unknown).')
+                                  ' (size before cropping is unknown).')
 
         inverse = CenterCrop(size=(self._img_h, self._img_w))  # center crop with bigger crop size is like padding
         th, tw = self.size

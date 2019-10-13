@@ -16,7 +16,7 @@ class FiveCrop(transforms.FiveCrop, Invertible):
     def invert(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
-                                      ' (size before the cropping is unknown).')
+                                  ' (size before the cropping is unknown).')
 
         crop_h, crop_w = self.size
         pad_w = self._img_w - crop_w

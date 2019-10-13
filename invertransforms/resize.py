@@ -23,7 +23,7 @@ class Resize(transforms.Resize, Invertible):
     def invert(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
-                                      ' (size before resizing is unknown).')
+                                  ' (size before resizing is unknown).')
 
         inverse = Resize(size=(self._img_h, self._img_w), interpolation=self.interpolation)
         inverse._img_h, inverse.tw = self.size

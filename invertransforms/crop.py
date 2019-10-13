@@ -35,7 +35,7 @@ class Crop(Invertible):
     def invert(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
-                                      ' (size before cropping is unknown).')
+                                  ' (size before cropping is unknown).')
 
         padding = (
             self.tl_j,

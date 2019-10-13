@@ -32,7 +32,7 @@ class TenCrop(transforms.TenCrop, Invertible):
     def invert(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
-                                      ' (size before cropping is unknown).')
+                                  ' (size before cropping is unknown).')
 
         five_crop = self._five_crop
         five_crop_flip = self._five_crop_flip
