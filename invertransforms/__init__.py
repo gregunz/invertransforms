@@ -6,13 +6,13 @@ This modules contains all the transformations classes.
 There are two typical practices to import them into your project:
 
 ```python
-import invertransform as T
+import invertransforms as T
 
 transform = T.Normalize()
 ```
 
 ```python
-from invertransform import Normalize
+from invertransforms import Normalize
 
 transform = Normalize()
 ```
