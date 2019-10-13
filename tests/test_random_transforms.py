@@ -24,7 +24,7 @@ class TestRandomApply(InvertibleTestCase):
 
     def test_identity(self):
         tf_id = T.RandomApply(
-            transforms=[T.Identity(), T.ToTensor()],
+            transforms=T.Lambda(lambda x: 2 * x),
             p=0,
         )
 
