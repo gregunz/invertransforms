@@ -1,4 +1,5 @@
-[Documentation]: https://github.com/gregunz/invertransforms
+[Documentation]: https:///gregunz.github.io/invertransforms/
+[mail@gregunz.io]: mailto:mail@gregunz.io
 
 [![](https://i.imgur.com/dFDH5Ro.jpg)](https://github.com/gregunz/invertransforms)
 
@@ -52,6 +53,11 @@ If a transformation is random, it is necessary to apply it once before calling `
 On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
 
 
+[Documentation]
+-------------
+
+The library's [documentation] contains the full list of [transformations](https://gregunz.github.io/invertransforms/#header-classes) which includes all the ones from torchvision and more.
+
 Use Case
 --------
 
@@ -70,7 +76,11 @@ Features
 * blah-blah
 
 
-[Documentation]
--------------
+Contribute
+----------
 
-The above features are explained in more detail in invertransforms' [documentation].
+You found a bug, think a feature is missing or just want to help ?
+
+Please feel free to open an issue, pull request or contact me [mail@gregunz.io]
+
+
