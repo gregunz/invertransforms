@@ -1,4 +1,6 @@
-from invertransforms.pad import Pad
+# noinspection PyUnresolvedReferences
+from torchvision.transforms import functional
+
 from .affine import Affine, RandomAffine
 from .center_crop import CenterCrop
 from .color_jitter import ColorJitter
@@ -10,6 +12,7 @@ from .identity import Identity
 from .lambd import Lambda
 from .linear_transformation import LinearTransformation
 from .normalize import Normalize
+from .pad import Pad
 from .perpective import Perspective, RandomPerspective
 from .random_erasing import RandomErasing
 from .random_flip import RandomHorizontalFlip, RandomVerticalFlip
@@ -20,3 +23,14 @@ from .rotation import RandomRotation, Rotation
 from .ten_crop import TenCrop
 from .to_tensor_pil_image import ToPILImage, ToTensor
 from .transform_if import TransformIf
+
+__all__ = [
+    'functional', 'Affine', 'RandomAffine', 'CenterCrop', 'ColorJitter',
+    'Compose', 'Crop', 'RandomCrop', 'FiveCrop', 'Grayscale',
+    'RandomGrayscale', 'Identity', 'Lambda', 'LinearTransformation',
+    'Normalize', 'Pad', 'Perspective', 'RandomPerspective', 'RandomErasing',
+    'RandomHorizontalFlip', 'RandomVerticalFlip', 'RandomResizedCrop',
+    'RandomChoice', 'RandomApply', 'Resize', 'Scale', 'RandomRotation',
+    'Rotation', 'TenCrop', 'ToPILImage', 'ToTensor', 'TransformIf',
+    'RandomSizedCrop', 'RandomOrder'
+]
