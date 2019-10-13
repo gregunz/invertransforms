@@ -1,9 +1,9 @@
-from invertransforms.lambd import Lambda
+from invertransforms.util import Invertible
 
 
-class Identity(Lambda):
-    def __init__(self):
-        super().__init__(lambd=lambda x: x)
+class Identity(Invertible):
+    def __call__(self, img):
+        return img
 
     def invert(self):
         return Identity()
