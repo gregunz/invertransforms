@@ -52,6 +52,15 @@ If a transformation is random, it is necessary to apply it once before calling `
 On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
 
 
+Use Case
+--------
+
+This library can be particularly useful in following situations:
+- Reverting your model outputs in order to stack predictions
+- Applying the same transformations on two different images
+- blah-blah
+
+
 Features
 --------
 * Invert any transformations even random ones
