@@ -16,7 +16,7 @@ setup(
     keywords=['invertible', 'transforms', 'transformations', 'torchvision', 'data', 'augmentation',
               'replay', 'replayable', 'invertransforms'],
     requires=[
-        'torch>=1.2.0'
+        'torch>=1.2.0',
         'torchvision>=0.4.0',
     ],
     classifiers=[
