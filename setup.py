@@ -15,7 +15,7 @@ setup(
     download_url='https://github.com/gregunz/invertransforms/archive/v{}.tar.gz'.format(version),
     keywords=['invertible', 'transforms', 'transformations', 'torchvision', 'data', 'augmentation',
               'replay', 'replayable', 'invertransforms'],
-    requires=[
+    install_requires=[
         'torch>=1.2.0',
         'torchvision>=0.4.0',
     ],
