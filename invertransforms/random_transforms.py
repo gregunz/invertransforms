@@ -1,4 +1,5 @@
 import random
+from typing import Union
 
 from torchvision import transforms
 
@@ -8,7 +9,19 @@ from invertransforms.util.invertible import InvertibleException
 
 
 class RandomApply(transforms.RandomApply, Invertible):
-    _transform = None
+    """Apply randomly a list of transformations with a given probability
+
+    Args:
+        transforms: one or multiple of transformations
+        p (float): probability
+    """
+
+    def __init__(self, transforms: Union[Invertible, list, tuple], p=0.5):
+        if isinstance(transforms, Invertible):
+            transforms = [transforms]
+        super().__init__(transforms=transforms, p=0.5)
+        self.p = p
+        self._transform = None
 
     def __call__(self, img):
 

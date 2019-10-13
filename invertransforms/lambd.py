@@ -1,7 +1,6 @@
 from torchvision import transforms
 
-import invertransforms as T
-from invertransforms.util import Invertible, flip_coin
+from invertransforms.util import Invertible
 from invertransforms.util.invertible import InvertibleException
 
 
@@ -35,30 +34,3 @@ class Lambda(transforms.Lambda, Invertible):
         if self._repr_str is not None:
             return self._repr_str
         return super().__repr__()
-
-
-class RandomLambda(Lambda):
-    def __init__(self, lambd, tf_inv=None, p=0.5, repr_str=None):
-        super().__init__(lambd=lambd, tf_inv=tf_inv, repr_str=repr_str)
-        self.p = p
-        self._transform = None
-
-    def __call__(self, img):
-        self._transform = T.Identity()
-        if flip_coin(self.p):
-            self._transform = super()
-        return self._transform.__call__(img)  # use of call because super is not callable
-
-    def __repr__(self):
-        if self._repr_str is not None:
-            return self._repr_str
-        return f'{self._transform.__repr__()}(p={self.p})'
-
-    def invert(self):
-        if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
-
-        return self._transform.invert()
-
-    def _can_invert(self):
-        return self._transform is not None

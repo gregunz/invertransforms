@@ -7,7 +7,7 @@ from .crop import Crop, RandomCrop
 from .five_crop import FiveCrop
 from .grayscale import Grayscale, RandomGrayscale
 from .identity import Identity
-from .lambd import Lambda, RandomLambda
+from .lambd import Lambda
 from .linear_transformation import LinearTransformation
 from .normalize import Normalize
 from .perpective import Perspective, RandomPerspective
