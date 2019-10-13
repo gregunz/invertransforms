@@ -56,7 +56,8 @@ Features
 --------
 * Invert any transformations even random ones
 * Replay any transformations even random ones
-* Extending torchvision tranformations
+* All classes extends its torchvision transformation equivalent class
+* Extensive unit testing
 * blah-blah
 
 
