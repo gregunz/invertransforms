@@ -1,9 +1,9 @@
 from torchvision import transforms
 
-from invertransforms.functions import Identity
+import invertransforms as T
 from invertransforms.util import Invertible
 
 
 class RandomErasing(transforms.RandomErasing, Invertible):
     def inverse(self):
-        return Identity()
+        return T.Identity()

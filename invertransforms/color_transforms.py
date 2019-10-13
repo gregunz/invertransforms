@@ -1,16 +1,22 @@
 from torchvision import transforms
+from torchvision.transforms import functional as F
 
 import invertransforms as T
 from invertransforms.util import Invertible, flip_coin, InvertibleError
+from invertransforms.util_functions import Identity
+
+
+class ColorJitter(transforms.ColorJitter, Invertible):
+    def inverse(self):
+        return Identity()
 
 
 class Grayscale(transforms.Grayscale, Invertible):
+    def __call__(self, img):
+        return F.to_grayscale(img, num_output_channels=self.num_output_channels)
+
     def inverse(self):
-        return T.Lambda(
-            lambd=lambda img: img,
-            tf_inv=Grayscale(num_output_channels=self.num_output_channels),
-            repr_str='GrayscaleInvert()'
-        )
+        return T.Identity()
 
 
 class RandomGrayscale(transforms.RandomGrayscale, Invertible):

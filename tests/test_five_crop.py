@@ -1,4 +1,4 @@
-import invertransforms as T
+import invertransforms.crop_pad
 from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
@@ -6,7 +6,7 @@ from tests.invertible_test_case import InvertibleTestCase
 class TestFiveCrop(InvertibleTestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.tf = T.FiveCrop(size=self.crop_size)
+        self.tf = invertransforms.crop_pad.FiveCrop(size=self.crop_size)
 
     def test_call(self):
         outputs = self.tf(self.img_pil)

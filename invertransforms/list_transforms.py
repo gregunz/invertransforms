@@ -27,7 +27,7 @@ class RandomApply(transforms.RandomApply, Invertible):
 
         self._transform = T.Identity()
         if flip_coin(self.p):
-            self._transform = T.Compose(self.transforms)
+            self._transform = Compose(self.transforms)
         return self._transform(img)
 
     def inverse(self):
@@ -72,7 +72,17 @@ class RandomOrder(transforms.RandomOrder, Invertible):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return T.Compose(transforms=[self.transforms[i].inverse() for i in self._order[::-1]])
+        return Compose(transforms=[self.transforms[i].inverse() for i in self._order[::-1]])
 
     def _can_invert(self):
         return self._order is not None
+
+
+class Compose(transforms.Compose, Invertible):
+    def inverse(self):
+        transforms_inv = []
+        for t in self.transforms[::-1]:
+            if not isinstance(t, Invertible):
+                raise InvertibleError(f'{t} ({t.__class__.__name__}) is not an invertible object')
+            transforms_inv.append(t.inverse())
+        return Compose(transforms=transforms_inv)

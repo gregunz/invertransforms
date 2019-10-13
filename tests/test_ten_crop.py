@@ -1,4 +1,4 @@
-import invertransforms as T
+import invertransforms.crop_pad
 from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
@@ -6,7 +6,7 @@ from tests.invertible_test_case import InvertibleTestCase
 class TestTenCrop(InvertibleTestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.tf = T.TenCrop(size=self.crop_size)
+        self.tf = invertransforms.crop_pad.TenCrop(size=self.crop_size)
 
     def test_call(self):
         outputs = self.tf(self.img_pil)
@@ -16,7 +16,7 @@ class TestTenCrop(InvertibleTestCase):
             self.assertEqual(img.size[::-1], self.crop_size)  # [::-1] because pil order is inversed
 
     def test_call_vflip(self):
-        tf = T.TenCrop(self.crop_size, vertical_flip=True)
+        tf = invertransforms.crop_pad.TenCrop(self.crop_size, vertical_flip=True)
         outputs = tf(self.img_pil)
         self.assertEqual(len(outputs), 10)
 

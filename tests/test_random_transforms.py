@@ -2,6 +2,8 @@ import torch
 from PIL import Image
 
 import invertransforms as T
+import invertransforms.crop_pad
+import invertransforms.util_functions
 from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
@@ -14,7 +16,7 @@ class TestRandomApply(InvertibleTestCase):
 
     def test_invert(self):
         tf = T.RandomApply(
-            transforms=[T.Identity(), T.ToTensor()],
+            transforms=[T.Identity(), invertransforms.util_functions.ToTensor()],
             p=1,
         )
 
@@ -24,7 +26,7 @@ class TestRandomApply(InvertibleTestCase):
 
     def test_identity(self):
         tf_id = T.RandomApply(
-            transforms=T.ToPILImage(),
+            transforms=invertransforms.util_functions.ToPILImage(),
             p=0,
         )
 
@@ -40,10 +42,10 @@ class TestRandomChoice(InvertibleTestCase):
 
     def test_invert(self):
         tf = T.RandomChoice(
-            [T.ToTensor()] * 10
+            [invertransforms.util_functions.ToTensor()] * 10
         )
         self.assertIsInstance(tf(self.img_pil), torch.Tensor)
-        self.assertIsInstance(tf.inverse(), T.ToPILImage)
+        self.assertIsInstance(tf.inverse(), invertransforms.util_functions.ToPILImage)
 
 
 class TestRandomOrder(InvertibleTestCase):
@@ -54,7 +56,7 @@ class TestRandomOrder(InvertibleTestCase):
 
     def test_invert(self):
         tf = T.RandomOrder([
-            T.CenterCrop(self.crop_size),
+            invertransforms.crop_pad.CenterCrop(self.crop_size),
             T.RandomHorizontalFlip(1),
             T.RandomVerticalFlip(1),
         ])

@@ -61,3 +61,13 @@ class TransformIf(Invertible):
             raise InvertibleError(
                 f'{self.transform} ({self.transform.__class__.__name__}) is not an invertible object')
         return self.transform.inverse()
+
+
+class ToPILImage(transforms.ToPILImage, Invertible):
+    def inverse(self):
+        return ToTensor()
+
+
+class ToTensor(transforms.ToTensor, Invertible):
+    def inverse(self):
+        return ToPILImage()

@@ -1,4 +1,4 @@
-import invertransforms as T
+import invertransforms.crop_pad
 from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
@@ -6,7 +6,7 @@ from tests.invertible_test_case import InvertibleTestCase
 class TestCenterCrop(InvertibleTestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.tf = T.CenterCrop(self.crop_size)
+        self.tf = invertransforms.crop_pad.CenterCrop(self.crop_size)
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
