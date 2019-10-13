@@ -5,7 +5,7 @@
 invertransforms
 ====
 
-[![Build Status](https://img.shields.io/travis/gregunz/invertransforms.svg?style=for-the-badge)](https://travis-ci.org/gregunz/invertransforms)
+[![Build Status](https://img.shields.io/travis/com/gregunz/invertransforms.svg?style=for-the-badge)](https://travis-ci.com/gregunz/invertransforms)
 [![Code Coverage](https://img.shields.io/codecov/c/gh/gregunz/invertransforms.svg?style=for-the-badge)](https://codecov.io/gh/gregunz/invertransforms)
 [![pdoc3 on PyPI](https://img.shields.io/pypi/v/invertransforms.svg?color=blue&style=for-the-badge)](https://pypi.org/project/invertransforms)
 
