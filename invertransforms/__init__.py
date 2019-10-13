@@ -14,7 +14,6 @@ from .perpective import Perspective, RandomPerspective
 from .random_erasing import RandomErasing
 from .random_flip import RandomHorizontalFlip, RandomVerticalFlip
 from .random_resized_crop import RandomResizedCrop, RandomSizedCrop
-from .random_rot_crop import RandomRotCrop
 from .random_transforms import RandomOrder, RandomChoice, RandomApply
 from .resize import Resize, Scale
 from .rotation import RandomRotation, Rotation
