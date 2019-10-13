@@ -11,20 +11,9 @@ class TestInvertible(InvertibleTestCase):
 
         # This test is used for accessing abstract methods
         class NewInvertible(Invertible):
-            def invert(self):
-                super().invert()
-
-            def __call__(self, img):
-                super().__call__(img)
-
-        self.tf = NewInvertible()
-
-    def test_instantiate_abstract(self):
-        class NewInvertibleBis(Invertible):
             pass
 
-        with self.assertRaises(TypeError):
-            NewInvertibleBis()
+        self.tf = NewInvertible()
 
     def test_access_abstract_methods(self):
         with self.assertRaises(NotImplementedError):

@@ -1,7 +1,7 @@
 from torchvision import transforms
 
 import invertransforms as T
-from invertransforms.util import Invertible, flip_coin, InvertibleException
+from invertransforms.util import Invertible, flip_coin, InvertibleError
 
 
 class Grayscale(transforms.Grayscale, Invertible):
@@ -25,7 +25,7 @@ class RandomGrayscale(transforms.RandomGrayscale, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
         return self._transform.invert()
 

@@ -1,12 +1,12 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
 class TestResize(InvertibleTestCase):
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.Resize(size=self.crop_size).invert()
 
     def test_deprecated(self):

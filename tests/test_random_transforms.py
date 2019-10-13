@@ -2,14 +2,14 @@ import torch
 from PIL import Image
 
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
 class TestRandomApply(InvertibleTestCase):
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.RandomApply([]).invert()
 
     def test_invert(self):
@@ -35,7 +35,7 @@ class TestRandomApply(InvertibleTestCase):
 class TestRandomChoice(InvertibleTestCase):
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.RandomChoice([]).invert()
 
     def test_invert(self):
@@ -49,7 +49,7 @@ class TestRandomChoice(InvertibleTestCase):
 class TestRandomOrder(InvertibleTestCase):
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.RandomOrder([]).invert()
 
     def test_invert(self):

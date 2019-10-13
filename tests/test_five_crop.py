@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -16,7 +16,7 @@ class TestFiveCrop(InvertibleTestCase):
             self.assertEqual(img.size[::-1], self.crop_size)  # [::-1] because pil order is inversed
 
     def test_invert_before_call(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             self.tf.invert()
 
     def test_invert(self):

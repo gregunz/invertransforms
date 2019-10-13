@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-from invertransforms.util.invertible import InvertibleException, Invertible
+from invertransforms.util.invertible import InvertibleError, Invertible
 
 
 class LinearTransformation(transforms.LinearTransformation, Invertible):
@@ -11,5 +11,5 @@ class LinearTransformation(transforms.LinearTransformation, Invertible):
                 mean_vector=(-1.0) * self.mean_vector @ self.transformation_matrix
             )
         except RuntimeError:
-            raise InvertibleException(
+            raise InvertibleError(
                 f'{self.__repr__()} is not invertible because the transformation matrix singular.')

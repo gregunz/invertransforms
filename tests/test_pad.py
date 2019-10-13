@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -20,7 +20,7 @@ class TestPad(InvertibleTestCase):
         self.assertEqual(self.img_pil.size, tf.inverse(img_inv).size)
 
     def test_invert_before_call(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.Pad(0).invert()
 
     def test_padding_mismatch(self):

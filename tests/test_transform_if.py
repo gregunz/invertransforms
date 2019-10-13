@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -12,7 +12,7 @@ class TestTransformIf(InvertibleTestCase):
 
     def test_not_a_transform(self):
         tf = T.TransformIf(transform=None, condition=True)
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             tf.invert()
 
     def test_invert(self):

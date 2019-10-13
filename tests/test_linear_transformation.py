@@ -1,7 +1,7 @@
 import torch
 
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -17,7 +17,7 @@ class Test(InvertibleTestCase):
         self.assertTrue(torch.allclose(tf.inverse(tf(small_img_tensor)), small_img_tensor, atol=1e-07))
 
     def test_not_invertible(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.LinearTransformation(
                 transformation_matrix=torch.zeros((32, 32)),
                 mean_vector=torch.randn(32),

@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -14,7 +14,7 @@ class Test(InvertibleTestCase):
         )
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             self.tf.invert()
 
     def test_invert(self):

@@ -5,7 +5,7 @@ from torchvision import transforms
 import invertransforms as T
 from invertransforms import functional as F
 from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.util.invertible import InvertibleError
 
 
 class Crop(Invertible):
@@ -34,7 +34,7 @@ class Crop(Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a transformation before it is applied'
+            raise InvertibleError('Cannot invert a transformation before it is applied'
                                       ' (size before cropping is unknown).')
 
         padding = (
@@ -63,7 +63,7 @@ class RandomCrop(transforms.RandomCrop, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied')
+            raise InvertibleError('Cannot invert a random transformation before it is applied')
 
         crop = Crop(
             location=(self._tl_i, self._tl_j),

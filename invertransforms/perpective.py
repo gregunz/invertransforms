@@ -4,7 +4,7 @@ from torchvision import transforms
 import invertransforms as T
 from invertransforms import functional as F
 from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.util.invertible import InvertibleError
 
 
 class Perspective(Invertible):
@@ -51,7 +51,7 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
         return self._transform.invert()
 

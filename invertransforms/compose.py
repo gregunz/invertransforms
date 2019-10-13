@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-from invertransforms.util import Invertible, InvertibleException
+from invertransforms.util import Invertible, InvertibleError
 
 
 class Compose(transforms.Compose, Invertible):
@@ -8,6 +8,6 @@ class Compose(transforms.Compose, Invertible):
         transforms_inv = []
         for t in self.transforms[::-1]:
             if not isinstance(t, Invertible):
-                raise InvertibleException(f'{t} ({t.__class__.__name__}) is not an invertible object')
+                raise InvertibleError(f'{t} ({t.__class__.__name__}) is not an invertible object')
             transforms_inv.append(t.invert())
         return Compose(transforms=transforms_inv)

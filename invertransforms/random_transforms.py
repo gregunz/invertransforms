@@ -5,7 +5,7 @@ from torchvision import transforms
 
 import invertransforms as T
 from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.util.invertible import InvertibleError
 
 
 class RandomApply(transforms.RandomApply, Invertible):
@@ -32,7 +32,7 @@ class RandomApply(transforms.RandomApply, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
         return self._transform.invert()
 
@@ -50,7 +50,7 @@ class RandomChoice(transforms.RandomChoice, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
         return self._transform.invert()
 
@@ -70,7 +70,7 @@ class RandomOrder(transforms.RandomOrder, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
         return T.Compose(transforms=[self.transforms[i].invert() for i in self._order[::-1]])
 

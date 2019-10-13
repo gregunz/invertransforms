@@ -2,7 +2,7 @@ from torchvision import transforms
 
 from invertransforms import functional as F
 from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.util.invertible import InvertibleError
 
 
 class CenterCrop(transforms.CenterCrop, Invertible):
@@ -21,7 +21,7 @@ class CenterCrop(transforms.CenterCrop, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a transformation before it is applied'
+            raise InvertibleError('Cannot invert a transformation before it is applied'
                                       ' (size before cropping is unknown).')
 
         inverse = CenterCrop(size=(self._img_h, self._img_w))  # center crop with bigger crop size is like padding

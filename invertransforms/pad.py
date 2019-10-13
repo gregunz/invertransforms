@@ -4,7 +4,7 @@ from torchvision import transforms
 
 import invertransforms as T
 from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.util.invertible import InvertibleError
 
 
 class Pad(transforms.Pad, Invertible):
@@ -23,7 +23,7 @@ class Pad(transforms.Pad, Invertible):
 
     def invert(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a transformation before it is applied'
+            raise InvertibleError('Cannot invert a transformation before it is applied'
                                       ' (size of image before padding unknown).')
 
         padding = self.padding

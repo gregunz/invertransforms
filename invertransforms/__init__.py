@@ -1,3 +1,24 @@
+"""
+Root module.
+
+This modules contains all the transformations classes.
+
+There are two typical practices to import them into your project:
+
+```python
+import invertransform as T
+
+transform = T.Normalize()
+```
+
+```python
+from invertransform import Normalize
+
+transform = Normalize()
+```
+
+"""
+
 # noinspection PyUnresolvedReferences
 from torchvision.transforms import functional
 
@@ -7,9 +28,8 @@ from .color_jitter import ColorJitter
 from .compose import Compose
 from .crop import Crop, RandomCrop
 from .five_crop import FiveCrop
+from .functions import Identity, Lambda, TransformIf
 from .grayscale import Grayscale, RandomGrayscale
-from .identity import Identity
-from .lambd import Lambda
 from .linear_transformation import LinearTransformation
 from .normalize import Normalize
 from .pad import Pad
@@ -22,7 +42,6 @@ from .resize import Resize, Scale
 from .rotation import RandomRotation, Rotation
 from .ten_crop import TenCrop
 from .to_tensor_pil_image import ToPILImage, ToTensor
-from .transform_if import TransformIf
 
 __all__ = [
     'functional', 'Affine', 'RandomAffine', 'CenterCrop', 'ColorJitter',

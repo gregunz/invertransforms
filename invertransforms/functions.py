@@ -1,7 +1,14 @@
 from torchvision import transforms
 
-from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.util import Invertible, InvertibleError
+
+
+class Identity(Invertible):
+    def __call__(self, img):
+        return img
+
+    def invert(self):
+        return Identity()
 
 
 class Lambda(transforms.Lambda, Invertible):
@@ -14,7 +21,7 @@ class Lambda(transforms.Lambda, Invertible):
 
     def invert(self):
         if self.tf_inv is None:
-            raise InvertibleException('Cannot invert transformation, tf_inv_builder is None')
+            raise InvertibleError('Cannot invert transformation, tf_inv_builder is None')
         if isinstance(self.tf_inv, Invertible):
             return self.tf_inv
         else:
@@ -34,3 +41,23 @@ class Lambda(transforms.Lambda, Invertible):
         if self._repr_str is not None:
             return self._repr_str
         return super().__repr__()
+
+
+class TransformIf(Invertible):
+    def __init__(self, transform, condition: bool):
+        if condition:
+            self.transform = transform
+        else:
+            self.transform = Identity()
+
+    def __call__(self, img):
+        return self.transform.__call__(img)
+
+    def __repr__(self):
+        return self.transform.__repr__()
+
+    def invert(self):
+        if not isinstance(self.transform, Invertible):
+            raise InvertibleError(
+                f'{self.transform} ({self.transform.__class__.__name__}) is not an invertible object')
+        return self.transform.invert()

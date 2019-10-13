@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.util import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -34,9 +34,9 @@ class TestCrop(InvertibleTestCase):
         self.assertEqual(self.random_tf(self.img_pil).size[::-1], self.crop_size)
 
     def test_invert_before_applied(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             self.tf.invert()
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             self.random_tf.invert()
 
     def test_invert(self):

@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-from invertransforms.identity import Identity
+from invertransforms.functions import Identity
 from invertransforms.util import Invertible
 
 
