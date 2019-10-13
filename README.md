@@ -1,4 +1,5 @@
 [Documentation]: https:///gregunz.github.io/invertransforms/
+[mail@gregunz.io]: mailto:mail@gregunz.io
 
 [![](https://i.imgur.com/dFDH5Ro.jpg)](https://github.com/gregunz/invertransforms)
 
@@ -74,3 +75,13 @@ Features
 -------------
 
 The above features are explained in more detail in invertransforms' [documentation].
+
+
+Contribute
+----------
+
+You found a bug, think a feature is missing or just want to help ?
+
+Please feel free to open an issue, pull request or contact me [mail@gregunz.io]
+
+
