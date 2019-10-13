@@ -2,11 +2,12 @@ from typing import Sequence
 
 from torchvision import transforms
 
-from invertransforms.crop import Crop
-from invertransforms.util import UndefinedInvertible
+import invertransforms as T
+from invertransforms.util import Invertible
+from invertransforms.util.invertible import InvertibleException
 
 
-class Pad(transforms.Pad, UndefinedInvertible):
+class Pad(transforms.Pad, Invertible):
     img_h = img_w = None
 
     def __call__(self, img):
@@ -20,7 +21,11 @@ class Pad(transforms.Pad, UndefinedInvertible):
         self.img_w, self.img_h = img.size
         return super().__call__(img=img)
 
-    def _invert(self):
+    def invert(self):
+        if not self.__can_invert():
+            raise InvertibleException('Cannot invert a transformation before it is applied'
+                                      ' (size of image before padding unknown).')
+
         padding = self.padding
         if isinstance(padding, int):
             pad_left = pad_right = pad_top = pad_bottom = padding
@@ -37,10 +42,10 @@ class Pad(transforms.Pad, UndefinedInvertible):
 
         size = (self.img_h, self.img_w)
         location = (pad_top, pad_left)
-        inverse = Crop(location=location, size=size)
+        inverse = T.Crop(location=location, size=size)
         inverse.img_h = pad_top + self.img_h + pad_bottom
         inverse.img_w = pad_left + self.img_w + pad_right
         return inverse
 
-    def _can_invert(self):
+    def __can_invert(self):
         return self.img_w is not None and self.img_h is not None

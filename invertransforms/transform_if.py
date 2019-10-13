@@ -1,11 +1,10 @@
 from invertransforms.identity import Identity
-from invertransforms.util import Invertible, _Invertible
+from invertransforms.util import Invertible, InvertibleException
 
 
 class TransformIf(Invertible):
     def __init__(self, transform, condition: bool):
         if condition:
-            assert isinstance(transform, _Invertible), f'{transform.__class__.__name__} is not an invertible class'
             self.transform = transform
         else:
             self.transform = Identity()
@@ -16,5 +15,8 @@ class TransformIf(Invertible):
     def __repr__(self):
         return self.transform.__repr__()
 
-    def _invert(self, **kwargs):
-        return self.transform.invert(**kwargs)
+    def invert(self):
+        if not isinstance(self.transform, Invertible):
+            raise InvertibleException(
+                f'{self.transform} ({self.transform.__class__.__name__}) is not an invertible object')
+        return self.transform.invert()

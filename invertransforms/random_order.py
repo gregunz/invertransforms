@@ -3,10 +3,11 @@ import random
 from torchvision import transforms
 
 from invertransforms.compose import Compose
-from invertransforms.util import UndefinedInvertible
+from invertransforms.util import Invertible
+from invertransforms.util.invertible import InvertibleException
 
 
-class RandomOrder(transforms.RandomOrder, UndefinedInvertible):
+class RandomOrder(transforms.RandomOrder, Invertible):
     order = None
 
     def __call__(self, img):
@@ -16,8 +17,11 @@ class RandomOrder(transforms.RandomOrder, UndefinedInvertible):
             img = self.transforms[i](img)
         return img
 
-    def _invert(self):
+    def invert(self):
+        if not self.__can_invert():
+            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+
         return Compose(transforms=[self.transforms[i].invert() for i in self.order[::-1]])
 
-    def _can_invert(self):
+    def __can_invert(self):
         return self.order is not None

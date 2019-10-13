@@ -1,12 +1,18 @@
 import math
 import random
+import warnings
 
-from invertransforms import functional as TF, Compose, Crop
-from invertransforms.random_rotation import rotation_inverse
-from invertransforms.util import UndefinedInvertible
+import invertransforms as T
+from invertransforms.util import Invertible
+from invertransforms.util.invertible import InvertibleException
 
 
-class RandomRotCrop(UndefinedInvertible):
+class RandomRotCrop(Invertible):
+    """
+    Rotate and image and extract a crop withing the rotated region.
+    """
+
+
     def __init__(self, degrees=(0, 360), crop_size=None):
         if isinstance(degrees, int) or isinstance(degrees, float):
             if degrees < 0:
@@ -19,23 +25,34 @@ class RandomRotCrop(UndefinedInvertible):
 
         if crop_size is None:
             self.out_h, self.out_w = None, None
+            warnings.warn('only square image are handled properly, doing a center crop of max size')
         elif isinstance(crop_size, int):
             self.out_h, self.out_w = (crop_size, crop_size)
         else:
             if len(degrees) != 2:
                 raise ValueError("If crop size is a sequence, it must be of len 2.")
             self.out_h, self.out_w = crop_size
-            assert self.out_h == self.out_w, \
-                'only handling square crop for now'  # a workaround could be: upsize -> square crop -> downsize'
-            assert (self.out_h is None and self.out_w is None) or (self.out_h is not None and self.out_w is not None), \
-                'cannot have only one crop size (height or width) which is None'
+            if not isinstance(self.out_w, int) or not isinstance(self.out_h, int):
+                raise ValueError(f'crop size must be an integer, found {crop_size}')
+            if self.out_h != self.out_w:
+                # todo: solve this
+                raise ValueError('only handling square crop for now')
 
-        self.inverse_rot = None
-        self.inverse_crop = None
+        self.transforms = []
 
     def __call__(self, img):
-        angle = random.uniform(self.degree_low, self.degree_high)
+        self.transforms = []
+
         w, h = img.size  # PIL image
+        if w != h:
+            # todo: should handle rectangle image as well
+            warnings.warn('only square image are handled properly, doing a center crop of max size')
+            center_crop = T.CenterCrop(size=min(w, h))
+            img = center_crop(img)
+            self.transforms.append(center_crop)
+            w, h = img.size
+
+        angle = random.uniform(self.degree_low, self.degree_high)
         out_w_max, out_h_max = _rotated_rect_with_max_area(w=w, h=h, angle=angle)  # max area rectangle of rotated image
 
         out_h = self.out_h
@@ -46,7 +63,9 @@ class RandomRotCrop(UndefinedInvertible):
             out_w = out_w_max
 
         if out_h > out_h_max or out_w > out_w_max:
-            raise Exception('cannot crop outside maximum rotated rectangle')
+            warnings.warn('cropping size is bigger than maximum size crop within the rotated area')
+            out_h = out_h_max
+            out_w = out_w_max
 
         out_h_init = round(h / out_h_max * out_h)
         out_w_init = round(w / out_w_max * out_w)
@@ -63,16 +82,23 @@ class RandomRotCrop(UndefinedInvertible):
         i_crop_center_rot, j_crop_center_rot = \
             _rotate_coordinates((i_crop_center, j_crop_center), angle, (i_img_center, j_img_center))
 
-        img = TF.rotate(img, angle, expand=True)
-        self.inverse_rot = rotation_inverse(h, w, angle, resample=False, expand=True, center=False)
+        rotate = T.Rotation(angle, expand=True)
+        img = rotate(img)
+        self.transforms.append(rotate)
         w_rot, h_rot = img.size
 
-        i = i_crop_center_rot + (h_rot - h - out_h) // 2
-        j = j_crop_center_rot + (w_rot - h - out_w) // 2
+        i = round(i_crop_center_rot + (h_rot - h - out_h) / 2)
+        j = round(j_crop_center_rot + (w_rot - h - out_w) / 2)
 
-        crop = Crop(location=(j, i), size=(out_h, out_w))
+        crop = T.Crop(location=(j, i), size=(int(out_h), int(out_w)))
         img = crop(img)
-        self.inverse_crop = crop.invert()
+        self.transforms.append(crop)
+
+        if (self.out_w is not None and self.out_w != out_w) or \
+                (self.out_h is not None and self.out_h != out_h):
+            center_crop = T.CenterCrop(size=(self.out_h, self.out_w))
+            img = center_crop(img)
+            self.transforms.append(center_crop)
 
         return img
 
@@ -82,14 +108,14 @@ class RandomRotCrop(UndefinedInvertible):
                f'crop_size=({self.out_h}, {self.out_w})' \
                f')'
 
-    def _invert(self, **kwargs):
-        return Compose([
-            self.inverse_crop,
-            self.inverse_rot,
-        ])
+    def invert(self):
+        if not self.__can_invert():
+            raise InvertibleException('Cannot invert a random transformation before it is applied.')
 
-    def _can_invert(self):
-        return self.inverse_rot is not None and self.inverse_crop is not None
+        return T.Compose(self.transforms).invert()
+
+    def __can_invert(self):
+        return len(self.transforms) > 0
 
 
 def _rotate_coordinates(coordinates, angle, center_coordinates):

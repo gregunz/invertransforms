@@ -1,11 +1,14 @@
 from collections import Sequence
 
+from torchvision import transforms
+
+import invertransforms as T
 from invertransforms import functional as F
-from invertransforms.pad import Pad
-from invertransforms.util import UndefinedInvertible
+from invertransforms.util import Invertible
+from invertransforms.util.invertible import InvertibleException
 
 
-class Crop(UndefinedInvertible):
+class Crop(Invertible):
     img_h = img_w = None
 
     def __init__(self, location, size):
@@ -23,23 +26,51 @@ class Crop(UndefinedInvertible):
             raise Exception(f'Argument mismatch: size={size}')
 
     def __repr__(self):
-        return f'{self.__class__.__name__}(location=({self.tl_i},{self.tl_j}), size=({self.crop_h},{self.crop_w}))'
+        return f'{self.__class__.__name__}(location=({self.tl_i}, {self.tl_j}), size=({self.crop_h}, {self.crop_w}))'
 
     def __call__(self, img):
         self.img_w, self.img_h = img.size
         return F.crop(img, self.tl_i, self.tl_j, self.crop_h, self.crop_w)
 
-    def _invert(self, **kwargs):
+    def invert(self):
+        if not self.__can_invert():
+            raise InvertibleException('Cannot invert a transformation before it is applied'
+                                      ' (size before cropping is unknown).')
+
         padding = (
             self.tl_j,
             self.tl_i,
             self.img_w - self.crop_w - self.tl_j,
             self.img_h - self.crop_h - self.tl_i,
         )
-        inverse = Pad(padding=padding, **kwargs)
+        inverse = T.Pad(padding=padding)
         inverse.img_w = self.crop_w
         inverse.img_h = self.crop_h
         return inverse
 
-    def _can_invert(self):
+    def __can_invert(self):
         return self.img_w is not None and self.img_h is not None
+
+
+class RandomCrop(transforms.RandomCrop, Invertible):
+    img_h = img_w = tl_i = tl_j = None
+
+    def get_params(self, img, output_size):
+        self.img_w, self.img_h = img.size
+        params = super().get_params(img, output_size)
+        self.tl_i, self.tl_j, _, _ = params
+        return params
+
+    def invert(self):
+        if not self.__can_invert():
+            raise InvertibleException('Cannot invert a random transformation before it is applied')
+
+        crop = Crop(
+            location=(self.tl_i, self.tl_j),
+            size=self.size,
+        )
+        crop.img_h, crop.img_w = self.img_h, self.img_w
+        return crop.invert()
+
+    def __can_invert(self):
+        return self.img_h is not None or self.img_w is not None or self.tl_i is not None or self.tl_j is not None

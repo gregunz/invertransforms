@@ -2,11 +2,12 @@ import warnings
 
 from torchvision import transforms
 
-from invertransforms import Crop, Resize, Compose
-from invertransforms.util import UndefinedInvertible
+import invertransforms as T
+from invertransforms.util import Invertible
+from invertransforms.util.invertible import InvertibleException
 
 
-class RandomResizedCrop(transforms.RandomResizedCrop, UndefinedInvertible):
+class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
     tf = None
 
     def __call__(self, img):
@@ -18,16 +19,19 @@ class RandomResizedCrop(transforms.RandomResizedCrop, UndefinedInvertible):
             PIL Image: Randomly cropped and resized image.
         """
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self.tf = Compose([
-            Crop(location=(i, j), size=(h, w)),
-            Resize(size=self.size, interpolation=self.interpolation),
+        self.tf = T.Compose([
+            T.Crop(location=(i, j), size=(h, w)),
+            T.Resize(size=self.size, interpolation=self.interpolation),
         ])
         return self.tf(img)
 
-    def _invert(self, **kwargs):
+    def invert(self):
+        if not self.__can_invert():
+            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+
         return self.tf.invert()
 
-    def _can_invert(self):
+    def __can_invert(self):
         return self.tf is not None
 
 
