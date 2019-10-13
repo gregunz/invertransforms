@@ -53,6 +53,11 @@ If a transformation is random, it is necessary to apply it once before calling `
 On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
 
 
+[Documentation]
+-------------
+
+The library's [documentation] contains the full list of [transformations](https://gregunz.github.io/invertransforms/#header-classes) which includes all the ones from torchvision and more.
+
 Use Case
 --------
 
@@ -69,12 +74,6 @@ Features
 * All classes extends its torchvision transformation equivalent class
 * Extensive unit testing
 * blah-blah
-
-
-[Documentation]
--------------
-
-The above features are explained in more detail in invertransforms' [documentation].
 
 
 Contribute
