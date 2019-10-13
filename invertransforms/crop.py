@@ -53,12 +53,12 @@ class Crop(Invertible):
 
 
 class RandomCrop(transforms.RandomCrop, Invertible):
-    img_h = img_w = tl_i = tl_j = None
+    _img_h = _img_w = _tl_i = _tl_j = None
 
     def get_params(self, img, output_size):
-        self.img_w, self.img_h = img.size
+        self._img_w, self._img_h = img.size
         params = super().get_params(img, output_size)
-        self.tl_i, self.tl_j, _, _ = params
+        self._tl_i, self._tl_j, _, _ = params
         return params
 
     def invert(self):
@@ -66,11 +66,11 @@ class RandomCrop(transforms.RandomCrop, Invertible):
             raise InvertibleException('Cannot invert a random transformation before it is applied')
 
         crop = Crop(
-            location=(self.tl_i, self.tl_j),
+            location=(self._tl_i, self._tl_j),
             size=self.size,
         )
-        crop._img_h, crop._img_w = self.img_h, self.img_w
+        crop._img_h, crop._img_w = self._img_h, self._img_w
         return crop.invert()
 
     def _can_invert(self):
-        return self.img_h is not None or self.img_w is not None or self.tl_i is not None or self.tl_j is not None
+        return self._img_h is not None or self._img_w is not None or self._tl_i is not None or self._tl_j is not None
