@@ -4,10 +4,10 @@ from invertransforms.util.invertible import InvertibleError, Invertible
 
 
 class LinearTransformation(transforms.LinearTransformation, Invertible):
-    def invert(self):
+    def inverse(self):
         try:
             return LinearTransformation(
-                transformation_matrix=self.transformation_matrix.inverse(),
+                transformation_matrix=self.transformation_matrix.invert(),
                 mean_vector=(-1.0) * self.mean_vector @ self.transformation_matrix
             )
         except RuntimeError:

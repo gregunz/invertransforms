@@ -12,7 +12,7 @@ class Affine(Invertible):
     def __init__(self, matrix):
         self.matrix = matrix
 
-    def invert(self):
+    def inverse(self):
         matrix_inv = _invert_affine_matrix(self.matrix)
         return Affine(matrix_inv)
 
@@ -38,7 +38,7 @@ class RandomAffine(transforms.RandomAffine, Invertible):
         self._matrix = _get_inverse_affine_matrix(center, *params)
         return F.affine(img, *params, resample=self.resample, fillcolor=self.fillcolor)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

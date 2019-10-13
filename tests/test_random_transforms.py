@@ -10,7 +10,7 @@ class TestRandomApply(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            T.RandomApply([]).invert()
+            T.RandomApply([]).inverse()
 
     def test_invert(self):
         tf = T.RandomApply(
@@ -20,7 +20,7 @@ class TestRandomApply(InvertibleTestCase):
 
         img_tensor = tf(self.img_pil)
         self.assertIsInstance(img_tensor, torch.Tensor)
-        self.assertIsInstance(tf.inverse(img_tensor), Image.Image)
+        self.assertIsInstance(tf.invert(img_tensor), Image.Image)
 
     def test_identity(self):
         tf_id = T.RandomApply(
@@ -29,28 +29,28 @@ class TestRandomApply(InvertibleTestCase):
         )
 
         self.assertEqual(tf_id(self.n), self.n)
-        self.assertEqual(tf_id.inverse(self.n), self.n)
+        self.assertEqual(tf_id.invert(self.n), self.n)
 
 
 class TestRandomChoice(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            T.RandomChoice([]).invert()
+            T.RandomChoice([]).inverse()
 
     def test_invert(self):
         tf = T.RandomChoice(
             [T.ToTensor()] * 10
         )
         self.assertIsInstance(tf(self.img_pil), torch.Tensor)
-        self.assertIsInstance(tf.invert(), T.ToPILImage)
+        self.assertIsInstance(tf.inverse(), T.ToPILImage)
 
 
 class TestRandomOrder(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            T.RandomOrder([]).invert()
+            T.RandomOrder([]).inverse()
 
     def test_invert(self):
         tf = T.RandomOrder([
@@ -59,7 +59,7 @@ class TestRandomOrder(InvertibleTestCase):
             T.RandomVerticalFlip(1),
         ])
         img_inv = tf(self.img_pil)
-        img_pil = tf.inverse(img_inv)
+        img_pil = tf.invert(img_inv)
         self.assertEqual(img_pil.size, self.img_pil.size)
         center = (self.w // 2 - 10, self.h // 2 + 10)
         self.assertEqual(img_pil.getpixel(center), self.img_pil.getpixel(center))

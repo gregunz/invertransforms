@@ -12,12 +12,12 @@ class TestRandomResizedCrop(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            T.RandomResizedCrop(self.crop_size).invert()
+            T.RandomResizedCrop(self.crop_size).inverse()
 
     def test_invert(self):
         tf = T.RandomResizedCrop(self.crop_size)
         img_inv = tf(self.img_pil)
         self.assertEqual(img_inv.size[::-1], self.crop_size)
 
-        img_pil = tf.inverse(img_inv)
+        img_pil = tf.invert(img_inv)
         self.assertEqual(img_pil.size, self.img_pil.size)

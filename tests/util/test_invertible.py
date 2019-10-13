@@ -20,7 +20,7 @@ class TestInvertible(InvertibleTestCase):
             self.tf.apply(None)
 
         with self.assertRaises(NotImplementedError):
-            self.tf.invert()
+            self.tf.inverse()
 
         self.assertTrue(self.tf._can_invert())
 

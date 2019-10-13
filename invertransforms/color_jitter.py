@@ -5,5 +5,5 @@ from invertransforms.util import Invertible
 
 
 class ColorJitter(transforms.ColorJitter, Invertible):
-    def invert(self):
+    def inverse(self):
         return Identity()

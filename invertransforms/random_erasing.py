@@ -5,5 +5,5 @@ from invertransforms.util import Invertible
 
 
 class RandomErasing(transforms.RandomErasing, Invertible):
-    def invert(self):
+    def inverse(self):
         return Identity()

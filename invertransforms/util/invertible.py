@@ -17,7 +17,7 @@ class Invertible:
         raise NotImplementedError
 
     @abstractmethod
-    def invert(self):
+    def inverse(self):
         """
         Abstract method to return the inverse of the transformation
 
@@ -40,7 +40,7 @@ class Invertible:
         """
         return self.__call__(img)
 
-    def inverse(self, img):
+    def invert(self, img):
         """
         Apply the inverse of this transformation.
 
@@ -50,7 +50,7 @@ class Invertible:
         Returns: image
 
         """
-        return self.invert()(img)
+        return self.inverse()(img)
 
     def replay(self, img):
         """
@@ -68,7 +68,7 @@ class Invertible:
         try:
             # hack: because inverse fixes the randomness,
             #       we can replay for free with double inverse
-            return self.invert().invert()(img)
+            return self.inverse().inverse()(img)
         except InvertibleError:
             return self.__call__(img)
 

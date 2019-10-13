@@ -30,11 +30,11 @@ class RandomApply(transforms.RandomApply, Invertible):
             self._transform = T.Compose(self.transforms)
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None
@@ -48,7 +48,7 @@ class RandomChoice(transforms.RandomChoice, Invertible):
         self._transform = self.transforms[i]
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
@@ -68,7 +68,7 @@ class RandomOrder(transforms.RandomOrder, Invertible):
             img = self.transforms[i](img)
         return img
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

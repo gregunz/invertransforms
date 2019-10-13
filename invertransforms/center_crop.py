@@ -19,7 +19,7 @@ class CenterCrop(transforms.CenterCrop, Invertible):
         self._img_w, self._img_h = img.size
         return F.center_crop(img, self.size)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size before cropping is unknown).')

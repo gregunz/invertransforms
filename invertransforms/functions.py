@@ -7,7 +7,7 @@ class Identity(Invertible):
     def __call__(self, img):
         return img
 
-    def invert(self):
+    def inverse(self):
         return Identity()
 
 
@@ -19,7 +19,7 @@ class Lambda(transforms.Lambda, Invertible):
         assert tf_inv is None or callable(tf_inv), repr(type(tf_inv).__name__) + " object is not callable"
         self.tf_inv = tf_inv
 
-    def invert(self):
+    def inverse(self):
         if self.tf_inv is None:
             raise InvertibleError('Cannot invert transformation, tf_inv_builder is None')
         if isinstance(self.tf_inv, Invertible):
@@ -56,8 +56,8 @@ class TransformIf(Invertible):
     def __repr__(self):
         return self.transform.__repr__()
 
-    def invert(self):
+    def inverse(self):
         if not isinstance(self.transform, Invertible):
             raise InvertibleError(
                 f'{self.transform} ({self.transform.__class__.__name__}) is not an invertible object')
-        return self.transform.invert()
+        return self.transform.inverse()

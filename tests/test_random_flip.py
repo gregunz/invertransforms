@@ -7,7 +7,7 @@ class TestRandomFlip(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            T.RandomVerticalFlip().invert()
+            T.RandomVerticalFlip().inverse()
 
         with self.assertRaises(InvertibleError):
-            T.RandomHorizontalFlip().invert()
+            T.RandomHorizontalFlip().inverse()

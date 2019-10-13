@@ -10,11 +10,11 @@ class TestCenterCrop(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            self.tf.invert()
+            self.tf.inverse()
 
     def test_inverse(self):
         img = self.tf(self.img_pil)
         self.assertEqual(img.size[::-1], self.crop_size)  # [::-1] because pil order is inversed
 
-        img2 = self.tf.inverse(img)
+        img2 = self.tf.invert(img)
         self.assertEqual(self.img_pil.size, img2.size)

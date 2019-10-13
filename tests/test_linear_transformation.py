@@ -14,11 +14,11 @@ class Test(InvertibleTestCase):
             transformation_matrix=torch.eye(small_img_tensor.nelement()) * 2,
             mean_vector=torch.randn_like(small_img_tensor).view(-1)
         )
-        self.assertTrue(torch.allclose(tf.inverse(tf(small_img_tensor)), small_img_tensor, atol=1e-07))
+        self.assertTrue(torch.allclose(tf.invert(tf(small_img_tensor)), small_img_tensor, atol=1e-07))
 
     def test_not_invertible(self):
         with self.assertRaises(InvertibleError):
             T.LinearTransformation(
                 transformation_matrix=torch.zeros((32, 32)),
                 mean_vector=torch.randn(32),
-            ).invert()
+            ).inverse()

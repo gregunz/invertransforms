@@ -7,7 +7,7 @@ class TestResize(InvertibleTestCase):
 
     def test_invert_before_apply(self):
         with self.assertRaises(InvertibleError):
-            T.Resize(size=self.crop_size).invert()
+            T.Resize(size=self.crop_size).inverse()
 
     def test_deprecated(self):
         with self.assertWarns(UserWarning):

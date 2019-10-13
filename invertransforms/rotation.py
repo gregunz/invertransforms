@@ -22,7 +22,7 @@ class Rotation(Invertible):
             img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
         return img
 
-    def invert(self):
+    def inverse(self):
         if (self._img_h is None or self._img_w is None) and self.expand:
             raise InvertibleError(
                 'Cannot invert a transformation before it is applied'
@@ -61,7 +61,7 @@ class RandomRotation(transforms.RandomRotation, Invertible):
         self._img_w, self._img_h = img.size
         return F.rotate(img, self._angle, self.resample, self.expand, self.center)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

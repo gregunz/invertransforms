@@ -21,7 +21,7 @@ class Pad(transforms.Pad, Invertible):
         self._img_w, self._img_h = img.size
         return super().__call__(img=img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size of image before padding unknown).')
