@@ -17,10 +17,12 @@ class TestInvertible(InvertibleTestCase):
 
     def test_access_abstract_methods(self):
         with self.assertRaises(NotImplementedError):
-            self.tf(None)
+            self.tf.apply(None)
 
         with self.assertRaises(NotImplementedError):
             self.tf.invert()
+
+        self.assertTrue(self.tf._can_invert())
 
     def test_replay(self):
         tf = T.Compose([
