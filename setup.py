@@ -2,15 +2,13 @@
 
 from setuptools import setup, find_packages
 
-version = '0.1.0'
+version = '0.1.1'
 
 setup(
     name='invertransforms',
     version=version,
+    license='BSD 3-Clause',
     description='A library which turns torchvision transformations invertible and replayable.',
-    author='Gregunz',
-    author_email='mail@gregunz.io',
-    url='github.com/gregunz/invertransforms',
     packages=find_packages(),
     download_url='https://github.com/gregunz/invertransforms/archive/v{}.tar.gz'.format(version),
     keywords=['invertible', 'transforms', 'transformations', 'torchvision', 'data', 'augmentation',
