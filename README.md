@@ -8,7 +8,7 @@ invertransforms
 
 [![Build Status](https://img.shields.io/travis/com/gregunz/invertransforms.svg?style=for-the-badge)](https://travis-ci.com/gregunz/invertransforms)
 [![Code Coverage](https://img.shields.io/codecov/c/gh/gregunz/invertransforms?style=for-the-badge&token=LKe8W1b4bk)](https://codecov.io/gh/gregunz/invertransforms)
-[![pdoc3 on PyPI](https://img.shields.io/pypi/v/invertransforms.svg?color=blue&style=for-the-badge)](https://pypi.org/project/invertransforms)
+[![PyPI](https://img.shields.io/pypi/v/invertransforms.svg?color=blue&style=for-the-badge)](https://pypi.org/project/invertransforms)
 
 A library which turns torchvision transformations __invertible__ and __replayable__.
 
@@ -21,7 +21,7 @@ pip install invertransforms
 
 Usage
 -----
-Simply replace previous torchvision import statements and enjoy the addons.
+Simply replace previous torchvision import statements and enjoy the new features.
 
 ```python
 # from torchvision import transforms as T
@@ -40,8 +40,8 @@ img_again = transform.invert(img_tensor)
 # replay
 img_tensor2 = transform.replay(img2)
 ```
-All transformations have an `inverse` transformation attached to it.
 
+All transformations have an `inverse` transformation attached to it.
 
 ```python
 inv_transform = transform.inverse()
