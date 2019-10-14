@@ -2,8 +2,6 @@ import torch
 from PIL import Image
 
 import invertransforms as T
-import invertransforms.sequence
-import invertransforms.util_functions
 from invertransforms.lib import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
@@ -11,14 +9,14 @@ from tests.invertible_test_case import InvertibleTestCase
 class TestCompose(InvertibleTestCase):
 
     def test_invert_of_invertible_only(self):
-        tf = invertransforms.sequence.Compose(['s'])
+        tf = T.Compose(['s'])
         with self.assertRaises(InvertibleError):
             tf.inverse()
 
     def test_nested_invert(self):
-        tf = invertransforms.sequence.Compose([
-            invertransforms.sequence.Compose([
-                invertransforms.util_functions.ToPILImage(),
+        tf = T.Compose([
+            T.Compose([
+                T.ToPILImage(),
                 T.RandomHorizontalFlip(0),
                 T.RandomHorizontalFlip(1),
             ]),

@@ -40,7 +40,8 @@ class Invertible:
 
         Args:
             img (PIL Image, torch.Tensor, Any): input image.
-            index (optional, int or Any): index associated with the tracked inverse transform; increasing int when not defined
+            index (optional, int or Any): index associated with the tracked inverse transform;
+             increasing int when not defined
 
         Returns: image
         """
