@@ -39,6 +39,13 @@ class ColorJitter(transforms.ColorJitter, Invertible):
 
 class Grayscale(transforms.Grayscale, Invertible):
     def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        """
         return F.to_grayscale(img, num_output_channels=self.num_output_channels)
 
     def inverse(self):
@@ -53,6 +60,13 @@ class RandomGrayscale(transforms.RandomGrayscale, Invertible):
     _transform = None
 
     def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        """
         self._transform = T.Identity()
         if flip_coin(self.p):
             num_output_channels = 1 if img.mode == 'L' else 3

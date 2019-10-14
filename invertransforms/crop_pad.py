@@ -190,7 +190,7 @@ class FiveCrop(transforms.FiveCrop, Invertible):
         return T.Lambda(
             lambd=invert_crops,
             tf_inv=invert_invert_crops,
-            repr_str=f'FiveCropInvert()',
+            repr_str=f'FiveCropInverse()',
         )
 
     def _can_invert(self):
@@ -229,7 +229,7 @@ class TenCrop(transforms.TenCrop, Invertible):
             lambd=lambda imgs: five_crop.inverse()(imgs[:5]) + self._flip(five_crop_flip.inverse()(imgs[5:])),
             tf_inv=lambda imgs: five_crop.inverse().invert(imgs[:5]) + five_crop_flip.inverse().invert(
                 self._flip(imgs[5:])),
-            repr_str='TenCropInvert()',
+            repr_str='TenCropInverse()',
         )
 
     def _can_invert(self):
