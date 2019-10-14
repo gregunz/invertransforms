@@ -11,46 +11,6 @@ import invertransforms as T
 from invertransforms.util import Invertible, flip_coin, InvertibleError
 
 
-class ColorJitterFixed(Invertible):
-    """
-    Change the brightness, contrast and saturation of an image.
-    Not random version for `ColorJitter`.
-    
-    Args:
-        brightness (float): How much to jitter brightness.
-        contrast (float): How much to jitter contrast.
-        saturation (float): How much to jitter saturation.
-        hue (float): How much to jitter hue.
-    """
-
-    def __init__(self, brightness=0, contrast=0, saturation=0, hue=0):
-        self.brightness = brightness
-        self.contrast = contrast
-        self.saturation = saturation
-        self.hue = hue
-        self.transform = T.Compose([
-            T.Lambda(lambda img: F.adjust_brightness(img, self.brightness)),
-            T.Lambda(lambda img: F.adjust_contrast(img, self.contrast)),
-            T.Lambda(lambda img: F.adjust_saturation(img, self.saturation)),
-            T.Lambda(lambda img: F.adjust_hue(img, self.hue)),
-        ])
-
-    def __call__(self, img):
-        return self.transform(img)
-
-    def inverse(self):
-        return T.Lambda(
-            lambd=lambda x: x,
-            tf_inv=ColorJitterFixed(
-                brightness=self.brightness,
-                contrast=self.contrast,
-                saturation=self.saturation,
-                hue=self.hue
-            ),
-            repr_str='ColorJitterInverse()'
-        )
-
-
 class ColorJitter(transforms.ColorJitter, Invertible):
     _transform = None
 
