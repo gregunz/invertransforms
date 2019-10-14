@@ -1,6 +1,6 @@
 import invertransforms as T
 import invertransforms.util_functions
-from invertransforms.util import InvertibleError
+from invertransforms.lib import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 

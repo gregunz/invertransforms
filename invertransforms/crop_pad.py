@@ -1,5 +1,5 @@
 """
-Crop and Pad module.
+Crop and Pad Module.
 
 This modules contains multiple transformations about creating crops.
 Generally, their inverse is/or involves `Pad`, and respectively is `Crop` for `Pad` transformation.
@@ -11,8 +11,7 @@ from torchvision import transforms
 
 import invertransforms as T
 from invertransforms import functional as F
-from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleError
+from invertransforms.lib import InvertibleError, Invertible
 
 
 class Crop(Invertible):

@@ -1,5 +1,5 @@
 """
-Tensors Module
+Tensors Module.
 
 This module contains transformations on torch tensors.
 
@@ -9,7 +9,7 @@ from torchvision import transforms
 
 import invertransforms as T
 from invertransforms import functional as F
-from invertransforms.util import Invertible, flip_coin, InvertibleError
+from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class LinearTransformation(transforms.LinearTransformation, Invertible):

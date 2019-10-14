@@ -1,12 +1,12 @@
 """
-Util Functions Module
+Util Functions Module.
 
 This modules contains utility transformations for building a clean pipeline.
 
 """
 from torchvision import transforms
 
-from invertransforms.util import Invertible, InvertibleError
+from invertransforms.lib import InvertibleError, Invertible
 
 
 class Identity(Invertible):

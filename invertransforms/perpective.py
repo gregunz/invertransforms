@@ -1,5 +1,5 @@
 """
-Perspective Module
+Perspective Module.
 
 This module contains transformations for perspective transformation and flipping vertically or horizontally images.
 These transformations can be applied deterministically or randomly.
@@ -10,8 +10,7 @@ from torchvision import transforms
 
 import invertransforms as T
 from invertransforms import functional as F
-from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleError
+from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class Perspective(Invertible):

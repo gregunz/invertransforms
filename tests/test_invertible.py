@@ -1,9 +1,7 @@
 import torch
 
 import invertransforms as T
-import invertransforms.sequence
-import invertransforms.util_functions
-from invertransforms.util import Invertible
+from invertransforms.lib import Invertible
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -27,11 +25,11 @@ class TestInvertible(InvertibleTestCase):
         self.assertTrue(self.tf._can_invert())
 
     def test_replay(self):
-        tf = invertransforms.sequence.Compose([
+        tf = T.Compose([
             T.RandomCrop(self.crop_size),
             T.RandomVerticalFlip(),
             T.RandomHorizontalFlip(),
-            invertransforms.util_functions.ToTensor(),
+            T.ToTensor(),
         ])
         img_tf1 = tf.replay(self.img_pil)
         img_tf2 = tf.replay(self.img_pil)

@@ -1,9 +1,12 @@
 """
-Invertible Module
+Lib Module.
 
-This module contains the basic building block to make transformations invertible.
+This module contains the basic building blocks of this library.
+It contains the abstract class all transformations should extend
+and utility functions.
 
 """
+import random
 from abc import abstractmethod
 
 
@@ -93,3 +96,18 @@ class InvertibleError(Exception):
 
     def __init__(self, message):
         super().__init__(message)
+
+
+def flip_coin(p):
+    """
+    Return true with probability p
+
+    Args:
+        p: float, probability to return True
+
+    Returns: bool
+
+    """
+
+    assert 0 <= p <= 1, 'A probability should be between 0 and 1'
+    return random.random() < p

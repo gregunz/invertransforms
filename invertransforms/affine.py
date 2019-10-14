@@ -12,8 +12,7 @@ from torchvision import transforms
 from torchvision.transforms.functional import _get_inverse_affine_matrix
 
 from invertransforms import functional as F
-from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleError
+from invertransforms.lib import InvertibleError, Invertible
 
 
 class Affine(Invertible):

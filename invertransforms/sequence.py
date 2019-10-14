@@ -1,5 +1,5 @@
 """
-Sequence Module
+Sequence Module.
 
 This module contains transformations that are applied to a list of transformations.
 It can apply them in order, in random order, pick one randomly, or apply none, ...
@@ -11,8 +11,7 @@ from typing import Union
 from torchvision import transforms
 
 import invertransforms as T
-from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleError
+from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class RandomApply(transforms.RandomApply, Invertible):
