@@ -1,3 +1,10 @@
+"""
+Affine Module.
+
+This module contains transform classes to apply affine transformations to images.
+The transformation can be random or fixed
+
+"""
 import torch
 from PIL import Image, PILLOW_VERSION
 from torchvision import transforms
@@ -9,6 +16,14 @@ from invertransforms.util.invertible import InvertibleError
 
 
 class Affine(Invertible):
+    """
+    Apply affine transformation on the image.
+
+    Args:
+        matrix (list of int): transformation matrix (from destination image to source)
+         because we want to interpolate the (discrete) destination pixel from the local
+         area around the (floating) source pixel.
+    """
     def __init__(self, matrix):
         self.matrix = matrix
 
