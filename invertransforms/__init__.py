@@ -21,8 +21,8 @@ transform = Normalize()
 from torchvision.transforms import functional
 
 from .affine import Affine, RandomAffine
-from .color_transforms import ColorJitter
-from .color_transforms import Grayscale, RandomGrayscale
+from .color import ColorJitter
+from .color import Grayscale, RandomGrayscale
 from .crop_pad import Crop, RandomCrop, Pad
 from .crop_pad import FiveCrop, TenCrop, CenterCrop
 from .flip import RandomHorizontalFlip, RandomVerticalFlip

@@ -1,4 +1,4 @@
-import invertransforms.color_transforms
+import invertransforms.color
 import invertransforms.random_erasing
 from tests.invertible_test_case import InvertibleTestCase
 

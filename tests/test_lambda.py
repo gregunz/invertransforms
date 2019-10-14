@@ -31,9 +31,9 @@ class TestLambda(InvertibleTestCase):
 
     def test_repr(self):
         tf_inv = self.tf.inverse()
-        self.assertIn('Invert()', repr(tf_inv))
+        self.assertIn('Inverse()', repr(tf_inv))
         tf_inv_inv = tf_inv.inverse()
-        self.assertNotIn('Invert()', repr(tf_inv_inv))
+        self.assertNotIn('Inverse()', repr(tf_inv_inv))
 
     def test_invert_none(self):
         tf = T.Lambda(lambda x: self.n)
