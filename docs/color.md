@@ -1,7 +1,9 @@
 Module invertransforms.color
 ============================
-This modules contains transformations on the image channels (RBG, grayscale).
-Generally this transformation cannot be reversed or it simply makes not much sense.
+This modules contains transformations on the image channels (RGB, grayscale).
+
+Technically these transformations cannot be inverted or it simply makes not much sense,
+hence the inverse is usually the identity function.
 
 Classes
 -------

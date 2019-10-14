@@ -58,17 +58,29 @@ Classes
     * invertransforms.util_functions.ToPILImage
     * invertransforms.util_functions.ToTensor
 
+    ### Class variables
+
+    `tracked_inverses`
+    :   dict() -> new empty dictionary
+        dict(mapping) -> new dictionary initialized from a mapping object's
+            (key, value) pairs
+        dict(iterable) -> new dictionary initialized as if via:
+            d = {}
+            for k, v in iterable:
+                d[k] = v
+        dict(**kwargs) -> new dictionary initialized with the name=value pairs
+            in the keyword argument list.  For example:  dict(one=1, two=2)
+
     ### Methods
 
-    `apply(self, img)`
-    :   Apply the transformation.
-        This is an alias to the `__call__` method which should be preferred.
-        Its main purpose is to appear in the doc alongside `inverse` and `replay`.
+    `get_inverse(self, index)`
+    :   Get the inverse of a tracked transformation given its index.
         
         Args:
-            img (PIL Image, torch.Tensor, Any): input image
+            index (int or Any): index associated with the tracked inverse transform
         
-        Returns: image
+        Returns:
+            inverse transformation
 
     `inverse(self)`
     :   Abstract method to return the inverse of the transformation
@@ -91,6 +103,15 @@ Classes
         
         Args:
             img (PIL Image, torch.Tensor, Any): input image
+        
+        Returns: image
+
+    `track(self, img, index=None)`
+    :   Apply the transformation and track all inverses.
+        
+        Args:
+            img (PIL Image, torch.Tensor, Any): input image.
+            index (optional, int or Any): index associated with the tracked inverse transform; increasing int when not defined
         
         Returns: image
 
