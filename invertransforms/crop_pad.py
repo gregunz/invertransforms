@@ -1,6 +1,4 @@
 """
-Crop and Pad Module.
-
 This modules contains multiple transformations about creating crops.
 Generally, their inverse is/or involves `Pad`, and respectively is `Crop` for `Pad` transformation.
 

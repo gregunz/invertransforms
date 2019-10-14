@@ -1,6 +1,4 @@
 """
-Lib Module.
-
 This module contains the basic building blocks of this library.
 It contains the abstract class all transformations should extend
 and utility functions.

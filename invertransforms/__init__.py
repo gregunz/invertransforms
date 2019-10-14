@@ -1,6 +1,4 @@
 """
-Root module.
-
 This module exports all the transformation classes.
 
 There are two typical practices to import them into your project:
@@ -17,12 +15,24 @@ from invertransforms import Normalize
 transform = Normalize()
 ```
 
-You can create your own invertible transformation class either by using the
+All transformations have an `inverse` transformation attached to it.
+
+```python
+inv_transform = transform.inverse()
+img_inv = inv_transform(img)
+```
+
+If a transformation is random, it is necessary to apply it once before calling `invert` or `inverse()`.
+Otherwise it will raise `InvertibleError`.
+On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
+
+
+One can create its own invertible transforms either by using the
 practical `Lambda` class function or by extending the `Invertible` class available
 in the `invertransforms.lib` module.
 
 
-For conveniences, you can also import the following torchvision useful functions from this library:
+For convenience, you can also import the following torchvision useful functions from this library:
 ```
 # from torchvision.transforms import functional as F
 # becomes:

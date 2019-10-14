@@ -1,6 +1,4 @@
 """
-Color Module
-
 This modules contains transformations on the image channels (RBG, grayscale).
 Generally this transformation cannot be reversed or it simply makes not much sense.
 

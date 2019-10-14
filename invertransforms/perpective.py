@@ -1,6 +1,4 @@
 """
-Perspective Module.
-
 This module contains transformations for perspective transformation and flipping vertically or horizontally images.
 These transformations can be applied deterministically or randomly.
 

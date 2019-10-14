@@ -53,34 +53,41 @@ If a transformation is random, it is necessary to apply it once before calling `
 On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
 
 
+One can create its own invertible transforms either by using the
+practical `Lambda` class function or by extending the `Invertible` class available
+in the `invertransforms.lib` module.
+
+
 [Documentation]
--------------
+---------------
 
-The library's [documentation] contains the full list of [transformations](https://gregunz.github.io/invertransforms/#header-classes) which includes all the ones from torchvision and more.
+The library's [documentation] contains the full list of [transformations](https://gregunz.github.io/invertransforms/#header-classes)
+ which includes all the ones from torchvision and more.
 
-Use Case
---------
-
+Use Cases
+---------
 This library can be particularly useful in following situations:
-- Reverting your model outputs in order to stack predictions
-- Applying the same transformations on two different images
-- blah-blah
-
+- Reverting a NN-model output in order to stack predictions
+- Applying the same (random) transformations the same way on different inputs
+- ...
 
 Features
 --------
 * Invert any transformations even random ones
 * Replay any transformations even random ones
-* All classes extends its torchvision transformation equivalent class
-* Extensive unit testing
-* blah-blah
+* All classes extend its torchvision transformation equivalent class (this means, just replace your import statement and you're free to go)
+* Extensive unit testing (100% coverage, be safe, hopefully)
+
+
+Future Improvements
+-------------------
+- [WIP] Extend the number of tranformations (e.g. random rotation and cropping (within the rotated area))
+- [WIP] Make the transformations on tensors directly (data augmentation/transformation on GPU)
 
 
 Contribute
 ----------
-
 You found a bug, think a feature is missing or just want to help ?
 
 Please feel free to open an issue, pull request or contact me [mail@gregunz.io]
-
 

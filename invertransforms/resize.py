@@ -1,8 +1,5 @@
 """
-Resize Module.
-
 This modules contains transformations which resize images.
-
 """
 
 import warnings

@@ -1,6 +1,4 @@
 """
-Affine Module.
-
 This module contains transform classes to apply affine transformations to images.
 The transformation can be random or fixed.
 Including specific transformations for rotations.

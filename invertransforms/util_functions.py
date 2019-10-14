@@ -1,8 +1,5 @@
 """
-Util Functions Module.
-
 This modules contains utility transformations for building a clean pipeline.
-
 """
 from torchvision import transforms
 
@@ -14,7 +11,7 @@ class Identity(Invertible):
     Returns its input image without changes.
 
     Args:
-        log_fn (callable): optional function useful for logging/debugging.
+        log_fn (function): optional, function useful for logging/debugging.
 
     Returns its input.
     Output = Input
@@ -35,6 +32,14 @@ class Identity(Invertible):
 
 
 class Lambda(transforms.Lambda, Invertible):
+    """Apply a user-defined lambda as a transform.
+
+    Args:
+        lambd (function): Lambda/function to be used for transform
+        tf_inv (function or Invertible): Invertible transform or Lambda/function to be returned by the `inverse` method
+        repr_str (str): optional, overriding the output of __repr__.
+    """
+
     def __init__(self, lambd, tf_inv=None, repr_str=None):
         super().__init__(lambd=lambd)
         assert repr_str is None or isinstance(repr_str, str), 'Expecting a string for repr_str argument'
