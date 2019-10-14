@@ -38,6 +38,7 @@ For convenience, you can also import the following torchvision useful functions 
 
 from invertransforms import functional as F
 ```
+Such that more functions could be added in the future.
 
 Sub-modules
 -----------
