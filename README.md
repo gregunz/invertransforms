@@ -7,7 +7,7 @@ invertransforms
 ====
 
 [![Build Status](https://img.shields.io/travis/com/gregunz/invertransforms.svg?style=for-the-badge)](https://travis-ci.com/gregunz/invertransforms)
-[![Code Coverage](https://img.shields.io/codecov/c/gh/gregunz/invertransforms?style=for-the-badge&token=LKe8W1b4bk)](https://codecov.io/gh/gregunz/invertransforms)
+[![Code Coverage](https://img.shields.io/codecov/c/gh/gregunz/invertransforms?style=for-the-badge)](https://codecov.io/gh/gregunz/invertransforms)
 [![PyPI](https://img.shields.io/pypi/v/invertransforms.svg?color=blue&style=for-the-badge)](https://pypi.org/project/invertransforms)
 
 A library which turns torchvision transformations __invertible__ and __replayable__.
