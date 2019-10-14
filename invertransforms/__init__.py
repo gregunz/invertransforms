@@ -24,8 +24,7 @@ from .affine import Affine, RandomAffine, RandomRotation, Rotation
 from .color import ColorJitter, Grayscale, RandomGrayscale
 from .crop_pad import Crop, RandomCrop, Pad, FiveCrop, TenCrop, CenterCrop
 from .perpective import Perspective, RandomPerspective, RandomHorizontalFlip, RandomVerticalFlip
-from .random_resized_crop import RandomResizedCrop, RandomSizedCrop
-from .resize import Resize, Scale
+from .resize import Resize, Scale, RandomResizedCrop, RandomSizedCrop
 from .sequence import Compose, RandomOrder, RandomChoice, RandomApply
 from .tensors import LinearTransformation, Normalize, RandomErasing
 from .util_functions import Identity, Lambda, TransformIf, ToPILImage, ToTensor

@@ -1,3 +1,9 @@
+"""
+Util Functions Module
+
+This modules contains utility transformations for building a clean pipeline.
+
+"""
 from torchvision import transforms
 
 from invertransforms.util import Invertible, InvertibleError

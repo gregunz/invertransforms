@@ -1,3 +1,9 @@
+"""
+Tensors Module
+
+This module contains transformations on torch tensors.
+
+"""
 import torch
 from torchvision import transforms
 
