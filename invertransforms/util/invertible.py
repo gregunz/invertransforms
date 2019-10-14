@@ -1,3 +1,10 @@
+"""
+Invertible Module
+
+This module contains the basic building block to make transformations invertible.
+
+
+"""
 from abc import abstractmethod
 
 
