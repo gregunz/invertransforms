@@ -1,7 +1,5 @@
 Module invertransforms.affine
 =============================
-Affine Module.
-
 This module contains transform classes to apply affine transformations to images.
 The transformation can be random or fixed.
 Including specific transformations for rotations.
@@ -19,7 +17,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomAffine(degrees, translate=None, scale=None, shear=None, resample=False, fillcolor=0)`
 :   Random affine transformation of the image keeping center invariant
@@ -51,7 +49,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomAffine
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomRotation(degrees, resample=False, expand=False, center=None)`
 :   Rotate the image by angle.
@@ -76,11 +74,24 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomRotation
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Rotation(angle, resample=False, expand=False, center=None)`
-:   
+:   Rotate the image given an angle (in degrees).
+    
+    Args:
+        angle (float or int): degrees of the angle
+        resample ({PIL.Image.NEAREST, PIL.Image.BILINEAR, PIL.Image.BICUBIC}, optional):
+            An optional resampling filter. See `filters`_ for more information.
+            If omitted, or if the image has mode "1" or "P", it is set to PIL.Image.NEAREST.
+        expand (bool, optional): Optional expansion flag.
+            If true, expands the output to make it large enough to hold the entire rotated image.
+            If false or omitted, make the output image the same size as the input image.
+            Note that the expand flag assumes rotation around the center and no translation.
+        center (2-tuple, optional): Optional center of rotation.
+            Origin is the upper left corner.
+            Default is the center of the image.
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

@@ -1,7 +1,5 @@
 Module invertransforms.tensors
 ==============================
-Tensors Module
-
 This module contains transformations on torch tensors.
 
 Classes
@@ -27,7 +25,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.LinearTransformation
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Normalize(mean, std, inplace=False)`
 :   Normalize a tensor image with mean and standard deviation.
@@ -46,7 +44,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Normalize
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomErasing(p=0.5, scale=(0.02, 0.33), ratio=(0.3, 3.3), value=0, inplace=False)`
 :   Randomly selects a rectangle region in an image and erases its pixels.
@@ -75,4 +73,4 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomErasing
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

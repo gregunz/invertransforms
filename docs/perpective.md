@@ -1,7 +1,5 @@
 Module invertransforms.perpective
 =================================
-Perspective Module
-
 This module contains transformations for perspective transformation and flipping vertically or horizontally images.
 These transformations can be applied deterministically or randomly.
 
@@ -9,18 +7,18 @@ Classes
 -------
 
 `HorizontalFlip(*args, **kwargs)`
-:   
+:   Flip the image horizontally.
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Perspective(startpoints, endpoints, interpolation=3)`
 :   
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomHorizontalFlip(p=0.5)`
 :   Horizontally flip the given PIL Image randomly with a given probability.
@@ -31,7 +29,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomHorizontalFlip
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomPerspective(distortion_scale=0.5, p=0.5, interpolation=3)`
 :   Performs Perspective transformation of the given PIL Image randomly with a given probability.
@@ -46,7 +44,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomPerspective
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomVerticalFlip(p=0.5)`
 :   Vertically flip the given PIL Image randomly with a given probability.
@@ -57,11 +55,11 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomVerticalFlip
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `VerticalFlip(*args, **kwargs)`
-:   
+:   Flip the image vertically.
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

@@ -1,7 +1,5 @@
 Module invertransforms.color
 ============================
-Color Module
-
 This modules contains transformations on the image channels (RBG, grayscale).
 Generally this transformation cannot be reversed or it simply makes not much sense.
 
@@ -28,7 +26,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.ColorJitter
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Grayscale(num_output_channels=1)`
 :   Convert image to grayscale.
@@ -44,7 +42,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Grayscale
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomGrayscale(p=0.1)`
 :   Randomly convert image to grayscale with a probability of p (default 0.1).
@@ -61,4 +59,4 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomGrayscale
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

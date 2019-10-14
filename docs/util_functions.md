@@ -1,29 +1,38 @@
 Module invertransforms.util_functions
 =====================================
-Util Functions Module
-
 This modules contains utility transformations for building a clean pipeline.
 
 Classes
 -------
 
-`Identity(*args, **kwargs)`
-:   
+`Identity(log_fn=<function Identity.<lambda>>)`
+:   Returns its input image without changes.
+    
+    Args:
+        log_fn (function): optional, function useful for logging/debugging.
+    
+    Returns its input.
+    Output = Input
+    
+    Can be use for debugging/logging if a log_fn is provided.
+    It is used throughout the library when inverse transformation is identity.
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Lambda(lambd, tf_inv=None, repr_str=None)`
 :   Apply a user-defined lambda as a transform.
     
     Args:
-        lambd (function): Lambda/function to be used for transform.
+        lambd (function): Lambda/function to be used for transform
+        tf_inv (function or Invertible): Invertible transform or Lambda/function to be returned by the `inverse` method
+        repr_str (str): optional, overriding the output of __repr__.
 
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Lambda
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `ToPILImage(mode=None)`
 :   Convert a tensor or an ndarray to PIL Image.
@@ -45,7 +54,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.ToPILImage
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `ToTensor(*args, **kwargs)`
 :   Convert a ``PIL Image`` or ``numpy.ndarray`` to tensor.
@@ -60,11 +69,16 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.ToTensor
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `TransformIf(transform, condition)`
-:   
+:   Apply a transformation if the condition is met.
+    Otherwise, returns its input.
+    
+    Args:
+          transform: a transformation
+          condition (bool): a boolean
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

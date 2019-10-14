@@ -1,7 +1,5 @@
 Module invertransforms.resize
 =============================
-Resize Module
-
 This modules contains transformations which resize images.
 
 Classes
@@ -24,7 +22,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomResizedCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
     ### Descendants
 
@@ -37,7 +35,7 @@ Classes
 
     * invertransforms.resize.RandomResizedCrop
     * torchvision.transforms.transforms.RandomResizedCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Resize(size, interpolation=2)`
 :   Resize the input PIL Image to the given size.
@@ -54,7 +52,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Resize
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
     ### Descendants
 
@@ -67,4 +65,4 @@ Classes
 
     * invertransforms.resize.Resize
     * torchvision.transforms.transforms.Resize
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

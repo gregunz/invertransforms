@@ -1,8 +1,20 @@
-Module invertransforms.util.invertible
-======================================
-Invertible Module
+Module invertransforms.lib
+==========================
+This module contains the basic building blocks of this library.
+It contains the abstract class all transformations should extend
+and utility functions.
 
-This module contains the basic building block to make transformations invertible.
+Functions
+---------
+
+    
+`flip_coin(p)`
+:   Return true with probability p
+    
+    Args:
+        p: float, probability to return True
+    
+    Returns: bool
 
 Classes
 -------
@@ -31,12 +43,12 @@ Classes
     * invertransforms.perpective.RandomHorizontalFlip
     * invertransforms.perpective.VerticalFlip
     * invertransforms.perpective.RandomVerticalFlip
+    * invertransforms.resize.Resize
+    * invertransforms.resize.RandomResizedCrop
     * invertransforms.sequence.RandomApply
     * invertransforms.sequence.RandomChoice
     * invertransforms.sequence.RandomOrder
     * invertransforms.sequence.Compose
-    * invertransforms.resize.Resize
-    * invertransforms.resize.RandomResizedCrop
     * invertransforms.tensors.LinearTransformation
     * invertransforms.tensors.Normalize
     * invertransforms.tensors.RandomErasing

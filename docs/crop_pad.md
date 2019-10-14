@@ -1,7 +1,5 @@
 Module invertransforms.crop_pad
 ===============================
-Crop and Pad module.
-
 This modules contains multiple transformations about creating crops.
 Generally, their inverse is/or involves `Pad`, and respectively is `Crop` for `Pad` transformation.
 
@@ -19,14 +17,17 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.CenterCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Crop(location, size)`
-:   
+:   Crop an image.
+    Args:
+        location (int, tuple): upper left coordinates of the crop area (top, left)
+        size (int, tuple): size of the crop (height, width)
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `FiveCrop(size)`
 :   Crop the given PIL Image into four corners and the central crop
@@ -54,7 +55,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.FiveCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Pad(padding, fill=0, padding_mode='constant')`
 :   Pad the given PIL Image on all sides with the given "pad" value.
@@ -88,7 +89,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Pad
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomCrop(size, padding=None, pad_if_needed=False, fill=0, padding_mode='constant')`
 :   Crop the given PIL Image at a random location.
@@ -127,7 +128,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
     ### Methods
 
@@ -170,4 +171,4 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.TenCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible

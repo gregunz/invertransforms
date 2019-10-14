@@ -1,8 +1,6 @@
 Module invertransforms
 ======================
-Root module.
-
-This modules contains all the transformations classes.
+This module exports all the transformation classes.
 
 There are two typical practices to import them into your project:
 
@@ -18,16 +16,39 @@ from invertransforms import Normalize
 transform = Normalize()
 ```
 
+All transformations have an `inverse` transformation attached to it.
+
+```python
+inv_transform = transform.inverse()
+img_inv = inv_transform(img)
+```
+
+If a transformation is random, it is necessary to apply it once before calling `invert` or `inverse()`.
+Otherwise it will raise `InvertibleError`.
+On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
+
+One can create its own invertible transforms either by using the
+practical `Lambda` class function or by extending the `Invertible` class available
+in the `invertransforms.lib` module.
+
+For convenience, you can also import the following torchvision useful functions from this library:
+```
+# from torchvision.transforms import functional as F
+# becomes:
+
+from invertransforms import functional as F
+```
+
 Sub-modules
 -----------
 * invertransforms.affine
 * invertransforms.color
 * invertransforms.crop_pad
+* invertransforms.lib
 * invertransforms.perpective
 * invertransforms.resize
 * invertransforms.sequence
 * invertransforms.tensors
-* invertransforms.util
 * invertransforms.util_functions
 
 Classes
@@ -43,7 +64,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `CenterCrop(size)`
 :   Crops the given PIL Image at the center.
@@ -56,7 +77,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.CenterCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `ColorJitter(brightness=0, contrast=0, saturation=0, hue=0)`
 :   Randomly change the brightness, contrast and saturation of an image.
@@ -78,7 +99,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.ColorJitter
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Compose(transforms)`
 :   Composes several transforms together.
@@ -95,14 +116,17 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Compose
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Crop(location, size)`
-:   
+:   Crop an image.
+    Args:
+        location (int, tuple): upper left coordinates of the crop area (top, left)
+        size (int, tuple): size of the crop (height, width)
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `FiveCrop(size)`
 :   Crop the given PIL Image into four corners and the central crop
@@ -130,7 +154,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.FiveCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Grayscale(num_output_channels=1)`
 :   Convert image to grayscale.
@@ -146,25 +170,43 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Grayscale
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
-`Identity(*args, **kwargs)`
-:   
+`HorizontalFlip(*args, **kwargs)`
+:   Flip the image horizontally.
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
+
+`Identity(log_fn=<function Identity.<lambda>>)`
+:   Returns its input image without changes.
+    
+    Args:
+        log_fn (function): optional, function useful for logging/debugging.
+    
+    Returns its input.
+    Output = Input
+    
+    Can be use for debugging/logging if a log_fn is provided.
+    It is used throughout the library when inverse transformation is identity.
+
+    ### Ancestors (in MRO)
+
+    * invertransforms.lib.Invertible
 
 `Lambda(lambd, tf_inv=None, repr_str=None)`
 :   Apply a user-defined lambda as a transform.
     
     Args:
-        lambd (function): Lambda/function to be used for transform.
+        lambd (function): Lambda/function to be used for transform
+        tf_inv (function or Invertible): Invertible transform or Lambda/function to be returned by the `inverse` method
+        repr_str (str): optional, overriding the output of __repr__.
 
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Lambda
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `LinearTransformation(transformation_matrix, mean_vector)`
 :   Transform a tensor image with a square transformation matrix and a mean_vector computed
@@ -186,7 +228,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.LinearTransformation
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Normalize(mean, std, inplace=False)`
 :   Normalize a tensor image with mean and standard deviation.
@@ -205,7 +247,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Normalize
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Pad(padding, fill=0, padding_mode='constant')`
 :   Pad the given PIL Image on all sides with the given "pad" value.
@@ -239,14 +281,14 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Pad
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Perspective(startpoints, endpoints, interpolation=3)`
 :   
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomAffine(degrees, translate=None, scale=None, shear=None, resample=False, fillcolor=0)`
 :   Random affine transformation of the image keeping center invariant
@@ -278,7 +320,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomAffine
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomApply(transforms, p=0.5)`
 :   Apply randomly a list of transformations with a given probability
@@ -291,7 +333,7 @@ Classes
 
     * torchvision.transforms.transforms.RandomApply
     * torchvision.transforms.transforms.RandomTransforms
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomChoice(transforms)`
 :   Apply single transformation randomly picked from a list
@@ -300,7 +342,7 @@ Classes
 
     * torchvision.transforms.transforms.RandomChoice
     * torchvision.transforms.transforms.RandomTransforms
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomCrop(size, padding=None, pad_if_needed=False, fill=0, padding_mode='constant')`
 :   Crop the given PIL Image at a random location.
@@ -339,7 +381,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
     ### Methods
 
@@ -380,7 +422,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomErasing
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomGrayscale(p=0.1)`
 :   Randomly convert image to grayscale with a probability of p (default 0.1).
@@ -397,7 +439,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomGrayscale
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomHorizontalFlip(p=0.5)`
 :   Horizontally flip the given PIL Image randomly with a given probability.
@@ -408,7 +450,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomHorizontalFlip
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomOrder(transforms)`
 :   Apply a list of transformations in a random order
@@ -417,7 +459,7 @@ Classes
 
     * torchvision.transforms.transforms.RandomOrder
     * torchvision.transforms.transforms.RandomTransforms
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomPerspective(distortion_scale=0.5, p=0.5, interpolation=3)`
 :   Performs Perspective transformation of the given PIL Image randomly with a given probability.
@@ -432,7 +474,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomPerspective
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomResizedCrop(size, scale=(0.08, 1.0), ratio=(0.75, 1.3333333333333333), interpolation=2)`
 :   Crop the given PIL Image to random size and aspect ratio.
@@ -451,7 +493,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomResizedCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
     ### Descendants
 
@@ -480,7 +522,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomRotation
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomSizedCrop(*args, **kwargs)`
 :   Note: This transform is deprecated in favor of RandomResizedCrop.
@@ -489,7 +531,7 @@ Classes
 
     * invertransforms.resize.RandomResizedCrop
     * torchvision.transforms.transforms.RandomResizedCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `RandomVerticalFlip(p=0.5)`
 :   Vertically flip the given PIL Image randomly with a given probability.
@@ -500,7 +542,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.RandomVerticalFlip
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Resize(size, interpolation=2)`
 :   Resize the input PIL Image to the given size.
@@ -517,18 +559,31 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.Resize
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
     ### Descendants
 
     * invertransforms.resize.Scale
 
 `Rotation(angle, resample=False, expand=False, center=None)`
-:   
+:   Rotate the image given an angle (in degrees).
+    
+    Args:
+        angle (float or int): degrees of the angle
+        resample ({PIL.Image.NEAREST, PIL.Image.BILINEAR, PIL.Image.BICUBIC}, optional):
+            An optional resampling filter. See `filters`_ for more information.
+            If omitted, or if the image has mode "1" or "P", it is set to PIL.Image.NEAREST.
+        expand (bool, optional): Optional expansion flag.
+            If true, expands the output to make it large enough to hold the entire rotated image.
+            If false or omitted, make the output image the same size as the input image.
+            Note that the expand flag assumes rotation around the center and no translation.
+        center (2-tuple, optional): Optional center of rotation.
+            Origin is the upper left corner.
+            Default is the center of the image.
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `Scale(*args, **kwargs)`
 :   Note: This transform is deprecated in favor of Resize.
@@ -537,7 +592,7 @@ Classes
 
     * invertransforms.resize.Resize
     * torchvision.transforms.transforms.Resize
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `TenCrop(size, vertical_flip=False)`
 :   Crop the given PIL Image into four corners and the central crop plus the flipped version of
@@ -568,7 +623,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.TenCrop
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `ToPILImage(mode=None)`
 :   Convert a tensor or an ndarray to PIL Image.
@@ -590,7 +645,7 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.ToPILImage
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `ToTensor(*args, **kwargs)`
 :   Convert a ``PIL Image`` or ``numpy.ndarray`` to tensor.
@@ -605,11 +660,23 @@ Classes
     ### Ancestors (in MRO)
 
     * torchvision.transforms.transforms.ToTensor
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
 
 `TransformIf(transform, condition)`
-:   
+:   Apply a transformation if the condition is met.
+    Otherwise, returns its input.
+    
+    Args:
+          transform: a transformation
+          condition (bool): a boolean
 
     ### Ancestors (in MRO)
 
-    * invertransforms.util.invertible.Invertible
+    * invertransforms.lib.Invertible
+
+`VerticalFlip(*args, **kwargs)`
+:   Flip the image vertically.
+
+    ### Ancestors (in MRO)
+
+    * invertransforms.lib.Invertible
