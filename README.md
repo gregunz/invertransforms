@@ -32,6 +32,7 @@ transform = T.Compose([
   T.ToTensor(),
 ])
 
+# apply
 img_tensor = transform(img)
 
 # invert
@@ -42,9 +43,10 @@ img_tensor2 = transform.replay(img2)
 
 # track
 for i in range(n):
-    img_tensor_i = transform.track(img)
+    img_tensor_i = transform.track(img_i)
     # ...
-inverse = transform.get_inverse(j)
+inverse_tf= transform.get_inverse(j)  # or transform[j]
+img_j = inverse_tf(img_tensor_j)
 ```
 
 All transformations have an `inverse` transformation attached to it.
@@ -73,23 +75,30 @@ The library's [documentation] contains the full list of [transformations](https:
 Use Cases
 ---------
 This library can be particularly useful in following situations:
+
 - Reverting a NN-model output in order to stack predictions
+
 - Applying the same (random) transformations the same way on different inputs
 
 Features
 --------
 - Invert any transformations, even random ones
+
 - Replay any transformations, even random ones
-- Track all transformations to get revert them long after.
+
+- Track all transformations to invert them long after
+
 - All classes extend its torchvision transformation equivalent class.
  This means, you can just replace your previous torchvision import statements and it will not break your code.
+ 
 - Extensive unit testing (100% coverage, be safe, hopefully)
 
 
 Future Improvements
 -------------------
 - [WIP] Extend the number of tranformations (e.g. random rotation and cropping (within the rotated area))
-- [WIP] Make the transformations on tensors directly (data augmentation/transformation on GPU)
+
+- Make the transformations on tensors directly (data augmentation/transformation on GPU)
 
 
 Contribute
