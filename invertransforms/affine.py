@@ -86,6 +86,23 @@ def _invert_affine_matrix(matrix):
 
 
 class Rotation(Invertible):
+    """
+    Rotate the image given an angle (in degrees).
+
+    Args:
+        angle (float or int): degrees of the angle
+        resample ({PIL.Image.NEAREST, PIL.Image.BILINEAR, PIL.Image.BICUBIC}, optional):
+            An optional resampling filter. See `filters`_ for more information.
+            If omitted, or if the image has mode "1" or "P", it is set to PIL.Image.NEAREST.
+        expand (bool, optional): Optional expansion flag.
+            If true, expands the output to make it large enough to hold the entire rotated image.
+            If false or omitted, make the output image the same size as the input image.
+            Note that the expand flag assumes rotation around the center and no translation.
+        center (2-tuple, optional): Optional center of rotation.
+            Origin is the upper left corner.
+            Default is the center of the image.
+    """
+
     def __init__(self, angle, resample=False, expand=False, center=None):
         self.angle = angle
         self.resample = resample

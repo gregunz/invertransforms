@@ -10,7 +10,24 @@ from invertransforms.lib import InvertibleError, Invertible
 
 
 class Identity(Invertible):
+    """
+    Returns its input image without changes.
+
+    Args:
+        log_fn (callable): optional function useful for logging/debugging.
+
+    Returns its input.
+    Output = Input
+
+    Can be use for debugging/logging if a log_fn is provided.
+    It is used throughout the library when inverse transformation is identity.
+    """
+
+    def __init__(self, log_fn=lambda img: None):
+        self.log_fn = log_fn
+
     def __call__(self, img):
+        self.log_fn(img)
         return img
 
     def inverse(self):
@@ -50,6 +67,16 @@ class Lambda(transforms.Lambda, Invertible):
 
 
 class TransformIf(Invertible):
+    """
+    Apply a transformation if the condition is met.
+    Otherwise, returns its input.
+
+    Args:
+          transform: a transformation
+          condition (bool): a boolean
+
+    """
+
     def __init__(self, transform, condition: bool):
         if condition:
             self.transform = transform

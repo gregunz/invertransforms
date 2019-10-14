@@ -15,6 +15,12 @@ from invertransforms.lib import InvertibleError, Invertible
 
 
 class Crop(Invertible):
+    """
+    Crop an image.
+    Args:
+        location (int, tuple): upper left coordinates of the crop area (top, left)
+        size (int, tuple): size of the crop (height, width)
+    """
     _img_h = _img_w = None
 
     def __init__(self, location, size):

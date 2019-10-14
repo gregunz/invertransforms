@@ -66,6 +66,10 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
 
 
 class HorizontalFlip(Invertible):
+    """
+    Flip the image horizontally.
+    """
+
     def __call__(self, img):
         return F.hflip(img)
 
@@ -100,6 +104,10 @@ class RandomHorizontalFlip(transforms.RandomHorizontalFlip, Invertible):
 
 
 class VerticalFlip(Invertible):
+    """
+    Flip the image vertically.
+    """
+
     def __call__(self, img):
         return F.vflip(img)
 

@@ -20,13 +20,13 @@ class Invertible:
         Args:
             img (PIL Image, torch.Tensor, Any): input image
 
-        Returns: image
+        Returns (PIL Image, torch.Tensor, Any): transformed input
 
         """
         raise NotImplementedError
 
     @abstractmethod
-    def inverse(self):
+    def inverse(self) -> 'Invertible':
         """
         Abstract method to return the inverse of the transformation
 

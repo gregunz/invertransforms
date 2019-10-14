@@ -35,7 +35,8 @@ from torchvision.transforms import functional
 from .affine import Affine, RandomAffine, RandomRotation, Rotation
 from .color import ColorJitter, Grayscale, RandomGrayscale
 from .crop_pad import Crop, RandomCrop, Pad, FiveCrop, TenCrop, CenterCrop
-from .perpective import Perspective, RandomPerspective, RandomHorizontalFlip, RandomVerticalFlip
+from .perpective import Perspective, VerticalFlip, HorizontalFlip, RandomHorizontalFlip, RandomVerticalFlip, \
+    RandomPerspective
 from .resize import Resize, Scale, RandomResizedCrop, RandomSizedCrop
 from .sequence import Compose, RandomOrder, RandomChoice, RandomApply
 from .tensors import LinearTransformation, Normalize, RandomErasing
