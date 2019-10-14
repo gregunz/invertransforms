@@ -39,6 +39,12 @@ img_again = transform.invert(img_tensor)
 
 # replay
 img_tensor2 = transform.replay(img2)
+
+# track
+for i in range(n):
+    img_tensor_i = transform.track(img)
+    # ...
+inverse = transform.get_inverse(j)
 ```
 
 All transformations have an `inverse` transformation attached to it.
@@ -69,14 +75,15 @@ Use Cases
 This library can be particularly useful in following situations:
 - Reverting a NN-model output in order to stack predictions
 - Applying the same (random) transformations the same way on different inputs
-- ...
 
 Features
 --------
-* Invert any transformations even random ones
-* Replay any transformations even random ones
-* All classes extend its torchvision transformation equivalent class (this means, just replace your import statement and you're free to go)
-* Extensive unit testing (100% coverage, be safe, hopefully)
+- Invert any transformations, even random ones
+- Replay any transformations, even random ones
+- Track all transformations to get revert them long after.
+- All classes extend its torchvision transformation equivalent class.
+ This means, you can just replace your previous torchvision import statements and it will not break your code.
+- Extensive unit testing (100% coverage, be safe, hopefully)
 
 
 Future Improvements

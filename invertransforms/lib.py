@@ -9,6 +9,7 @@ from abc import abstractmethod
 
 
 class Invertible:
+    tracked_inverses = dict()
 
     @abstractmethod
     def __call__(self, img):
@@ -33,19 +34,36 @@ class Invertible:
         """
         raise NotImplementedError
 
-    def apply(self, img):
+    def track(self, img, index=None):
         """
-        Apply the transformation.
-        This is an alias to the `__call__` method which should be preferred.
-        Its main purpose is to appear in the doc alongside `inverse` and `replay`.
+        Apply the transformation and track all inverses.
 
         Args:
-            img (PIL Image, torch.Tensor, Any): input image
+            img (PIL Image, torch.Tensor, Any): input image.
+            index (optional, int or Any): index associated with the tracked inverse transform; increasing int when not defined
 
         Returns: image
-
         """
-        return self.__call__(img)
+        if index is None:
+            index = len(self.tracked_inverses)
+        img = self.__call__(img)
+        self.tracked_inverses[index] = self.inverse()
+        return img
+
+    def get_inverse(self, index) -> 'Invertible':
+        """
+        Get the inverse of a tracked transformation given its index.
+
+        Args:
+            index (int or Any): index associated with the tracked inverse transform
+
+        Returns:
+            inverse transformation
+        """
+        return self.tracked_inverses[index]
+
+    def __getitem__(self, index):
+        return self.get_inverse(index)
 
     def invert(self, img):
         """
@@ -83,8 +101,8 @@ class Invertible:
         return f'{self.__class__.__name__}()'
 
     # not very useful except for refactoring
-    def _can_invert(self):
-        return True
+    # def _can_invert(self):
+    #    return True
 
 
 class InvertibleError(Exception):
