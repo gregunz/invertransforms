@@ -18,8 +18,6 @@ transform = Normalize()
 ```
 
 """
-
-# noinspection PyUnresolvedReferences
 from torchvision.transforms import functional
 
 from invertransforms.color_transforms import Grayscale, RandomGrayscale
@@ -40,12 +38,8 @@ from .rotation import RandomRotation, Rotation
 from .tensor_transforms import LinearTransformation
 from .util_functions import Identity, Lambda, TransformIf
 
-__all__ = [
-    'functional', 'Affine', 'RandomAffine', 'ColorJitter',
-    'Crop', 'RandomCrop', 'Identity', 'Lambda', 'LinearTransformation',
-    'Pad', 'Perspective', 'RandomPerspective', 'RandomHorizontalFlip', 'RandomVerticalFlip',
-    'RandomResizedCrop',
-    'RandomChoice', 'RandomApply', 'Resize', 'Scale', 'RandomRotation',
-    'Rotation', 'TransformIf',
-    'RandomSizedCrop', 'RandomOrder'
-]
+__all__ = ['Affine', 'CenterCrop', 'ColorJitter', 'Compose', 'Crop', 'FiveCrop', 'Grayscale', 'Identity', 'Lambda',
+           'LinearTransformation', 'Normalize', 'Pad', 'Perspective', 'RandomAffine', 'RandomApply', 'RandomChoice',
+           'RandomCrop', 'RandomErasing', 'RandomGrayscale', 'RandomHorizontalFlip', 'RandomOrder',
+           'RandomPerspective', 'RandomResizedCrop', 'RandomRotation', 'RandomSizedCrop', 'RandomVerticalFlip',
+           'Resize', 'Rotation', 'Scale', 'TenCrop', 'ToPILImage', 'ToTensor', 'TransformIf', 'functional']
