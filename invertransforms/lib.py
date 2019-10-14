@@ -9,7 +9,7 @@ from abc import abstractmethod
 
 
 class Invertible:
-    tracked_inverses = dict()
+    _tracked_inverses = dict()
 
     @abstractmethod
     def __call__(self, img):
@@ -45,9 +45,9 @@ class Invertible:
         Returns: image
         """
         if index is None:
-            index = len(self.tracked_inverses)
+            index = len(self._tracked_inverses)
         img = self.__call__(img)
-        self.tracked_inverses[index] = self.inverse()
+        self._tracked_inverses[index] = self.inverse()
         return img
 
     def get_inverse(self, index) -> 'Invertible':
@@ -60,7 +60,7 @@ class Invertible:
         Returns:
             inverse transformation
         """
-        return self.tracked_inverses[index]
+        return self._tracked_inverses[index]
 
     def __getitem__(self, index):
         return self.get_inverse(index)
