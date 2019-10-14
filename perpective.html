@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.7.1" name="generator"/>
     <title>invertransforms.perpective API documentation</title>
-    <meta content="" name="description"/>
+    <meta content="Perspective Module …" name="description"/>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -427,11 +427,22 @@
             <h1 class="title">Module <code>invertransforms.perpective</code></h1>
         </header>
         <section id="section-intro">
+            <p>Perspective Module</p>
+            <p>This module contains transformations for perspective transformation and flipping vertically or
+                horizontally images.
+                These transformations can be applied deterministically or randomly.</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">from PIL import Image
+                <pre><code class="python">&#34;&#34;&#34;
+Perspective Module
+
+This module contains transformations for perspective transformation and flipping vertically or horizontally images.
+These transformations can be applied deterministically or randomly.
+
+&#34;&#34;&#34;
+from PIL import Image
 from torchvision import transforms
 
 import invertransforms as T
@@ -449,7 +460,7 @@ class Perspective(Invertible):
     def __call__(self, img):
         return F.perspective(img, self.startpoints, self.endpoints, self.interpolation)
 
-    def invert(self):
+    def inverse(self):
         return Perspective(
             startpoints=self.endpoints,
             endpoints=self.startpoints,
@@ -482,11 +493,79 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
             )
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None
+
+
+class HorizontalFlip(Invertible):
+    def __call__(self, img):
+        return F.hflip(img)
+
+    def inverse(self):
+        return HorizontalFlip()
+
+
+class RandomHorizontalFlip(transforms.RandomHorizontalFlip, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be flipped.
+
+        Returns:
+            PIL Image: Randomly flipped image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            self._transform = HorizontalFlip()
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None
+
+
+class VerticalFlip(Invertible):
+    def __call__(self, img):
+        return F.vflip(img)
+
+    def inverse(self):
+        return VerticalFlip()
+
+
+class RandomVerticalFlip(transforms.RandomVerticalFlip, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be flipped.
+
+        Returns:
+            PIL Image: Randomly flipped image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            self._transform = VerticalFlip()
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -501,6 +580,52 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
         <section>
             <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
+                <dt id="invertransforms.perpective.HorizontalFlip"><code class="flex name class">
+                    <span>class <span class="ident">HorizontalFlip</span></span>
+                    <span>(</span><span>*args, **kwargs)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class HorizontalFlip(Invertible):
+    def __call__(self, img):
+        return F.hflip(img)
+
+    def inverse(self):
+        return HorizontalFlip()</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
                 <dt id="invertransforms.perpective.Perspective"><code class="flex name class">
                     <span>class <span class="ident">Perspective</span></span>
                     <span>(</span><span>startpoints, endpoints, interpolation=3)</span>
@@ -520,7 +645,7 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
     def __call__(self, img):
         return F.perspective(img, self.startpoints, self.endpoints, self.interpolation)
 
-    def invert(self):
+    def inverse(self):
         return Perspective(
             startpoints=self.endpoints,
             endpoints=self.startpoints,
@@ -532,6 +657,78 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.perpective.RandomHorizontalFlip"><code class="flex name class">
+                    <span>class <span class="ident">RandomHorizontalFlip</span></span>
+                    <span>(</span><span>p=0.5)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Horizontally flip the given PIL Image randomly with a given
+                        probability.</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+                            <dd>probability of the image being flipped. Default value is 0.5</dd>
+                        </dl>
+                    </section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class RandomHorizontalFlip(transforms.RandomHorizontalFlip, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be flipped.
+
+        Returns:
+            PIL Image: Randomly flipped image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            self._transform = HorizontalFlip()
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.RandomHorizontalFlip</li>
                         <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
                                title="invertransforms.util.invertible.Invertible">Invertible</a></li>
                     </ul>
@@ -602,11 +799,11 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
             )
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -614,6 +811,123 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
                     <h3>Ancestors</h3>
                     <ul class="hlist">
                         <li>torchvision.transforms.transforms.RandomPerspective</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.perpective.RandomVerticalFlip"><code class="flex name class">
+                    <span>class <span class="ident">RandomVerticalFlip</span></span>
+                    <span>(</span><span>p=0.5)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Vertically flip the given PIL Image randomly with a given probability.</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+                            <dd>probability of the image being flipped. Default value is 0.5</dd>
+                        </dl>
+                    </section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class RandomVerticalFlip(transforms.RandomVerticalFlip, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be flipped.
+
+        Returns:
+            PIL Image: Randomly flipped image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            self._transform = VerticalFlip()
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.RandomVerticalFlip</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.perpective.VerticalFlip"><code class="flex name class">
+                    <span>class <span class="ident">VerticalFlip</span></span>
+                    <span>(</span><span>*args, **kwargs)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class VerticalFlip(Invertible):
+    def __call__(self, img):
+        return F.vflip(img)
+
+    def inverse(self):
+        return VerticalFlip()</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
                         <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
                                title="invertransforms.util.invertible.Invertible">Invertible</a></li>
                     </ul>
@@ -658,13 +972,31 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
             <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
                     <li>
+                        <h4><code><a href="#invertransforms.perpective.HorizontalFlip"
+                                     title="invertransforms.perpective.HorizontalFlip">HorizontalFlip</a></code></h4>
+                    </li>
+                    <li>
                         <h4><code><a href="#invertransforms.perpective.Perspective"
                                      title="invertransforms.perpective.Perspective">Perspective</a></code></h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.perpective.RandomHorizontalFlip"
+                                     title="invertransforms.perpective.RandomHorizontalFlip">RandomHorizontalFlip</a></code>
+                        </h4>
                     </li>
                     <li>
                         <h4><code><a href="#invertransforms.perpective.RandomPerspective"
                                      title="invertransforms.perpective.RandomPerspective">RandomPerspective</a></code>
                         </h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.perpective.RandomVerticalFlip"
+                                     title="invertransforms.perpective.RandomVerticalFlip">RandomVerticalFlip</a></code>
+                        </h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.perpective.VerticalFlip"
+                                     title="invertransforms.perpective.VerticalFlip">VerticalFlip</a></code></h4>
                     </li>
                 </ul>
             </li>

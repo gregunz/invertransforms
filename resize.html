@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.7.1" name="generator"/>
     <title>invertransforms.resize API documentation</title>
-    <meta content="" name="description"/>
+    <meta content="Resize Module …" name="description"/>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -427,14 +427,25 @@
             <h1 class="title">Module <code>invertransforms.resize</code></h1>
         </header>
         <section id="section-intro">
+            <p>Resize Module</p>
+            <p>This modules contains transformations which resize images.</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">import warnings
+                <pre><code class="python">&#34;&#34;&#34;
+Resize Module
+
+This modules contains transformations which resize images.
+
+&#34;&#34;&#34;
+
+import warnings
 
 from torchvision import transforms
 
+import invertransforms as T
+import invertransforms.sequence
 from invertransforms.util import Invertible
 from invertransforms.util.invertible import InvertibleError
 
@@ -453,10 +464,10 @@ class Resize(transforms.Resize, Invertible):
         self._img_w, self._img_h = img.size
         return super().__call__(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before resizing is unknown).&#39;)
+                                  &#39; (size before resizing is unknown).&#39;)
 
         inverse = Resize(size=(self._img_h, self._img_w), interpolation=self.interpolation)
         inverse._img_h, inverse.tw = self.size
@@ -474,7 +485,46 @@ class Scale(Resize):
     def __init__(self, *args, **kwargs):
         warnings.warn(&#34;The use of the invertransforms.Scale transform is deprecated, &#34; +
                       &#34;please use invertransforms.Resize instead.&#34;)
-        super().__init__(*args, **kwargs)</code></pre>
+        super().__init__(*args, **kwargs)
+
+
+class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be cropped and resized.
+
+        Returns:
+            PIL Image: Randomly cropped and resized image.
+        &#34;&#34;&#34;
+        i, j, h, w = super().get_params(img, self.scale, self.ratio)
+        self._transform = invertransforms.sequence.Compose([
+            T.Crop(location=(i, j), size=(h, w)),
+            T.Resize(size=self.size, interpolation=self.interpolation),
+        ])
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None
+
+
+class RandomSizedCrop(RandomResizedCrop):
+    &#34;&#34;&#34;
+    Note: This transform is deprecated in favor of RandomResizedCrop.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn(&#34;The use of the transforms.RandomSizedCrop transform is deprecated, &#34; +
+                      &#34;please use transforms.RandomResizedCrop instead.&#34;)
+        super(RandomSizedCrop, self).__init__(*args, **kwargs)</code></pre>
             </details>
         </section>
         <section>
@@ -486,6 +536,145 @@ class Scale(Resize):
         <section>
             <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
+                <dt id="invertransforms.resize.RandomResizedCrop"><code class="flex name class">
+                    <span>class <span class="ident">RandomResizedCrop</span></span>
+                    <span>(</span><span>size, scale=(0.08, 1.0), ratio=(0.75, 1.3333333333333333), interpolation=2)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Crop the given PIL Image to random size and aspect ratio.</p>
+                        <p>A crop of random size (default: of 0.08 to 1.0) of the original size and a random
+                            aspect ratio (default: of 3/4 to 4/3) of the original aspect ratio is made. This crop
+                            is finally resized to given size.
+                            This is popularly used to train the Inception networks.</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>size</code></strong></dt>
+                            <dd>expected output size of each edge</dd>
+                            <dt><strong><code>scale</code></strong></dt>
+                            <dd>range of size of the origin size cropped</dd>
+                            <dt><strong><code>ratio</code></strong></dt>
+                            <dd>range of aspect ratio of the origin aspect ratio cropped</dd>
+                            <dt><strong><code>interpolation</code></strong></dt>
+                            <dd>Default: PIL.Image.BILINEAR</dd>
+                        </dl>
+                    </section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be cropped and resized.
+
+        Returns:
+            PIL Image: Randomly cropped and resized image.
+        &#34;&#34;&#34;
+        i, j, h, w = super().get_params(img, self.scale, self.ratio)
+        self._transform = invertransforms.sequence.Compose([
+            T.Crop(location=(i, j), size=(h, w)),
+            T.Resize(size=self.size, interpolation=self.interpolation),
+        ])
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.RandomResizedCrop</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Subclasses</h3>
+                    <ul class="hlist">
+                        <li><a href="#invertransforms.resize.RandomSizedCrop"
+                               title="invertransforms.resize.RandomSizedCrop">RandomSizedCrop</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.resize.RandomSizedCrop"><code class="flex name class">
+                    <span>class <span class="ident">RandomSizedCrop</span></span>
+                    <span>(</span><span>*args, **kwargs)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Note: This transform is deprecated in favor of RandomResizedCrop.</p>
+                    </section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class RandomSizedCrop(RandomResizedCrop):
+    &#34;&#34;&#34;
+    Note: This transform is deprecated in favor of RandomResizedCrop.
+    &#34;&#34;&#34;
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn(&#34;The use of the transforms.RandomSizedCrop transform is deprecated, &#34; +
+                      &#34;please use transforms.RandomResizedCrop instead.&#34;)
+        super(RandomSizedCrop, self).__init__(*args, **kwargs)</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li><a href="#invertransforms.resize.RandomResizedCrop"
+                               title="invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></li>
+                        <li>torchvision.transforms.transforms.RandomResizedCrop</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="#invertransforms.resize.RandomResizedCrop"
+                                        title="invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.resize.RandomResizedCrop.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.resize.RandomResizedCrop.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.resize.RandomResizedCrop.invert">invert</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.resize.RandomResizedCrop.replay">replay</a></code></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
                 <dt id="invertransforms.resize.Resize"><code class="flex name class">
                     <span>class <span class="ident">Resize</span></span>
                     <span>(</span><span>size, interpolation=2)</span>
@@ -525,10 +714,10 @@ class Scale(Resize):
         self._img_w, self._img_h = img.size
         return super().__call__(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before resizing is unknown).&#39;)
+                                  &#39; (size before resizing is unknown).&#39;)
 
         inverse = Resize(size=(self._img_h, self._img_w), interpolation=self.interpolation)
         inverse._img_h, inverse.tw = self.size
@@ -635,6 +824,14 @@ class Scale(Resize):
             </li>
             <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
+                    <li>
+                        <h4><code><a href="#invertransforms.resize.RandomResizedCrop"
+                                     title="invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></code></h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.resize.RandomSizedCrop"
+                                     title="invertransforms.resize.RandomSizedCrop">RandomSizedCrop</a></code></h4>
+                    </li>
                     <li>
                         <h4><code><a href="#invertransforms.resize.Resize"
                                      title="invertransforms.resize.Resize">Resize</a></code></h4>

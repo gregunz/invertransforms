@@ -462,41 +462,22 @@ transform = Normalize()
 ```
 
 &#34;&#34;&#34;
-
-# noinspection PyUnresolvedReferences
 from torchvision.transforms import functional
 
-from .affine import Affine, RandomAffine
-from .center_crop import CenterCrop
-from .color_jitter import ColorJitter
-from .compose import Compose
-from .crop import Crop, RandomCrop
-from .five_crop import FiveCrop
-from .functions import Identity, Lambda, TransformIf
-from .grayscale import Grayscale, RandomGrayscale
-from .linear_transformation import LinearTransformation
-from .normalize import Normalize
-from .pad import Pad
-from .perpective import Perspective, RandomPerspective
-from .random_erasing import RandomErasing
-from .random_flip import RandomHorizontalFlip, RandomVerticalFlip
-from .random_resized_crop import RandomResizedCrop, RandomSizedCrop
-from .random_transforms import RandomOrder, RandomChoice, RandomApply
-from .resize import Resize, Scale
-from .rotation import RandomRotation, Rotation
-from .ten_crop import TenCrop
-from .to_tensor_pil_image import ToPILImage, ToTensor
+from .affine import Affine, RandomAffine, RandomRotation, Rotation
+from .color import ColorJitter, Grayscale, RandomGrayscale
+from .crop_pad import Crop, RandomCrop, Pad, FiveCrop, TenCrop, CenterCrop
+from .perpective import Perspective, RandomPerspective, RandomHorizontalFlip, RandomVerticalFlip
+from .resize import Resize, Scale, RandomResizedCrop, RandomSizedCrop
+from .sequence import Compose, RandomOrder, RandomChoice, RandomApply
+from .tensors import LinearTransformation, Normalize, RandomErasing
+from .util_functions import Identity, Lambda, TransformIf, ToPILImage, ToTensor
 
-__all__ = [
-    &#39;functional&#39;, &#39;Affine&#39;, &#39;RandomAffine&#39;, &#39;CenterCrop&#39;, &#39;ColorJitter&#39;,
-    &#39;Compose&#39;, &#39;Crop&#39;, &#39;RandomCrop&#39;, &#39;FiveCrop&#39;, &#39;Grayscale&#39;,
-    &#39;RandomGrayscale&#39;, &#39;Identity&#39;, &#39;Lambda&#39;, &#39;LinearTransformation&#39;,
-    &#39;Normalize&#39;, &#39;Pad&#39;, &#39;Perspective&#39;, &#39;RandomPerspective&#39;, &#39;RandomErasing&#39;,
-    &#39;RandomHorizontalFlip&#39;, &#39;RandomVerticalFlip&#39;, &#39;RandomResizedCrop&#39;,
-    &#39;RandomChoice&#39;, &#39;RandomApply&#39;, &#39;Resize&#39;, &#39;Scale&#39;, &#39;RandomRotation&#39;,
-    &#39;Rotation&#39;, &#39;TenCrop&#39;, &#39;ToPILImage&#39;, &#39;ToTensor&#39;, &#39;TransformIf&#39;,
-    &#39;RandomSizedCrop&#39;, &#39;RandomOrder&#39;
-]</code></pre>
+__all__ = [&#39;Affine&#39;, &#39;CenterCrop&#39;, &#39;ColorJitter&#39;, &#39;Compose&#39;, &#39;Crop&#39;, &#39;FiveCrop&#39;, &#39;Grayscale&#39;, &#39;Identity&#39;, &#39;Lambda&#39;,
+           &#39;LinearTransformation&#39;, &#39;Normalize&#39;, &#39;Pad&#39;, &#39;Perspective&#39;, &#39;RandomAffine&#39;, &#39;RandomApply&#39;, &#39;RandomChoice&#39;,
+           &#39;RandomCrop&#39;, &#39;RandomErasing&#39;, &#39;RandomGrayscale&#39;, &#39;RandomHorizontalFlip&#39;, &#39;RandomOrder&#39;,
+           &#39;RandomPerspective&#39;, &#39;RandomResizedCrop&#39;, &#39;RandomRotation&#39;, &#39;RandomSizedCrop&#39;, &#39;RandomVerticalFlip&#39;,
+           &#39;Resize&#39;, &#39;Rotation&#39;, &#39;Scale&#39;, &#39;TenCrop&#39;, &#39;ToPILImage&#39;, &#39;ToTensor&#39;, &#39;TransformIf&#39;, &#39;functional&#39;]</code></pre>
             </details>
         </section>
         <section>
@@ -505,108 +486,47 @@ __all__ = [
                 <dt><code class="name"><a href="affine.html" title="invertransforms.affine">invertransforms.affine</a></code>
                 </dt>
                 <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Affine Module …</p></section>
                 </dd>
-                <dt><code class="name"><a href="center_crop.html" title="invertransforms.center_crop">invertransforms.center_crop</a></code>
+                <dt><code class="name"><a href="color.html"
+                                          title="invertransforms.color">invertransforms.color</a></code></dt>
+                <dd>
+                    <section class="desc"><p>Color Module …</p></section>
+                </dd>
+                <dt><code class="name"><a href="crop_pad.html" title="invertransforms.crop_pad">invertransforms.crop_pad</a></code>
                 </dt>
                 <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="color_jitter.html" title="invertransforms.color_jitter">invertransforms.color_jitter</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="compose.html"
-                                          title="invertransforms.compose">invertransforms.compose</a></code></dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="crop.html" title="invertransforms.crop">invertransforms.crop</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="five_crop.html" title="invertransforms.five_crop">invertransforms.five_crop</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="functions.html" title="invertransforms.functions">invertransforms.functions</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="grayscale.html" title="invertransforms.grayscale">invertransforms.grayscale</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="linear_transformation.html"
-                                          title="invertransforms.linear_transformation">invertransforms.linear_transformation</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="normalize.html" title="invertransforms.normalize">invertransforms.normalize</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="pad.html" title="invertransforms.pad">invertransforms.pad</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Crop and Pad module …</p></section>
                 </dd>
                 <dt><code class="name"><a href="perpective.html" title="invertransforms.perpective">invertransforms.perpective</a></code>
                 </dt>
                 <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="random_erasing.html" title="invertransforms.random_erasing">invertransforms.random_erasing</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="random_flip.html" title="invertransforms.random_flip">invertransforms.random_flip</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="random_resized_crop.html" title="invertransforms.random_resized_crop">invertransforms.random_resized_crop</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="random_transforms.html" title="invertransforms.random_transforms">invertransforms.random_transforms</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Perspective Module …</p></section>
                 </dd>
                 <dt><code class="name"><a href="resize.html" title="invertransforms.resize">invertransforms.resize</a></code>
                 </dt>
                 <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Resize Module …</p></section>
                 </dd>
-                <dt><code class="name"><a href="rotation.html" title="invertransforms.rotation">invertransforms.rotation</a></code>
+                <dt><code class="name"><a href="sequence.html" title="invertransforms.sequence">invertransforms.sequence</a></code>
                 </dt>
                 <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Sequence Module …</p></section>
                 </dd>
-                <dt><code class="name"><a href="ten_crop.html" title="invertransforms.ten_crop">invertransforms.ten_crop</a></code>
-                </dt>
+                <dt><code class="name"><a href="tensors.html"
+                                          title="invertransforms.tensors">invertransforms.tensors</a></code></dt>
                 <dd>
-                    <section class="desc"></section>
-                </dd>
-                <dt><code class="name"><a href="to_tensor_pil_image.html" title="invertransforms.to_tensor_pil_image">invertransforms.to_tensor_pil_image</a></code>
-                </dt>
-                <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Tensors Module …</p></section>
                 </dd>
                 <dt><code class="name"><a href="util/index.html" title="invertransforms.util">invertransforms.util</a></code>
                 </dt>
                 <dd>
                     <section class="desc"></section>
+                </dd>
+                <dt><code class="name"><a href="util_functions.html" title="invertransforms.util_functions">invertransforms.util_functions</a></code>
+                </dt>
+                <dd>
+                    <section class="desc"><p>Util Functions Module …</p></section>
                 </dd>
             </dl>
         </section>
@@ -622,20 +542,43 @@ __all__ = [
                     <span>(</span><span>matrix)</span>
                 </code></dt>
                 <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Apply affine transformation on the image.</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>matrix</code></strong> :&ensp;<code>list</code> of <code>int</code></dt>
+                            <dd>transformation matrix (from destination image to source)</dd>
+                        </dl>
+                        <p>because we want to interpolate the (discrete) destination pixel from the local
+                            area around the (floating) source pixel.</p></section>
                     <details class="source">
                         <summary>
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class Affine(Invertible):
+    &#34;&#34;&#34;
+    Apply affine transformation on the image.
+
+    Args:
+        matrix (list of int): transformation matrix (from destination image to source)
+         because we want to interpolate the (discrete) destination pixel from the local
+         area around the (floating) source pixel.
+    &#34;&#34;&#34;
+
     def __init__(self, matrix):
         self.matrix = matrix
 
-    def invert(self):
+    def inverse(self):
         matrix_inv = _invert_affine_matrix(self.matrix)
         return Affine(matrix_inv)
 
     def __call__(self, img):
+        &#34;&#34;&#34;
+        Args
+            img (PIL Image): Image to be transformed.
+
+        Returns:
+            PIL Image: Affine transformed image.
+        &#34;&#34;&#34;
         return _affine_with_matrix(img, self.matrix)
 
     def __repr__(self):
@@ -678,8 +621,9 @@ __all__ = [
                     <section class="desc"><p>Crops the given PIL Image at the center.</p>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>size</code></strong> :&ensp;<code>sequence</code> or <code>int</code>
-                            </dt>
+                            <dt><strong><code>size</code></strong> :&ensp;<a href="sequence.html"
+                                                                             title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>int</code></dt>
                             <dd>Desired output size of the crop. If size is an
                                 int instead of sequence like (h, w), a square crop (size, size) is
                                 made.
@@ -704,10 +648,10 @@ __all__ = [
         self._img_w, self._img_h = img.size
         return F.center_crop(img, self.size)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before cropping is unknown).&#39;)
+                                  &#39; (size before cropping is unknown).&#39;)
 
         inverse = CenterCrop(size=(self._img_h, self._img_w))  # center crop with bigger crop size is like padding
         th, tw = self.size
@@ -772,8 +716,32 @@ __all__ = [
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class ColorJitter(transforms.ColorJitter, Invertible):
-    def invert(self):
-        return Identity()</code></pre>
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Input image.
+
+        Returns:
+            PIL Image: Color jittered image.
+        &#34;&#34;&#34;
+        self._transform = self.get_params(self.brightness, self.contrast,
+                                          self.saturation, self.hue)
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return T.Lambda(
+            lambd=lambda x: x,
+            tf_inv=self._transform,
+            repr_str=&#39;ColorJitterInverse()&#39;
+        )
+
+    def _can_invert(self):
+        return self._transform is not None</code></pre>
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
@@ -825,12 +793,12 @@ __all__ = [
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class Compose(transforms.Compose, Invertible):
-    def invert(self):
+    def inverse(self):
         transforms_inv = []
         for t in self.transforms[::-1]:
             if not isinstance(t, Invertible):
                 raise InvertibleError(f&#39;{t} ({t.__class__.__name__}) is not an invertible object&#39;)
-            transforms_inv.append(t.invert())
+            transforms_inv.append(t.inverse())
         return Compose(transforms=transforms_inv)</code></pre>
                     </details>
                     <h3>Ancestors</h3>
@@ -897,10 +865,10 @@ __all__ = [
         self._img_w, self._img_h = img.size
         return F.crop(img, self.tl_i, self.tl_j, self.crop_h, self.crop_w)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before cropping is unknown).&#39;)
+                                  &#39; (size before cropping is unknown).&#39;)
 
         padding = (
             self.tl_j,
@@ -908,7 +876,7 @@ __all__ = [
             self._img_w - self.crop_w - self.tl_j,
             self._img_h - self.crop_h - self.tl_i,
         )
-        inverse = T.Pad(padding=padding)
+        inverse = Pad(padding=padding)
         inverse._img_w = self.crop_w
         inverse._img_h = self.crop_h
         return inverse
@@ -959,8 +927,9 @@ __all__ = [
                         </div>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>size</code></strong> :&ensp;<code>sequence</code> or <code>int</code>
-                            </dt>
+                            <dt><strong><code>size</code></strong> :&ensp;<a href="sequence.html"
+                                                                             title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>int</code></dt>
                             <dd>Desired output size of the crop. If size is an <code>int</code>
                                 instead of sequence like (h, w), a square crop of size (size, size) is made.
                             </dd>
@@ -988,10 +957,10 @@ __all__ = [
         self._img_w, self._img_h = img.size
         return F.five_crop(img, self.size)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before the cropping is unknown).&#39;)
+                                  &#39; (size before the cropping is unknown).&#39;)
 
         crop_h, crop_w = self.size
         pad_w = self._img_w - crop_w
@@ -1017,12 +986,12 @@ __all__ = [
 
         def invert_invert_crops(crops):
             tl, tr, bl, br, center = crops
-            return [tf.invert()(img) for tf, img in zip(tfs, [tl, tr, bl, br, center])]
+            return [tf.inverse()(img) for tf, img in zip(tfs, [tl, tr, bl, br, center])]
 
         return T.Lambda(
             lambd=invert_crops,
             tf_inv=invert_invert_crops,
-            repr_str=f&#39;FiveCropInvert()&#39;,
+            repr_str=f&#39;FiveCropInverse()&#39;,
         )
 
     def _can_invert(self):
@@ -1078,11 +1047,21 @@ __all__ = [
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class Grayscale(transforms.Grayscale, Invertible):
-    def invert(self):
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        &#34;&#34;&#34;
+        return F.to_grayscale(img, num_output_channels=self.num_output_channels)
+
+    def inverse(self):
         return T.Lambda(
-            lambd=lambda img: img,
-            tf_inv=Grayscale(num_output_channels=self.num_output_channels),
-            repr_str=&#39;GrayscaleInvert()&#39;
+            lambd=lambda x: x,
+            tf_inv=Grayscale(self.num_output_channels),
+            repr_str=&#39;GrayscaleInverse()&#39;
         )</code></pre>
                     </details>
                     <h3>Ancestors</h3>
@@ -1129,7 +1108,7 @@ __all__ = [
     def __call__(self, img):
         return img
 
-    def invert(self):
+    def inverse(self):
         return Identity()</code></pre>
                     </details>
                     <h3>Ancestors</h3>
@@ -1185,18 +1164,18 @@ __all__ = [
         assert tf_inv is None or callable(tf_inv), repr(type(tf_inv).__name__) + &#34; object is not callable&#34;
         self.tf_inv = tf_inv
 
-    def invert(self):
+    def inverse(self):
         if self.tf_inv is None:
             raise InvertibleError(&#39;Cannot invert transformation, tf_inv_builder is None&#39;)
         if isinstance(self.tf_inv, Invertible):
             return self.tf_inv
         else:
-            repr_str = repr(self)
-            suffix = &#39;Invert()&#39;
+            repr_str = repr(self).split(&#39;()&#39;)[0]
+            suffix = &#39;Inverse&#39;
             if suffix in repr_str:
                 repr_str = repr_str[:-len(suffix)]
             else:
-                repr_str += suffix
+                repr_str += suffix + &#39;()&#39;
             return Lambda(
                 lambd=self.tf_inv,
                 tf_inv=self.lambd,
@@ -1267,7 +1246,7 @@ __all__ = [
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class LinearTransformation(transforms.LinearTransformation, Invertible):
-    def invert(self):
+    def inverse(self):
         try:
             return LinearTransformation(
                 transformation_matrix=self.transformation_matrix.inverse(),
@@ -1334,7 +1313,7 @@ __all__ = [
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class Normalize(transforms.Normalize, Invertible):
-    def invert(self):
+    def inverse(self):
         mean = torch.as_tensor(self.mean)
         std = torch.as_tensor(self.std)
         std_inv = torch.tensor(1.0) / std
@@ -1439,10 +1418,10 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
         self._img_w, self._img_h = img.size
         return super().__call__(img=img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size of image before padding unknown).&#39;)
+                                  &#39; (size of image before padding unknown).&#39;)
 
         padding = self.padding
         if isinstance(padding, int):
@@ -1460,7 +1439,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 
         size = (self._img_h, self._img_w)
         location = (pad_top, pad_left)
-        inverse = T.Crop(location=location, size=size)
+        inverse = Crop(location=location, size=size)
         inverse._img_h = pad_top + self._img_h + pad_bottom
         inverse._img_w = pad_left + self._img_w + pad_right
         return inverse
@@ -1517,7 +1496,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
     def __call__(self, img):
         return F.perspective(img, self.startpoints, self.endpoints, self.interpolation)
 
-    def invert(self):
+    def inverse(self):
         return Perspective(
             startpoints=self.endpoints,
             endpoints=self.startpoints,
@@ -1564,8 +1543,9 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                     <section class="desc"><p>Random affine transformation of the image keeping center invariant</p>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>degrees</code></strong> :&ensp;<code>sequence</code> or
-                                <code>float</code> or <code>int</code></dt>
+                            <dt><strong><code>degrees</code></strong> :&ensp;<a href="sequence.html"
+                                                                                title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>float</code> or <code>int</code></dt>
                             <dd>Range of degrees to select from.
                                 If degrees is a number instead of sequence like (min, max), the range of degrees
                                 will be (-degrees, +degrees). Set to 0 to deactivate rotations.
@@ -1583,8 +1563,9 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                                 randomly sampled from the range a &lt;= scale &lt;= b. Will keep original scale by
                                 default.
                             </dd>
-                            <dt><strong><code>shear</code></strong> :&ensp;<code>sequence</code> or <code>float</code>
-                                or <code>int</code>, optional
+                            <dt><strong><code>shear</code></strong> :&ensp;<a href="sequence.html"
+                                                                              title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>float</code> or <code>int</code>, optional
                             </dt>
                             <dd>Range of degrees to select from.
                                 If shear is a number, a shear parallel to the x axis in the range (-shear, +shear)
@@ -1617,6 +1598,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 
     def __call__(self, img):
         &#34;&#34;&#34;
+        Args
             img (PIL Image): Image to be transformed.
 
         Returns:
@@ -1627,7 +1609,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
         self._matrix = _get_inverse_affine_matrix(center, *params)
         return F.affine(img, *params, resample=self.resample, fillcolor=self.fillcolor)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
@@ -1704,14 +1686,14 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 
         self._transform = T.Identity()
         if flip_coin(self.p):
-            self._transform = T.Compose(self.transforms)
+            self._transform = Compose(self.transforms)
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -1765,11 +1747,11 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
         self._transform = self.transforms[i]
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -1813,13 +1795,15 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                     <section class="desc"><p>Crop the given PIL Image at a random location.</p>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>size</code></strong> :&ensp;<code>sequence</code> or <code>int</code>
-                            </dt>
+                            <dt><strong><code>size</code></strong> :&ensp;<a href="sequence.html"
+                                                                             title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>int</code></dt>
                             <dd>Desired output size of the crop. If size is an
                                 int instead of sequence like (h, w), a square crop (size, size) is
                                 made.
                             </dd>
-                            <dt><strong><code>padding</code></strong> :&ensp;<code>int</code> or <code>sequence</code>,
+                            <dt><strong><code>padding</code></strong> :&ensp;<code>int</code> or <a
+                                    href="sequence.html" title="invertransforms.sequence"><code>invertransforms.sequence</code></a>,
                                 optional
                             </dt>
                             <dd>Optional padding on each border
@@ -1881,7 +1865,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
         self._tl_i, self._tl_j, _, _ = params
         return params
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied&#39;)
 
@@ -1890,7 +1874,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             size=self.size,
         )
         crop._img_h, crop._img_w = self._img_h, self._img_w
-        return crop.invert()
+        return crop.inverse()
 
     def _can_invert(self):
         return self._img_h is not None or self._img_w is not None or self._tl_i is not None or self._tl_j is not None</code></pre>
@@ -1907,9 +1891,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                             <span>def <span class="ident">get_params</span></span>(<span>self, img, output_size)</span>
                         </code></dt>
                         <dd>
-                            <section class="desc"><p>Get parameters for <code>&lt;a title="invertransforms.crop"
-                                href="crop.html"&gt;</code>invertransforms.crop<code>&lt;/a&gt;</code> for a random
-                                crop.</p>
+                            <section class="desc"><p>Get parameters for <code>crop</code> for a random crop.</p>
                                 <h2 id="args">Args</h2>
                                 <dl>
                                     <dt><strong><code>img</code></strong> :&ensp;<code>PIL</code> <code>Image</code>
@@ -1921,10 +1903,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                                 <h2 id="returns">Returns</h2>
                                 <dl>
                                     <dt><strong><code>tuple</code></strong></dt>
-                                    <dd>params (i, j, h, w) to be passed to <code>&lt;a title="invertransforms.crop"
-                                        href="crop.html"&gt;</code>invertransforms.crop<code>&lt;/a&gt;</code> for
-                                        random crop.
-                                    </dd>
+                                    <dd>params (i, j, h, w) to be passed to <code>crop</code> for random crop.</dd>
                                 </dl>
                             </section>
                             <details class="source">
@@ -2004,8 +1983,33 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class RandomErasing(transforms.RandomErasing, Invertible):
-    def invert(self):
-        return Identity()</code></pre>
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (Tensor): Tensor image of size (C, H, W) to be erased.
+
+        Returns:
+            img (Tensor): Erased Tensor image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            x, y, h, w, v = self.get_params(img, scale=self.scale, ratio=self.ratio, value=self.value)
+            self._transform = T.Lambda(
+                lambd=lambda img: F.erase(img, x, y, h, w, v, self.inplace),
+                tf_inv=lambda img: img,
+                repr_str=&#39;RandomErasing()&#39;
+            )
+        return img
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None</code></pre>
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
@@ -2069,17 +2073,24 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
     _transform = None
 
     def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        &#34;&#34;&#34;
         self._transform = T.Identity()
         if flip_coin(self.p):
             num_output_channels = 1 if img.mode == &#39;L&#39; else 3
             self._transform = Grayscale(num_output_channels=num_output_channels)
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -2147,11 +2158,11 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             self._transform = HorizontalFlip()
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -2206,11 +2217,11 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             img = self.transforms[i](img)
         return img
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return T.Compose(transforms=[self.transforms[i].invert() for i in self._order[::-1]])
+        return Compose(transforms=[self.transforms[i].inverse() for i in self._order[::-1]])
 
     def _can_invert(self):
         return self._order is not None</code></pre>
@@ -2289,11 +2300,11 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             )
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -2366,17 +2377,17 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             PIL Image: Randomly cropped and resized image.
         &#34;&#34;&#34;
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self._transform = T.Compose([
+        self._transform = invertransforms.sequence.Compose([
             T.Crop(location=(i, j), size=(h, w)),
             T.Resize(size=self.size, interpolation=self.interpolation),
         ])
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -2389,8 +2400,8 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                     </ul>
                     <h3>Subclasses</h3>
                     <ul class="hlist">
-                        <li><a href="random_resized_crop.html#invertransforms.random_resized_crop.RandomSizedCrop"
-                               title="invertransforms.random_resized_crop.RandomSizedCrop">RandomSizedCrop</a></li>
+                        <li><a href="resize.html#invertransforms.resize.RandomSizedCrop"
+                               title="invertransforms.resize.RandomSizedCrop">RandomSizedCrop</a></li>
                     </ul>
                     <h3>Inherited members</h3>
                     <ul class="hlist">
@@ -2424,8 +2435,9 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                     <section class="desc"><p>Rotate the image by angle.</p>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>degrees</code></strong> :&ensp;<code>sequence</code> or
-                                <code>float</code> or <code>int</code></dt>
+                            <dt><strong><code>degrees</code></strong> :&ensp;<a href="sequence.html"
+                                                                                title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>float</code> or <code>int</code></dt>
                             <dd>Range of degrees to select from.
                                 If degrees is a number instead of sequence like (min, max), the range of degrees
                                 will be (-degrees, +degrees).
@@ -2465,7 +2477,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
         self._img_w, self._img_h = img.size
         return F.rotate(img, self._angle, self.resample, self.expand, self.center)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
@@ -2534,34 +2546,30 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
-                        <li><a href="random_resized_crop.html#invertransforms.random_resized_crop.RandomResizedCrop"
-                               title="invertransforms.random_resized_crop.RandomResizedCrop">RandomResizedCrop</a></li>
+                        <li><a href="resize.html#invertransforms.resize.RandomResizedCrop"
+                               title="invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></li>
                         <li>torchvision.transforms.transforms.RandomResizedCrop</li>
                         <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
                                title="invertransforms.util.invertible.Invertible">Invertible</a></li>
                     </ul>
                     <h3>Inherited members</h3>
                     <ul class="hlist">
-                        <li><code><b><a
-                                href="random_resized_crop.html#invertransforms.random_resized_crop.RandomResizedCrop"
-                                title="invertransforms.random_resized_crop.RandomResizedCrop">RandomResizedCrop</a></b></code>:
+                        <li><code><b><a href="resize.html#invertransforms.resize.RandomResizedCrop"
+                                        title="invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></b></code>:
                             <ul class="hlist">
                                 <li><code><a
                                         href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
-                                        title="invertransforms.random_resized_crop.RandomResizedCrop.apply">apply</a></code>
-                                </li>
+                                        title="invertransforms.resize.RandomResizedCrop.apply">apply</a></code></li>
                                 <li><code><a
                                         href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
-                                        title="invertransforms.random_resized_crop.RandomResizedCrop.inverse">inverse</a></code>
+                                        title="invertransforms.resize.RandomResizedCrop.inverse">inverse</a></code>
                                 </li>
                                 <li><code><a
                                         href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
-                                        title="invertransforms.random_resized_crop.RandomResizedCrop.invert">invert</a></code>
-                                </li>
+                                        title="invertransforms.resize.RandomResizedCrop.invert">invert</a></code></li>
                                 <li><code><a
                                         href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
-                                        title="invertransforms.random_resized_crop.RandomResizedCrop.replay">replay</a></code>
-                                </li>
+                                        title="invertransforms.resize.RandomResizedCrop.replay">replay</a></code></li>
                             </ul>
                         </li>
                     </ul>
@@ -2598,11 +2606,11 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             self._transform = VerticalFlip()
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
@@ -2645,8 +2653,9 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                     <section class="desc"><p>Resize the input PIL Image to the given size.</p>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>size</code></strong> :&ensp;<code>sequence</code> or <code>int</code>
-                            </dt>
+                            <dt><strong><code>size</code></strong> :&ensp;<a href="sequence.html"
+                                                                             title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>int</code></dt>
                             <dd>Desired output size. If size is a sequence like
                                 (h, w), output size will be matched to this. If size is an int,
                                 smaller edge of the image will be matched to this number.
@@ -2676,10 +2685,10 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
         self._img_w, self._img_h = img.size
         return super().__call__(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before resizing is unknown).&#39;)
+                                  &#39; (size before resizing is unknown).&#39;)
 
         inverse = Resize(size=(self._img_h, self._img_w), interpolation=self.interpolation)
         inverse._img_h, inverse.tw = self.size
@@ -2750,7 +2759,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
         return img
 
-    def invert(self):
+    def inverse(self):
         if (self._img_h is None or self._img_w is None) and self.expand:
             raise InvertibleError(
                 &#39;Cannot invert a transformation before it is applied&#39;
@@ -2867,8 +2876,9 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                         </div>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>size</code></strong> :&ensp;<code>sequence</code> or <code>int</code>
-                            </dt>
+                            <dt><strong><code>size</code></strong> :&ensp;<a href="sequence.html"
+                                                                             title="invertransforms.sequence"><code>invertransforms.sequence</code></a>
+                                or <code>int</code></dt>
                             <dd>Desired output size of the crop. If size is an
                                 int instead of sequence like (h, w), a square crop (size, size) is
                                 made.
@@ -2905,26 +2915,26 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
             return F.hflip(img)
 
     def __call__(self, img):
-        self._five_crop = T.FiveCrop(self.size)
-        self._five_crop_flip = T.FiveCrop(self.size)
+        self._five_crop = FiveCrop(self.size)
+        self._five_crop_flip = FiveCrop(self.size)
 
         first_five = self._five_crop(img)
         second_five = self._five_crop_flip(self._flip(img))
 
         return first_five + second_five
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a transformation before it is applied&#39;
-                                      &#39; (size before cropping is unknown).&#39;)
+                                  &#39; (size before cropping is unknown).&#39;)
 
         five_crop = self._five_crop
         five_crop_flip = self._five_crop_flip
         return T.Lambda(
-            lambd=lambda imgs: five_crop.invert()(imgs[:5]) + self._flip(five_crop_flip.invert()(imgs[5:])),
-            tf_inv=lambda imgs: five_crop.invert().inverse(imgs[:5]) + five_crop_flip.invert().inverse(
+            lambd=lambda imgs: five_crop.inverse()(imgs[:5]) + self._flip(five_crop_flip.inverse()(imgs[5:])),
+            tf_inv=lambda imgs: five_crop.inverse().invert(imgs[:5]) + five_crop_flip.inverse().invert(
                 self._flip(imgs[5:])),
-            repr_str=&#39;TenCropInvert()&#39;,
+            repr_str=&#39;TenCropInverse()&#39;,
         )
 
     def _can_invert(self):
@@ -2986,7 +2996,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class ToPILImage(transforms.ToPILImage, Invertible):
-    def invert(self):
+    def inverse(self):
         return ToTensor()</code></pre>
                     </details>
                     <h3>Ancestors</h3>
@@ -3036,7 +3046,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class ToTensor(transforms.ToTensor, Invertible):
-    def invert(self):
+    def inverse(self):
         return ToPILImage()</code></pre>
                     </details>
                     <h3>Ancestors</h3>
@@ -3092,11 +3102,11 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
     def __repr__(self):
         return self.transform.__repr__()
 
-    def invert(self):
+    def inverse(self):
         if not isinstance(self.transform, Invertible):
             raise InvertibleError(
                 f&#39;{self.transform} ({self.transform.__class__.__name__}) is not an invertible object&#39;)
-        return self.transform.invert()</code></pre>
+        return self.transform.inverse()</code></pre>
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
@@ -3140,43 +3150,20 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
                 <ul>
                     <li><code><a href="affine.html" title="invertransforms.affine">invertransforms.affine</a></code>
                     </li>
-                    <li><code><a href="center_crop.html" title="invertransforms.center_crop">invertransforms.center_crop</a></code>
-                    </li>
-                    <li><code><a href="color_jitter.html" title="invertransforms.color_jitter">invertransforms.color_jitter</a></code>
-                    </li>
-                    <li><code><a href="compose.html" title="invertransforms.compose">invertransforms.compose</a></code>
-                    </li>
-                    <li><code><a href="crop.html" title="invertransforms.crop">invertransforms.crop</a></code></li>
-                    <li><code><a href="five_crop.html" title="invertransforms.five_crop">invertransforms.five_crop</a></code>
-                    </li>
-                    <li><code><a href="functions.html" title="invertransforms.functions">invertransforms.functions</a></code>
-                    </li>
-                    <li><code><a href="grayscale.html" title="invertransforms.grayscale">invertransforms.grayscale</a></code>
-                    </li>
-                    <li><code><a href="linear_transformation.html" title="invertransforms.linear_transformation">invertransforms.linear_transformation</a></code>
-                    </li>
-                    <li><code><a href="normalize.html" title="invertransforms.normalize">invertransforms.normalize</a></code>
-                    </li>
-                    <li><code><a href="pad.html" title="invertransforms.pad">invertransforms.pad</a></code></li>
+                    <li><code><a href="color.html" title="invertransforms.color">invertransforms.color</a></code></li>
+                    <li><code><a href="crop_pad.html"
+                                 title="invertransforms.crop_pad">invertransforms.crop_pad</a></code></li>
                     <li><code><a href="perpective.html"
                                  title="invertransforms.perpective">invertransforms.perpective</a></code></li>
-                    <li><code><a href="random_erasing.html" title="invertransforms.random_erasing">invertransforms.random_erasing</a></code>
-                    </li>
-                    <li><code><a href="random_flip.html" title="invertransforms.random_flip">invertransforms.random_flip</a></code>
-                    </li>
-                    <li><code><a href="random_resized_crop.html" title="invertransforms.random_resized_crop">invertransforms.random_resized_crop</a></code>
-                    </li>
-                    <li><code><a href="random_transforms.html" title="invertransforms.random_transforms">invertransforms.random_transforms</a></code>
-                    </li>
                     <li><code><a href="resize.html" title="invertransforms.resize">invertransforms.resize</a></code>
                     </li>
-                    <li><code><a href="rotation.html"
-                                 title="invertransforms.rotation">invertransforms.rotation</a></code></li>
-                    <li><code><a href="ten_crop.html"
-                                 title="invertransforms.ten_crop">invertransforms.ten_crop</a></code></li>
-                    <li><code><a href="to_tensor_pil_image.html" title="invertransforms.to_tensor_pil_image">invertransforms.to_tensor_pil_image</a></code>
+                    <li><code><a href="sequence.html"
+                                 title="invertransforms.sequence">invertransforms.sequence</a></code></li>
+                    <li><code><a href="tensors.html" title="invertransforms.tensors">invertransforms.tensors</a></code>
                     </li>
                     <li><code><a href="util/index.html" title="invertransforms.util">invertransforms.util</a></code>
+                    </li>
+                    <li><code><a href="util_functions.html" title="invertransforms.util_functions">invertransforms.util_functions</a></code>
                     </li>
                 </ul>
             </li>

@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.7.1" name="generator"/>
     <title>invertransforms.affine API documentation</title>
-    <meta content="" name="description"/>
+    <meta content="Affine Module …" name="description"/>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -427,11 +427,23 @@
             <h1 class="title">Module <code>invertransforms.affine</code></h1>
         </header>
         <section id="section-intro">
+            <p>Affine Module.</p>
+            <p>This module contains transform classes to apply affine transformations to images.
+                The transformation can be random or fixed.
+                Including specific transformations for rotations.</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">import torch
+                <pre><code class="python">&#34;&#34;&#34;
+Affine Module.
+
+This module contains transform classes to apply affine transformations to images.
+The transformation can be random or fixed.
+Including specific transformations for rotations.
+
+&#34;&#34;&#34;
+import torch
 from PIL import Image, PILLOW_VERSION
 from torchvision import transforms
 from torchvision.transforms.functional import _get_inverse_affine_matrix
@@ -442,14 +454,30 @@ from invertransforms.util.invertible import InvertibleError
 
 
 class Affine(Invertible):
+    &#34;&#34;&#34;
+    Apply affine transformation on the image.
+
+    Args:
+        matrix (list of int): transformation matrix (from destination image to source)
+         because we want to interpolate the (discrete) destination pixel from the local
+         area around the (floating) source pixel.
+    &#34;&#34;&#34;
+
     def __init__(self, matrix):
         self.matrix = matrix
 
-    def invert(self):
+    def inverse(self):
         matrix_inv = _invert_affine_matrix(self.matrix)
         return Affine(matrix_inv)
 
     def __call__(self, img):
+        &#34;&#34;&#34;
+        Args
+            img (PIL Image): Image to be transformed.
+
+        Returns:
+            PIL Image: Affine transformed image.
+        &#34;&#34;&#34;
         return _affine_with_matrix(img, self.matrix)
 
     def __repr__(self):
@@ -461,6 +489,7 @@ class RandomAffine(transforms.RandomAffine, Invertible):
 
     def __call__(self, img):
         &#34;&#34;&#34;
+        Args
             img (PIL Image): Image to be transformed.
 
         Returns:
@@ -471,7 +500,7 @@ class RandomAffine(transforms.RandomAffine, Invertible):
         self._matrix = _get_inverse_affine_matrix(center, *params)
         return F.affine(img, *params, resample=self.resample, fillcolor=self.fillcolor)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
@@ -491,7 +520,80 @@ def _invert_affine_matrix(matrix):
     if len(matrix) == 6:
         matrix += [0., 0., 1.]
     matrix = torch.tensor(matrix).reshape(3, 3)
-    return matrix.inverse().reshape(-1).tolist()</code></pre>
+    return matrix.inverse().reshape(-1).tolist()
+
+
+class Rotation(Invertible):
+    def __init__(self, angle, resample=False, expand=False, center=None):
+        self.angle = angle
+        self.resample = resample
+        self.expand = expand
+        self.center = center
+        self._img_h = self._img_w = None
+
+    def __call__(self, img):
+        first_call = self._img_h is None or self._img_w is None
+        if first_call:
+            self._img_w, self._img_h = img.size
+        img = F.rotate(img, -self.angle, self.resample, self.expand, self.center)
+        if not first_call and self.expand:
+            img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
+        return img
+
+    def inverse(self):
+        if (self._img_h is None or self._img_w is None) and self.expand:
+            raise InvertibleError(
+                &#39;Cannot invert a transformation before it is applied&#39;
+                &#39; (size of image before expanded rotation unknown).&#39;)  # note: the size could be computed
+        rot = Rotation(
+            angle=-self.angle,
+            resample=self.resample,
+            expand=self.expand,
+            center=self.center,
+        )
+        rot._img_h, rot._img_w = self._img_h, self._img_w
+        return rot
+
+    def __repr__(self):
+        format_string = self.__class__.__name__ + &#39;(angle={0}&#39;.format(self.angle)
+        format_string += &#39;, resample={0}&#39;.format(self.resample)
+        format_string += &#39;, expand={0}&#39;.format(self.expand)
+        if self.center is not None:
+            format_string += &#39;, center={0}&#39;.format(self.center)
+        format_string += &#39;)&#39;
+        return format_string
+
+
+class RandomRotation(transforms.RandomRotation, Invertible):
+    _angle = _img_h = _img_w = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be rotated.
+
+        Returns:
+            PIL Image: Rotated image.
+        &#34;&#34;&#34;
+        self._angle = self.get_params(self.degrees)
+        self._img_w, self._img_h = img.size
+        return F.rotate(img, self._angle, self.resample, self.expand, self.center)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        rot = Rotation(
+            angle=-self._angle,
+            resample=self.resample,
+            expand=self.expand,
+            center=self.center,
+        )
+        rot._img_h, rot._img_w = self._img_h, self._img_w
+        return rot
+
+    def _can_invert(self):
+        return self._angle is not None and self._img_w is not None and self._img_h is not None</code></pre>
             </details>
         </section>
         <section>
@@ -508,20 +610,43 @@ def _invert_affine_matrix(matrix):
                     <span>(</span><span>matrix)</span>
                 </code></dt>
                 <dd>
-                    <section class="desc"></section>
+                    <section class="desc"><p>Apply affine transformation on the image.</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>matrix</code></strong> :&ensp;<code>list</code> of <code>int</code></dt>
+                            <dd>transformation matrix (from destination image to source)</dd>
+                        </dl>
+                        <p>because we want to interpolate the (discrete) destination pixel from the local
+                            area around the (floating) source pixel.</p></section>
                     <details class="source">
                         <summary>
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">class Affine(Invertible):
+    &#34;&#34;&#34;
+    Apply affine transformation on the image.
+
+    Args:
+        matrix (list of int): transformation matrix (from destination image to source)
+         because we want to interpolate the (discrete) destination pixel from the local
+         area around the (floating) source pixel.
+    &#34;&#34;&#34;
+
     def __init__(self, matrix):
         self.matrix = matrix
 
-    def invert(self):
+    def inverse(self):
         matrix_inv = _invert_affine_matrix(self.matrix)
         return Affine(matrix_inv)
 
     def __call__(self, img):
+        &#34;&#34;&#34;
+        Args
+            img (PIL Image): Image to be transformed.
+
+        Returns:
+            PIL Image: Affine transformed image.
+        &#34;&#34;&#34;
         return _affine_with_matrix(img, self.matrix)
 
     def __repr__(self):
@@ -617,6 +742,7 @@ def _invert_affine_matrix(matrix):
 
     def __call__(self, img):
         &#34;&#34;&#34;
+        Args
             img (PIL Image): Image to be transformed.
 
         Returns:
@@ -627,7 +753,7 @@ def _invert_affine_matrix(matrix):
         self._matrix = _get_inverse_affine_matrix(center, *params)
         return F.affine(img, *params, resample=self.resample, fillcolor=self.fillcolor)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
@@ -640,6 +766,180 @@ def _invert_affine_matrix(matrix):
                     <h3>Ancestors</h3>
                     <ul class="hlist">
                         <li>torchvision.transforms.transforms.RandomAffine</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.affine.RandomRotation"><code class="flex name class">
+                    <span>class <span class="ident">RandomRotation</span></span>
+                    <span>(</span><span>degrees, resample=False, expand=False, center=None)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Rotate the image by angle.</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>degrees</code></strong> :&ensp;<code>sequence</code> or
+                                <code>float</code> or <code>int</code></dt>
+                            <dd>Range of degrees to select from.
+                                If degrees is a number instead of sequence like (min, max), the range of degrees
+                                will be (-degrees, +degrees).
+                            </dd>
+                            <dt>resample ({PIL.Image.NEAREST, PIL.Image.BILINEAR, PIL.Image.BICUBIC}, optional):</dt>
+                            <dt>An optional resampling filter. See <code>filters</code>_ for more information.</dt>
+                            <dt>If omitted, or if the image has mode "1" or "P", it is set to PIL.Image.NEAREST.</dt>
+                            <dt><strong><code>expand</code></strong> :&ensp;<code>bool</code>, optional</dt>
+                            <dd>Optional expansion flag.
+                                If true, expands the output to make it large enough to hold the entire rotated image.
+                                If false or omitted, make the output image the same size as the input image.
+                                Note that the expand flag assumes rotation around the center and no translation.
+                            </dd>
+                        </dl>
+                        <p>center (2-tuple, optional): Optional center of rotation.
+                            Origin is the upper left corner.
+                            Default is the center of the image.
+                            .. _filters: <a
+                                    href="https://pillow.readthedocs.io/en/latest/handbook/concepts.html#filters">https://pillow.readthedocs.io/en/latest/handbook/concepts.html#filters</a>
+                        </p></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class RandomRotation(transforms.RandomRotation, Invertible):
+    _angle = _img_h = _img_w = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be rotated.
+
+        Returns:
+            PIL Image: Rotated image.
+        &#34;&#34;&#34;
+        self._angle = self.get_params(self.degrees)
+        self._img_w, self._img_h = img.size
+        return F.rotate(img, self._angle, self.resample, self.expand, self.center)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        rot = Rotation(
+            angle=-self._angle,
+            resample=self.resample,
+            expand=self.expand,
+            center=self.center,
+        )
+        rot._img_h, rot._img_w = self._img_h, self._img_w
+        return rot
+
+    def _can_invert(self):
+        return self._angle is not None and self._img_w is not None and self._img_h is not None</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.RandomRotation</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.affine.Rotation"><code class="flex name class">
+                    <span>class <span class="ident">Rotation</span></span>
+                    <span>(</span><span>angle, resample=False, expand=False, center=None)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class Rotation(Invertible):
+    def __init__(self, angle, resample=False, expand=False, center=None):
+        self.angle = angle
+        self.resample = resample
+        self.expand = expand
+        self.center = center
+        self._img_h = self._img_w = None
+
+    def __call__(self, img):
+        first_call = self._img_h is None or self._img_w is None
+        if first_call:
+            self._img_w, self._img_h = img.size
+        img = F.rotate(img, -self.angle, self.resample, self.expand, self.center)
+        if not first_call and self.expand:
+            img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
+        return img
+
+    def inverse(self):
+        if (self._img_h is None or self._img_w is None) and self.expand:
+            raise InvertibleError(
+                &#39;Cannot invert a transformation before it is applied&#39;
+                &#39; (size of image before expanded rotation unknown).&#39;)  # note: the size could be computed
+        rot = Rotation(
+            angle=-self.angle,
+            resample=self.resample,
+            expand=self.expand,
+            center=self.center,
+        )
+        rot._img_h, rot._img_w = self._img_h, self._img_w
+        return rot
+
+    def __repr__(self):
+        format_string = self.__class__.__name__ + &#39;(angle={0}&#39;.format(self.angle)
+        format_string += &#39;, resample={0}&#39;.format(self.resample)
+        format_string += &#39;, expand={0}&#39;.format(self.expand)
+        if self.center is not None:
+            format_string += &#39;, center={0}&#39;.format(self.center)
+        format_string += &#39;)&#39;
+        return format_string</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
                         <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
                                title="invertransforms.util.invertible.Invertible">Invertible</a></li>
                     </ul>
@@ -690,6 +990,14 @@ def _invert_affine_matrix(matrix):
                     <li>
                         <h4><code><a href="#invertransforms.affine.RandomAffine"
                                      title="invertransforms.affine.RandomAffine">RandomAffine</a></code></h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.affine.RandomRotation"
+                                     title="invertransforms.affine.RandomRotation">RandomRotation</a></code></h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.affine.Rotation" title="invertransforms.affine.Rotation">Rotation</a></code>
+                        </h4>
                     </li>
                 </ul>
             </li>

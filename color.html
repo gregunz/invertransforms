@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.7.1" name="generator"/>
-    <title>invertransforms.random_transforms API documentation</title>
-    <meta content="" name="description"/>
+    <title>invertransforms.color API documentation</title>
+    <meta content="Color Module …" name="description"/>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -424,91 +424,103 @@
 <main>
     <article id="content">
         <header>
-            <h1 class="title">Module <code>invertransforms.random_transforms</code></h1>
+            <h1 class="title">Module <code>invertransforms.color</code></h1>
         </header>
         <section id="section-intro">
+            <p>Color Module</p>
+            <p>This modules contains transformations on the image channels (RBG, grayscale).
+                Generally this transformation cannot be reversed or it simply makes not much sense.</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">import random
-from typing import Union
+                <pre><code class="python">&#34;&#34;&#34;
+Color Module
 
+This modules contains transformations on the image channels (RBG, grayscale).
+Generally this transformation cannot be reversed or it simply makes not much sense.
+
+&#34;&#34;&#34;
 from torchvision import transforms
+from torchvision.transforms import functional as F
 
 import invertransforms as T
-from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleError
+from invertransforms.util import Invertible, flip_coin, InvertibleError
 
 
-class RandomApply(transforms.RandomApply, Invertible):
-    &#34;&#34;&#34;Apply randomly a list of transformations with a given probability
-
-    Args:
-        transforms: one or multiple of transformations
-        p (float): probability
-    &#34;&#34;&#34;
-
-    def __init__(self, transforms: Union[Invertible, list, tuple], p=0.5):
-        if isinstance(transforms, Invertible):
-            transforms = [transforms]
-        super().__init__(transforms=transforms, p=0.5)
-        self.p = p
-        self._transform = None
-
-    def __call__(self, img):
-
-        self._transform = T.Identity()
-        if flip_coin(self.p):
-            self._transform = T.Compose(self.transforms)
-        return self._transform(img)
-
-    def invert(self):
-        if not self._can_invert():
-            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
-
-        return self._transform.invert()
-
-    def _can_invert(self):
-        return self._transform is not None
-
-
-class RandomChoice(transforms.RandomChoice, Invertible):
+class ColorJitter(transforms.ColorJitter, Invertible):
     _transform = None
 
     def __call__(self, img):
-        i = random.randint(0, len(self.transforms) - 1)
-        self._transform = self.transforms[i]
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Input image.
+
+        Returns:
+            PIL Image: Color jittered image.
+        &#34;&#34;&#34;
+        self._transform = self.get_params(self.brightness, self.contrast,
+                                          self.saturation, self.hue)
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return T.Lambda(
+            lambd=lambda x: x,
+            tf_inv=self._transform,
+            repr_str=&#39;ColorJitterInverse()&#39;
+        )
 
     def _can_invert(self):
         return self._transform is not None
 
 
-class RandomOrder(transforms.RandomOrder, Invertible):
-    _order = None
+class Grayscale(transforms.Grayscale, Invertible):
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        &#34;&#34;&#34;
+        return F.to_grayscale(img, num_output_channels=self.num_output_channels)
+
+    def inverse(self):
+        return T.Lambda(
+            lambd=lambda x: x,
+            tf_inv=Grayscale(self.num_output_channels),
+            repr_str=&#39;GrayscaleInverse()&#39;
+        )
+
+
+class RandomGrayscale(transforms.RandomGrayscale, Invertible):
+    _transform = None
 
     def __call__(self, img):
-        self._order = list(range(len(self.transforms)))
-        random.shuffle(self._order)
-        for i in self._order:
-            img = self.transforms[i](img)
-        return img
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
 
-    def invert(self):
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            num_output_channels = 1 if img.mode == &#39;L&#39; else 3
+            self._transform = Grayscale(num_output_channels=num_output_channels)
+        return self._transform(img)
+
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return T.Compose(transforms=[self.transforms[i].invert() for i in self._order[::-1]])
+        return self._transform.inverse()
 
     def _can_invert(self):
-        return self._order is not None</code></pre>
+        return self._transform is not None</code></pre>
             </details>
         </section>
         <section>
@@ -520,177 +532,211 @@ class RandomOrder(transforms.RandomOrder, Invertible):
         <section>
             <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
-                <dt id="invertransforms.random_transforms.RandomApply"><code class="flex name class">
-                    <span>class <span class="ident">RandomApply</span></span>
-                    <span>(</span><span>transforms, p=0.5)</span>
+                <dt id="invertransforms.color.ColorJitter"><code class="flex name class">
+                    <span>class <span class="ident">ColorJitter</span></span>
+                    <span>(</span><span>brightness=0, contrast=0, saturation=0, hue=0)</span>
                 </code></dt>
                 <dd>
-                    <section class="desc"><p>Apply randomly a list of transformations with a given probability</p>
+                    <section class="desc"><p>Randomly change the brightness, contrast and saturation of an image.</p>
+                        <h2 id="args">Args</h2>
+                        <p>brightness (float or tuple of float (min, max)): How much to jitter brightness.
+                            brightness_factor is chosen uniformly from [max(0, 1 - brightness), 1 + brightness]
+                            or the given [min, max]. Should be non negative numbers.
+                            contrast (float or tuple of float (min, max)): How much to jitter contrast.
+                            contrast_factor is chosen uniformly from [max(0, 1 - contrast), 1 + contrast]
+                            or the given [min, max]. Should be non negative numbers.
+                            saturation (float or tuple of float (min, max)): How much to jitter saturation.
+                            saturation_factor is chosen uniformly from [max(0, 1 - saturation), 1 + saturation]
+                            or the given [min, max]. Should be non negative numbers.
+                            hue (float or tuple of float (min, max)): How much to jitter hue.
+                            hue_factor is chosen uniformly from [-hue, hue] or the given [min, max].
+                            Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class ColorJitter(transforms.ColorJitter, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Input image.
+
+        Returns:
+            PIL Image: Color jittered image.
+        &#34;&#34;&#34;
+        self._transform = self.get_params(self.brightness, self.contrast,
+                                          self.saturation, self.hue)
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
+
+        return T.Lambda(
+            lambd=lambda x: x,
+            tf_inv=self._transform,
+            repr_str=&#39;ColorJitterInverse()&#39;
+        )
+
+    def _can_invert(self):
+        return self._transform is not None</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.ColorJitter</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.color.Grayscale"><code class="flex name class">
+                    <span>class <span class="ident">Grayscale</span></span>
+                    <span>(</span><span>num_output_channels=1)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Convert image to grayscale.</p>
                         <h2 id="args">Args</h2>
                         <dl>
-                            <dt><strong><code>transforms</code></strong></dt>
-                            <dd>one or multiple of transformations</dd>
-                            <dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
-                            <dd>probability</dd>
+                            <dt><strong><code>num_output_channels</code></strong> :&ensp;<code>int</code></dt>
+                            <dd>(1 or 3) number of channels desired for output image</dd>
                         </dl>
+                        <h2 id="returns">Returns</h2>
+                        <p>PIL Image: Grayscale version of the input.
+                            - If num_output_channels == 1 : returned image is single channel
+                            - If num_output_channels == 3 : returned image is 3 channel with r == g == b</p></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class Grayscale(transforms.Grayscale, Invertible):
+    def __call__(self, img):
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        &#34;&#34;&#34;
+        return F.to_grayscale(img, num_output_channels=self.num_output_channels)
+
+    def inverse(self):
+        return T.Lambda(
+            lambd=lambda x: x,
+            tf_inv=Grayscale(self.num_output_channels),
+            repr_str=&#39;GrayscaleInverse()&#39;
+        )</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.Grayscale</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.color.RandomGrayscale"><code class="flex name class">
+                    <span>class <span class="ident">RandomGrayscale</span></span>
+                    <span>(</span><span>p=0.1)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Randomly convert image to grayscale with a probability of p (default
+                        0.1).</p>
+                        <h2 id="args">Args</h2>
+                        <dl>
+                            <dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+                            <dd>probability that image should be converted to grayscale.</dd>
+                        </dl>
+                        <h2 id="returns">Returns</h2>
+                        <dl>
+                            <dt><code>PIL</code> <code>Image</code>: <a href="#invertransforms.color.Grayscale"
+                                                                        title="invertransforms.color.Grayscale"><code>Grayscale</code></a>
+                                <code>version</code> of <code>the</code> <code>input</code> <code>image</code> <code>with</code>
+                                <code>probability</code> <code>p</code> <code>and</code> <code>unchanged</code></dt>
+                            <dd>&nbsp;</dd>
+                        </dl>
+                        <p>with probability (1-p).
+                            - If input image is 1 channel: grayscale version is 1 channel
+                            - If input image is 3 channel: grayscale version is 3 channel with r == g == b</p>
                     </section>
                     <details class="source">
                         <summary>
                             <span>Expand source code</span>
                         </summary>
-                        <pre><code class="python">class RandomApply(transforms.RandomApply, Invertible):
-    &#34;&#34;&#34;Apply randomly a list of transformations with a given probability
-
-    Args:
-        transforms: one or multiple of transformations
-        p (float): probability
-    &#34;&#34;&#34;
-
-    def __init__(self, transforms: Union[Invertible, list, tuple], p=0.5):
-        if isinstance(transforms, Invertible):
-            transforms = [transforms]
-        super().__init__(transforms=transforms, p=0.5)
-        self.p = p
-        self._transform = None
-
-    def __call__(self, img):
-
-        self._transform = T.Identity()
-        if flip_coin(self.p):
-            self._transform = T.Compose(self.transforms)
-        return self._transform(img)
-
-    def invert(self):
-        if not self._can_invert():
-            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
-
-        return self._transform.invert()
-
-    def _can_invert(self):
-        return self._transform is not None</code></pre>
-                    </details>
-                    <h3>Ancestors</h3>
-                    <ul class="hlist">
-                        <li>torchvision.transforms.transforms.RandomApply</li>
-                        <li>torchvision.transforms.transforms.RandomTransforms</li>
-                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
-                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
-                    </ul>
-                    <h3>Inherited members</h3>
-                    <ul class="hlist">
-                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
-                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
-                            <ul class="hlist">
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
-                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
-                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
-                                </li>
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
-                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
-                                </li>
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
-                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </dd>
-                <dt id="invertransforms.random_transforms.RandomChoice"><code class="flex name class">
-                    <span>class <span class="ident">RandomChoice</span></span>
-                    <span>(</span><span>transforms)</span>
-                </code></dt>
-                <dd>
-                    <section class="desc"><p>Apply single transformation randomly picked from a list</p></section>
-                    <details class="source">
-                        <summary>
-                            <span>Expand source code</span>
-                        </summary>
-                        <pre><code class="python">class RandomChoice(transforms.RandomChoice, Invertible):
+                        <pre><code class="python">class RandomGrayscale(transforms.RandomGrayscale, Invertible):
     _transform = None
 
     def __call__(self, img):
-        i = random.randint(0, len(self.transforms) - 1)
-        self._transform = self.transforms[i]
+        &#34;&#34;&#34;
+        Args:
+            img (PIL Image): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image: Randomly grayscaled image.
+        &#34;&#34;&#34;
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            num_output_channels = 1 if img.mode == &#39;L&#39; else 3
+            self._transform = Grayscale(num_output_channels=num_output_channels)
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
             raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None</code></pre>
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
-                        <li>torchvision.transforms.transforms.RandomChoice</li>
-                        <li>torchvision.transforms.transforms.RandomTransforms</li>
-                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
-                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
-                    </ul>
-                    <h3>Inherited members</h3>
-                    <ul class="hlist">
-                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
-                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
-                            <ul class="hlist">
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
-                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
-                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
-                                </li>
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
-                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
-                                </li>
-                                <li><code><a
-                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
-                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </dd>
-                <dt id="invertransforms.random_transforms.RandomOrder"><code class="flex name class">
-                    <span>class <span class="ident">RandomOrder</span></span>
-                    <span>(</span><span>transforms)</span>
-                </code></dt>
-                <dd>
-                    <section class="desc"><p>Apply a list of transformations in a random order</p></section>
-                    <details class="source">
-                        <summary>
-                            <span>Expand source code</span>
-                        </summary>
-                        <pre><code class="python">class RandomOrder(transforms.RandomOrder, Invertible):
-    _order = None
-
-    def __call__(self, img):
-        self._order = list(range(len(self.transforms)))
-        random.shuffle(self._order)
-        for i in self._order:
-            img = self.transforms[i](img)
-        return img
-
-    def invert(self):
-        if not self._can_invert():
-            raise InvertibleError(&#39;Cannot invert a random transformation before it is applied.&#39;)
-
-        return T.Compose(transforms=[self.transforms[i].invert() for i in self._order[::-1]])
-
-    def _can_invert(self):
-        return self._order is not None</code></pre>
-                    </details>
-                    <h3>Ancestors</h3>
-                    <ul class="hlist">
-                        <li>torchvision.transforms.transforms.RandomOrder</li>
-                        <li>torchvision.transforms.transforms.RandomTransforms</li>
+                        <li>torchvision.transforms.transforms.RandomGrayscale</li>
                         <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
                                title="invertransforms.util.invertible.Invertible">Invertible</a></li>
                     </ul>
@@ -735,17 +781,16 @@ class RandomOrder(transforms.RandomOrder, Invertible):
             <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
                     <li>
-                        <h4><code><a href="#invertransforms.random_transforms.RandomApply"
-                                     title="invertransforms.random_transforms.RandomApply">RandomApply</a></code></h4>
+                        <h4><code><a href="#invertransforms.color.ColorJitter"
+                                     title="invertransforms.color.ColorJitter">ColorJitter</a></code></h4>
                     </li>
                     <li>
-                        <h4><code><a href="#invertransforms.random_transforms.RandomChoice"
-                                     title="invertransforms.random_transforms.RandomChoice">RandomChoice</a></code>
+                        <h4><code><a href="#invertransforms.color.Grayscale" title="invertransforms.color.Grayscale">Grayscale</a></code>
                         </h4>
                     </li>
                     <li>
-                        <h4><code><a href="#invertransforms.random_transforms.RandomOrder"
-                                     title="invertransforms.random_transforms.RandomOrder">RandomOrder</a></code></h4>
+                        <h4><code><a href="#invertransforms.color.RandomGrayscale"
+                                     title="invertransforms.color.RandomGrayscale">RandomGrayscale</a></code></h4>
                     </li>
                 </ul>
             </li>

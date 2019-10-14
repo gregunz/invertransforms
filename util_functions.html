@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.7.1" name="generator"/>
-    <title>invertransforms.functions API documentation</title>
-    <meta content="" name="description"/>
+    <title>invertransforms.util_functions API documentation</title>
+    <meta content="Util Functions Module …" name="description"/>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -424,14 +424,22 @@
 <main>
     <article id="content">
         <header>
-            <h1 class="title">Module <code>invertransforms.functions</code></h1>
+            <h1 class="title">Module <code>invertransforms.util_functions</code></h1>
         </header>
         <section id="section-intro">
+            <p>Util Functions Module</p>
+            <p>This modules contains utility transformations for building a clean pipeline.</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">from torchvision import transforms
+                <pre><code class="python">&#34;&#34;&#34;
+Util Functions Module
+
+This modules contains utility transformations for building a clean pipeline.
+
+&#34;&#34;&#34;
+from torchvision import transforms
 
 from invertransforms.util import Invertible, InvertibleError
 
@@ -440,7 +448,7 @@ class Identity(Invertible):
     def __call__(self, img):
         return img
 
-    def invert(self):
+    def inverse(self):
         return Identity()
 
 
@@ -452,18 +460,18 @@ class Lambda(transforms.Lambda, Invertible):
         assert tf_inv is None or callable(tf_inv), repr(type(tf_inv).__name__) + &#34; object is not callable&#34;
         self.tf_inv = tf_inv
 
-    def invert(self):
+    def inverse(self):
         if self.tf_inv is None:
             raise InvertibleError(&#39;Cannot invert transformation, tf_inv_builder is None&#39;)
         if isinstance(self.tf_inv, Invertible):
             return self.tf_inv
         else:
-            repr_str = repr(self)
-            suffix = &#39;Invert()&#39;
+            repr_str = repr(self).split(&#39;()&#39;)[0]
+            suffix = &#39;Inverse&#39;
             if suffix in repr_str:
                 repr_str = repr_str[:-len(suffix)]
             else:
-                repr_str += suffix
+                repr_str += suffix + &#39;()&#39;
             return Lambda(
                 lambd=self.tf_inv,
                 tf_inv=self.lambd,
@@ -489,11 +497,21 @@ class TransformIf(Invertible):
     def __repr__(self):
         return self.transform.__repr__()
 
-    def invert(self):
+    def inverse(self):
         if not isinstance(self.transform, Invertible):
             raise InvertibleError(
                 f&#39;{self.transform} ({self.transform.__class__.__name__}) is not an invertible object&#39;)
-        return self.transform.invert()</code></pre>
+        return self.transform.inverse()
+
+
+class ToPILImage(transforms.ToPILImage, Invertible):
+    def inverse(self):
+        return ToTensor()
+
+
+class ToTensor(transforms.ToTensor, Invertible):
+    def inverse(self):
+        return ToPILImage()</code></pre>
             </details>
         </section>
         <section>
@@ -505,7 +523,7 @@ class TransformIf(Invertible):
         <section>
             <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
-                <dt id="invertransforms.functions.Identity"><code class="flex name class">
+                <dt id="invertransforms.util_functions.Identity"><code class="flex name class">
                     <span>class <span class="ident">Identity</span></span>
                     <span>(</span><span>*args, **kwargs)</span>
                 </code></dt>
@@ -519,7 +537,7 @@ class TransformIf(Invertible):
     def __call__(self, img):
         return img
 
-    def invert(self):
+    def inverse(self):
         return Identity()</code></pre>
                     </details>
                     <h3>Ancestors</h3>
@@ -551,7 +569,7 @@ class TransformIf(Invertible):
                         </li>
                     </ul>
                 </dd>
-                <dt id="invertransforms.functions.Lambda"><code class="flex name class">
+                <dt id="invertransforms.util_functions.Lambda"><code class="flex name class">
                     <span>class <span class="ident">Lambda</span></span>
                     <span>(</span><span>lambd, tf_inv=None, repr_str=None)</span>
                 </code></dt>
@@ -575,18 +593,18 @@ class TransformIf(Invertible):
         assert tf_inv is None or callable(tf_inv), repr(type(tf_inv).__name__) + &#34; object is not callable&#34;
         self.tf_inv = tf_inv
 
-    def invert(self):
+    def inverse(self):
         if self.tf_inv is None:
             raise InvertibleError(&#39;Cannot invert transformation, tf_inv_builder is None&#39;)
         if isinstance(self.tf_inv, Invertible):
             return self.tf_inv
         else:
-            repr_str = repr(self)
-            suffix = &#39;Invert()&#39;
+            repr_str = repr(self).split(&#39;()&#39;)[0]
+            suffix = &#39;Inverse&#39;
             if suffix in repr_str:
                 repr_str = repr_str[:-len(suffix)]
             else:
-                repr_str += suffix
+                repr_str += suffix + &#39;()&#39;
             return Lambda(
                 lambd=self.tf_inv,
                 tf_inv=self.lambd,
@@ -628,7 +646,116 @@ class TransformIf(Invertible):
                         </li>
                     </ul>
                 </dd>
-                <dt id="invertransforms.functions.TransformIf"><code class="flex name class">
+                <dt id="invertransforms.util_functions.ToPILImage"><code class="flex name class">
+                    <span>class <span class="ident">ToPILImage</span></span>
+                    <span>(</span><span>mode=None)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Convert a tensor or an ndarray to PIL Image.</p>
+                        <p>Converts a torch.*Tensor of shape C x H x W or a numpy ndarray of shape
+                            H x W x C to a PIL Image while preserving the value range.</p>
+                        <h2 id="args">Args</h2>
+                        <p>mode (<code>PIL.Image mode</code>_): color space and pixel depth of input data (optional).
+                            If <code>mode</code> is <code>None</code> (default) there are some assumptions made about
+                            the input data:
+                            - If the input has 4 channels, the <code>mode</code> is assumed to be <code>RGBA</code>.
+                            - If the input has 3 channels, the <code>mode</code> is assumed to be <code>RGB</code>.
+                            - If the input has 2 channels, the <code>mode</code> is assumed to be <code>LA</code>.
+                            - If the input has 1 channel, the <code>mode</code> is determined by the data type (i.e
+                            <code>int</code>, <code>float</code>,
+                            <code>short</code>).
+                            .. _PIL.Image mode: <a
+                                    href="https://pillow.readthedocs.io/en/latest/handbook/concepts.html#concept-modes">https://pillow.readthedocs.io/en/latest/handbook/concepts.html#concept-modes</a>
+                        </p></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class ToPILImage(transforms.ToPILImage, Invertible):
+    def inverse(self):
+        return ToTensor()</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.ToPILImage</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.util_functions.ToTensor"><code class="flex name class">
+                    <span>class <span class="ident">ToTensor</span></span>
+                    <span>(</span><span>*args, **kwargs)</span>
+                </code></dt>
+                <dd>
+                    <section class="desc"><p>Convert a <code>PIL Image</code> or <code>numpy.ndarray</code> to tensor.
+                    </p>
+                        <p>Converts a PIL Image or numpy.ndarray (H x W x C) in the range
+                            [0, 255] to a torch.FloatTensor of shape (C x H x W) in the range [0.0, 1.0]
+                            if the PIL Image belongs to one of the modes (L, LA, P, I, F, RGB, YCbCr, RGBA, CMYK, 1)
+                            or if the numpy.ndarray has dtype = np.uint8</p>
+                        <p>In the other cases, tensors are returned without scaling.</p></section>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class ToTensor(transforms.ToTensor, Invertible):
+    def inverse(self):
+        return ToPILImage()</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>torchvision.transforms.transforms.ToTensor</li>
+                        <li><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                               title="invertransforms.util.invertible.Invertible">Invertible</a></li>
+                    </ul>
+                    <h3>Inherited members</h3>
+                    <ul class="hlist">
+                        <li><code><b><a href="util/invertible.html#invertransforms.util.invertible.Invertible"
+                                        title="invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+                            <ul class="hlist">
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.apply"
+                                        title="invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse"
+                                        title="invertransforms.util.invertible.Invertible.inverse">inverse</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.invert"
+                                        title="invertransforms.util.invertible.Invertible.invert">invert</a></code>
+                                </li>
+                                <li><code><a
+                                        href="util/invertible.html#invertransforms.util.invertible.Invertible.replay"
+                                        title="invertransforms.util.invertible.Invertible.replay">replay</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+                <dt id="invertransforms.util_functions.TransformIf"><code class="flex name class">
                     <span>class <span class="ident">TransformIf</span></span>
                     <span>(</span><span>transform, condition)</span>
                 </code></dt>
@@ -651,11 +778,11 @@ class TransformIf(Invertible):
     def __repr__(self):
         return self.transform.__repr__()
 
-    def invert(self):
+    def inverse(self):
         if not isinstance(self.transform, Invertible):
             raise InvertibleError(
                 f&#39;{self.transform} ({self.transform.__class__.__name__}) is not an invertible object&#39;)
-        return self.transform.invert()</code></pre>
+        return self.transform.inverse()</code></pre>
                     </details>
                     <h3>Ancestors</h3>
                     <ul class="hlist">
@@ -703,16 +830,24 @@ class TransformIf(Invertible):
             <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
                     <li>
-                        <h4><code><a href="#invertransforms.functions.Identity"
-                                     title="invertransforms.functions.Identity">Identity</a></code></h4>
+                        <h4><code><a href="#invertransforms.util_functions.Identity"
+                                     title="invertransforms.util_functions.Identity">Identity</a></code></h4>
                     </li>
                     <li>
-                        <h4><code><a href="#invertransforms.functions.Lambda" title="invertransforms.functions.Lambda">Lambda</a></code>
-                        </h4>
+                        <h4><code><a href="#invertransforms.util_functions.Lambda"
+                                     title="invertransforms.util_functions.Lambda">Lambda</a></code></h4>
                     </li>
                     <li>
-                        <h4><code><a href="#invertransforms.functions.TransformIf"
-                                     title="invertransforms.functions.TransformIf">TransformIf</a></code></h4>
+                        <h4><code><a href="#invertransforms.util_functions.ToPILImage"
+                                     title="invertransforms.util_functions.ToPILImage">ToPILImage</a></code></h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.util_functions.ToTensor"
+                                     title="invertransforms.util_functions.ToTensor">ToTensor</a></code></h4>
+                    </li>
+                    <li>
+                        <h4><code><a href="#invertransforms.util_functions.TransformIf"
+                                     title="invertransforms.util_functions.TransformIf">TransformIf</a></code></h4>
                     </li>
                 </ul>
             </li>

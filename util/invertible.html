@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.7.1" name="generator"/>
     <title>invertransforms.util.invertible API documentation</title>
-    <meta content="" name="description"/>
+    <meta content="Invertible Module …" name="description"/>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -427,11 +427,19 @@
             <h1 class="title">Module <code>invertransforms.util.invertible</code></h1>
         </header>
         <section id="section-intro">
+            <p>Invertible Module</p>
+            <p>This module contains the basic building block to make transformations invertible.</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">from abc import abstractmethod
+                <pre><code class="python">&#34;&#34;&#34;
+Invertible Module
+
+This module contains the basic building block to make transformations invertible.
+
+&#34;&#34;&#34;
+from abc import abstractmethod
 
 
 class Invertible:
@@ -450,7 +458,7 @@ class Invertible:
         raise NotImplementedError
 
     @abstractmethod
-    def invert(self):
+    def inverse(self):
         &#34;&#34;&#34;
         Abstract method to return the inverse of the transformation
 
@@ -473,7 +481,7 @@ class Invertible:
         &#34;&#34;&#34;
         return self.__call__(img)
 
-    def inverse(self, img):
+    def invert(self, img):
         &#34;&#34;&#34;
         Apply the inverse of this transformation.
 
@@ -483,7 +491,7 @@ class Invertible:
         Returns: image
 
         &#34;&#34;&#34;
-        return self.invert()(img)
+        return self.inverse()(img)
 
     def replay(self, img):
         &#34;&#34;&#34;
@@ -501,7 +509,7 @@ class Invertible:
         try:
             # hack: because inverse fixes the randomness,
             #       we can replay for free with double inverse
-            return self.invert().invert()(img)
+            return self.inverse().inverse()(img)
         except InvertibleError:
             return self.__call__(img)
 
@@ -557,7 +565,7 @@ class InvertibleError(Exception):
         raise NotImplementedError
 
     @abstractmethod
-    def invert(self):
+    def inverse(self):
         &#34;&#34;&#34;
         Abstract method to return the inverse of the transformation
 
@@ -580,7 +588,7 @@ class InvertibleError(Exception):
         &#34;&#34;&#34;
         return self.__call__(img)
 
-    def inverse(self, img):
+    def invert(self, img):
         &#34;&#34;&#34;
         Apply the inverse of this transformation.
 
@@ -590,7 +598,7 @@ class InvertibleError(Exception):
         Returns: image
 
         &#34;&#34;&#34;
-        return self.invert()(img)
+        return self.inverse()(img)
 
     def replay(self, img):
         &#34;&#34;&#34;
@@ -608,7 +616,7 @@ class InvertibleError(Exception):
         try:
             # hack: because inverse fixes the randomness,
             #       we can replay for free with double inverse
-            return self.invert().invert()(img)
+            return self.inverse().inverse()(img)
         except InvertibleError:
             return self.__call__(img)
 
@@ -625,69 +633,68 @@ class InvertibleError(Exception):
                                title="invertransforms.affine.Affine">Affine</a></li>
                         <li><a href="../affine.html#invertransforms.affine.RandomAffine"
                                title="invertransforms.affine.RandomAffine">RandomAffine</a></li>
-                        <li><a href="../center_crop.html#invertransforms.center_crop.CenterCrop"
-                               title="invertransforms.center_crop.CenterCrop">CenterCrop</a></li>
-                        <li><a href="../functions.html#invertransforms.functions.Identity"
-                               title="invertransforms.functions.Identity">Identity</a></li>
-                        <li><a href="../functions.html#invertransforms.functions.Lambda"
-                               title="invertransforms.functions.Lambda">Lambda</a></li>
-                        <li><a href="../functions.html#invertransforms.functions.TransformIf"
-                               title="invertransforms.functions.TransformIf">TransformIf</a></li>
-                        <li><a href="../color_jitter.html#invertransforms.color_jitter.ColorJitter"
-                               title="invertransforms.color_jitter.ColorJitter">ColorJitter</a></li>
-                        <li><a href="../compose.html#invertransforms.compose.Compose"
-                               title="invertransforms.compose.Compose">Compose</a></li>
-                        <li><a href="../crop.html#invertransforms.crop.Crop" title="invertransforms.crop.Crop">Crop</a>
-                        </li>
-                        <li><a href="../crop.html#invertransforms.crop.RandomCrop"
-                               title="invertransforms.crop.RandomCrop">RandomCrop</a></li>
-                        <li><a href="../five_crop.html#invertransforms.five_crop.FiveCrop"
-                               title="invertransforms.five_crop.FiveCrop">FiveCrop</a></li>
-                        <li><a href="../grayscale.html#invertransforms.grayscale.Grayscale"
-                               title="invertransforms.grayscale.Grayscale">Grayscale</a></li>
-                        <li><a href="../grayscale.html#invertransforms.grayscale.RandomGrayscale"
-                               title="invertransforms.grayscale.RandomGrayscale">RandomGrayscale</a></li>
-                        <li>
-                            <a href="../linear_transformation.html#invertransforms.linear_transformation.LinearTransformation"
-                               title="invertransforms.linear_transformation.LinearTransformation">LinearTransformation</a>
-                        </li>
-                        <li><a href="../normalize.html#invertransforms.normalize.Normalize"
-                               title="invertransforms.normalize.Normalize">Normalize</a></li>
-                        <li><a href="../pad.html#invertransforms.pad.Pad" title="invertransforms.pad.Pad">Pad</a></li>
+                        <li><a href="../affine.html#invertransforms.affine.Rotation"
+                               title="invertransforms.affine.Rotation">Rotation</a></li>
+                        <li><a href="../affine.html#invertransforms.affine.RandomRotation"
+                               title="invertransforms.affine.RandomRotation">RandomRotation</a></li>
+                        <li><a href="../color.html#invertransforms.color.ColorJitter"
+                               title="invertransforms.color.ColorJitter">ColorJitter</a></li>
+                        <li><a href="../color.html#invertransforms.color.Grayscale"
+                               title="invertransforms.color.Grayscale">Grayscale</a></li>
+                        <li><a href="../color.html#invertransforms.color.RandomGrayscale"
+                               title="invertransforms.color.RandomGrayscale">RandomGrayscale</a></li>
+                        <li><a href="../crop_pad.html#invertransforms.crop_pad.Crop"
+                               title="invertransforms.crop_pad.Crop">Crop</a></li>
+                        <li><a href="../crop_pad.html#invertransforms.crop_pad.CenterCrop"
+                               title="invertransforms.crop_pad.CenterCrop">CenterCrop</a></li>
+                        <li><a href="../crop_pad.html#invertransforms.crop_pad.RandomCrop"
+                               title="invertransforms.crop_pad.RandomCrop">RandomCrop</a></li>
+                        <li><a href="../crop_pad.html#invertransforms.crop_pad.Pad"
+                               title="invertransforms.crop_pad.Pad">Pad</a></li>
+                        <li><a href="../crop_pad.html#invertransforms.crop_pad.FiveCrop"
+                               title="invertransforms.crop_pad.FiveCrop">FiveCrop</a></li>
+                        <li><a href="../crop_pad.html#invertransforms.crop_pad.TenCrop"
+                               title="invertransforms.crop_pad.TenCrop">TenCrop</a></li>
                         <li><a href="../perpective.html#invertransforms.perpective.Perspective"
                                title="invertransforms.perpective.Perspective">Perspective</a></li>
                         <li><a href="../perpective.html#invertransforms.perpective.RandomPerspective"
                                title="invertransforms.perpective.RandomPerspective">RandomPerspective</a></li>
-                        <li><a href="../random_erasing.html#invertransforms.random_erasing.RandomErasing"
-                               title="invertransforms.random_erasing.RandomErasing">RandomErasing</a></li>
-                        <li><a href="../random_flip.html#invertransforms.random_flip.HorizontalFlip"
-                               title="invertransforms.random_flip.HorizontalFlip">HorizontalFlip</a></li>
-                        <li><a href="../random_flip.html#invertransforms.random_flip.RandomHorizontalFlip"
-                               title="invertransforms.random_flip.RandomHorizontalFlip">RandomHorizontalFlip</a></li>
-                        <li><a href="../random_flip.html#invertransforms.random_flip.VerticalFlip"
-                               title="invertransforms.random_flip.VerticalFlip">VerticalFlip</a></li>
-                        <li><a href="../random_flip.html#invertransforms.random_flip.RandomVerticalFlip"
-                               title="invertransforms.random_flip.RandomVerticalFlip">RandomVerticalFlip</a></li>
-                        <li><a href="../random_resized_crop.html#invertransforms.random_resized_crop.RandomResizedCrop"
-                               title="invertransforms.random_resized_crop.RandomResizedCrop">RandomResizedCrop</a></li>
-                        <li><a href="../random_transforms.html#invertransforms.random_transforms.RandomApply"
-                               title="invertransforms.random_transforms.RandomApply">RandomApply</a></li>
-                        <li><a href="../random_transforms.html#invertransforms.random_transforms.RandomChoice"
-                               title="invertransforms.random_transforms.RandomChoice">RandomChoice</a></li>
-                        <li><a href="../random_transforms.html#invertransforms.random_transforms.RandomOrder"
-                               title="invertransforms.random_transforms.RandomOrder">RandomOrder</a></li>
+                        <li><a href="../perpective.html#invertransforms.perpective.HorizontalFlip"
+                               title="invertransforms.perpective.HorizontalFlip">HorizontalFlip</a></li>
+                        <li><a href="../perpective.html#invertransforms.perpective.RandomHorizontalFlip"
+                               title="invertransforms.perpective.RandomHorizontalFlip">RandomHorizontalFlip</a></li>
+                        <li><a href="../perpective.html#invertransforms.perpective.VerticalFlip"
+                               title="invertransforms.perpective.VerticalFlip">VerticalFlip</a></li>
+                        <li><a href="../perpective.html#invertransforms.perpective.RandomVerticalFlip"
+                               title="invertransforms.perpective.RandomVerticalFlip">RandomVerticalFlip</a></li>
+                        <li><a href="../sequence.html#invertransforms.sequence.RandomApply"
+                               title="invertransforms.sequence.RandomApply">RandomApply</a></li>
+                        <li><a href="../sequence.html#invertransforms.sequence.RandomChoice"
+                               title="invertransforms.sequence.RandomChoice">RandomChoice</a></li>
+                        <li><a href="../sequence.html#invertransforms.sequence.RandomOrder"
+                               title="invertransforms.sequence.RandomOrder">RandomOrder</a></li>
+                        <li><a href="../sequence.html#invertransforms.sequence.Compose"
+                               title="invertransforms.sequence.Compose">Compose</a></li>
                         <li><a href="../resize.html#invertransforms.resize.Resize"
                                title="invertransforms.resize.Resize">Resize</a></li>
-                        <li><a href="../rotation.html#invertransforms.rotation.Rotation"
-                               title="invertransforms.rotation.Rotation">Rotation</a></li>
-                        <li><a href="../rotation.html#invertransforms.rotation.RandomRotation"
-                               title="invertransforms.rotation.RandomRotation">RandomRotation</a></li>
-                        <li><a href="../ten_crop.html#invertransforms.ten_crop.TenCrop"
-                               title="invertransforms.ten_crop.TenCrop">TenCrop</a></li>
-                        <li><a href="../to_tensor_pil_image.html#invertransforms.to_tensor_pil_image.ToPILImage"
-                               title="invertransforms.to_tensor_pil_image.ToPILImage">ToPILImage</a></li>
-                        <li><a href="../to_tensor_pil_image.html#invertransforms.to_tensor_pil_image.ToTensor"
-                               title="invertransforms.to_tensor_pil_image.ToTensor">ToTensor</a></li>
+                        <li><a href="../resize.html#invertransforms.resize.RandomResizedCrop"
+                               title="invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></li>
+                        <li><a href="../tensors.html#invertransforms.tensors.LinearTransformation"
+                               title="invertransforms.tensors.LinearTransformation">LinearTransformation</a></li>
+                        <li><a href="../tensors.html#invertransforms.tensors.Normalize"
+                               title="invertransforms.tensors.Normalize">Normalize</a></li>
+                        <li><a href="../tensors.html#invertransforms.tensors.RandomErasing"
+                               title="invertransforms.tensors.RandomErasing">RandomErasing</a></li>
+                        <li><a href="../util_functions.html#invertransforms.util_functions.Identity"
+                               title="invertransforms.util_functions.Identity">Identity</a></li>
+                        <li><a href="../util_functions.html#invertransforms.util_functions.Lambda"
+                               title="invertransforms.util_functions.Lambda">Lambda</a></li>
+                        <li><a href="../util_functions.html#invertransforms.util_functions.TransformIf"
+                               title="invertransforms.util_functions.TransformIf">TransformIf</a></li>
+                        <li><a href="../util_functions.html#invertransforms.util_functions.ToPILImage"
+                               title="invertransforms.util_functions.ToPILImage">ToPILImage</a></li>
+                        <li><a href="../util_functions.html#invertransforms.util_functions.ToTensor"
+                               title="invertransforms.util_functions.ToTensor">ToTensor</a></li>
                     </ul>
                     <h3>Methods</h3>
                     <dl>
@@ -728,7 +735,28 @@ class InvertibleError(Exception):
                             </details>
                         </dd>
                         <dt id="invertransforms.util.invertible.Invertible.inverse"><code class="name flex">
-                            <span>def <span class="ident">inverse</span></span>(<span>self, img)</span>
+                            <span>def <span class="ident">inverse</span></span>(<span>self)</span>
+                        </code></dt>
+                        <dd>
+                            <section class="desc"><p>Abstract method to return the inverse of the transformation</p>
+                                <p>Returns (Invertible): tf</p></section>
+                            <details class="source">
+                                <summary>
+                                    <span>Expand source code</span>
+                                </summary>
+                                <pre><code class="python">@abstractmethod
+def inverse(self):
+    &#34;&#34;&#34;
+    Abstract method to return the inverse of the transformation
+
+    Returns (Invertible): tf
+
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+                            </details>
+                        </dd>
+                        <dt id="invertransforms.util.invertible.Invertible.invert"><code class="name flex">
+                            <span>def <span class="ident">invert</span></span>(<span>self, img)</span>
                         </code></dt>
                         <dd>
                             <section class="desc"><p>Apply the inverse of this transformation.</p>
@@ -745,7 +773,7 @@ class InvertibleError(Exception):
                                 <summary>
                                     <span>Expand source code</span>
                                 </summary>
-                                <pre><code class="python">def inverse(self, img):
+                                <pre><code class="python">def invert(self, img):
     &#34;&#34;&#34;
     Apply the inverse of this transformation.
 
@@ -755,28 +783,7 @@ class InvertibleError(Exception):
     Returns: image
 
     &#34;&#34;&#34;
-    return self.invert()(img)</code></pre>
-                            </details>
-                        </dd>
-                        <dt id="invertransforms.util.invertible.Invertible.invert"><code class="name flex">
-                            <span>def <span class="ident">invert</span></span>(<span>self)</span>
-                        </code></dt>
-                        <dd>
-                            <section class="desc"><p>Abstract method to return the inverse of the transformation</p>
-                                <p>Returns (Invertible): tf</p></section>
-                            <details class="source">
-                                <summary>
-                                    <span>Expand source code</span>
-                                </summary>
-                                <pre><code class="python">@abstractmethod
-def invert(self):
-    &#34;&#34;&#34;
-    Abstract method to return the inverse of the transformation
-
-    Returns (Invertible): tf
-
-    &#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
+    return self.inverse()(img)</code></pre>
                             </details>
                         </dd>
                         <dt id="invertransforms.util.invertible.Invertible.replay"><code class="name flex">
@@ -816,7 +823,7 @@ def invert(self):
     try:
         # hack: because inverse fixes the randomness,
         #       we can replay for free with double inverse
-        return self.invert().invert()(img)
+        return self.inverse().inverse()(img)
     except InvertibleError:
         return self.__call__(img)</code></pre>
                             </details>
