@@ -1,3 +1,10 @@
+"""
+Sequence Module
+
+This module contains transformations that are applied to a list of transformations.
+It can apply them in order, in random order, pick one randomly, or apply none, ...
+
+"""
 import random
 from typing import Union
 

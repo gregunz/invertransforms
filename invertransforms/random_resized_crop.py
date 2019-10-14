@@ -3,7 +3,7 @@ import warnings
 from torchvision import transforms
 
 import invertransforms as T
-import invertransforms.list_transforms
+import invertransforms.sequence
 from invertransforms.util import Invertible
 from invertransforms.util.invertible import InvertibleError
 
@@ -20,7 +20,7 @@ class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
             PIL Image: Randomly cropped and resized image.
         """
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self._transform = invertransforms.list_transforms.Compose([
+        self._transform = invertransforms.sequence.Compose([
             T.Crop(location=(i, j), size=(h, w)),
             T.Resize(size=self.size, interpolation=self.interpolation),
         ])

@@ -3,6 +3,7 @@ Color Module
 
 This modules contains transformations on the image channels (RBG, grayscale).
 Generally this transformation cannot be reversed or it simply makes not much sense.
+
 """
 from torchvision import transforms
 from torchvision.transforms import functional as F
@@ -35,6 +36,9 @@ class ColorJitter(transforms.ColorJitter, Invertible):
             tf_inv=self._transform,
             repr_str='ColorJitterInverse()'
         )
+
+    def _can_invert(self):
+        return self._transform is not None
 
 
 class Grayscale(transforms.Grayscale, Invertible):

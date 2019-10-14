@@ -1,3 +1,10 @@
+"""
+Crop and Pad module.
+
+This modules contains multiple transformations about creating crops.
+Generally, their inverse is/or involves `Pad`, and respectively is `Crop` for `Pad` transformation.
+
+"""
 from typing import Sequence
 
 from torchvision import transforms

@@ -20,23 +20,15 @@ transform = Normalize()
 """
 from torchvision.transforms import functional
 
-from .affine import Affine, RandomAffine
-from .color import ColorJitter
-from .color import Grayscale, RandomGrayscale
-from .crop_pad import Crop, RandomCrop, Pad
-from .crop_pad import FiveCrop, TenCrop, CenterCrop
-from .flip import RandomHorizontalFlip, RandomVerticalFlip
-from .list_transforms import Compose
-from .list_transforms import RandomOrder, RandomChoice, RandomApply
-from .perpective import Perspective, RandomPerspective
-from .random_erasing import RandomErasing
+from .affine import Affine, RandomAffine, RandomRotation, Rotation
+from .color import ColorJitter, Grayscale, RandomGrayscale
+from .crop_pad import Crop, RandomCrop, Pad, FiveCrop, TenCrop, CenterCrop
+from .perpective import Perspective, RandomPerspective, RandomHorizontalFlip, RandomVerticalFlip
 from .random_resized_crop import RandomResizedCrop, RandomSizedCrop
 from .resize import Resize, Scale
-from .rotation import RandomRotation, Rotation
-from .tensor_transforms import LinearTransformation
-from .tensor_transforms import Normalize
-from .util_functions import Identity, Lambda, TransformIf
-from .util_functions import ToPILImage, ToTensor
+from .sequence import Compose, RandomOrder, RandomChoice, RandomApply
+from .tensors import LinearTransformation, Normalize, RandomErasing
+from .util_functions import Identity, Lambda, TransformIf, ToPILImage, ToTensor
 
 __all__ = ['Affine', 'CenterCrop', 'ColorJitter', 'Compose', 'Crop', 'FiveCrop', 'Grayscale', 'Identity', 'Lambda',
            'LinearTransformation', 'Normalize', 'Pad', 'Perspective', 'RandomAffine', 'RandomApply', 'RandomChoice',
