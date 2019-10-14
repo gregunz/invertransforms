@@ -42,8 +42,8 @@ from .sequence import Compose, RandomOrder, RandomChoice, RandomApply
 from .tensors import LinearTransformation, Normalize, RandomErasing
 from .util_functions import Identity, Lambda, TransformIf, ToPILImage, ToTensor
 
-__all__ = ['Affine', 'CenterCrop', 'ColorJitter', 'Compose', 'Crop', 'FiveCrop', 'Grayscale', 'Identity',
-           'Lambda', 'LinearTransformation', 'Normalize', 'Pad', 'Perspective', 'RandomAffine',
+__all__ = ['Affine', 'CenterCrop', 'ColorJitter', 'Compose', 'Crop', 'FiveCrop', 'Grayscale', 'Identity', 'Lambda',
+           'LinearTransformation', 'Normalize', 'Pad', 'Perspective', 'RandomAffine', 'HorizontalFlip', 'VerticalFlip',
            'RandomApply', 'RandomChoice', 'RandomCrop', 'RandomErasing', 'RandomGrayscale', 'RandomHorizontalFlip',
            'RandomOrder', 'RandomPerspective', 'RandomResizedCrop', 'RandomRotation', 'RandomSizedCrop',
            'RandomVerticalFlip', 'Resize', 'Rotation', 'Scale', 'TenCrop', 'ToPILImage', 'ToTensor', 'TransformIf',
