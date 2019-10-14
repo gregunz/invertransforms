@@ -93,6 +93,15 @@ Features
  
 - Extensive unit testing (100% coverage, be safe, hopefully)
 
+Requirements
+------------
+```
+python>=3.6
+
+torch>=1.2.0
+torchvision>=0.4.0
+```
+
 
 Future Improvements
 -------------------
