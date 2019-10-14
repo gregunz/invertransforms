@@ -32,7 +32,6 @@ transform = T.Compose([
   T.ToTensor(),
 ])
 
-# apply
 img_tensor = transform(img)
 
 # invert
@@ -45,7 +44,7 @@ img_tensor2 = transform.replay(img2)
 for i in range(n):
     img_tensor_i = transform.track(img_i)
     # ...
-inverse_tf= transform.get_inverse(j)  # or transform[j]
+inverse_tf = transform.get_inverse(j)  # or transform[j]
 img_j = inverse_tf(img_tensor_j)
 ```
 
