@@ -32,6 +32,13 @@ class Affine(Invertible):
         return Affine(matrix_inv)
 
     def __call__(self, img):
+        """
+        Args
+            img (PIL Image): Image to be transformed.
+
+        Returns:
+            PIL Image: Affine transformed image.
+        """
         return _affine_with_matrix(img, self.matrix)
 
     def __repr__(self):
@@ -43,6 +50,7 @@ class RandomAffine(transforms.RandomAffine, Invertible):
 
     def __call__(self, img):
         """
+        Args
             img (PIL Image): Image to be transformed.
 
         Returns:
