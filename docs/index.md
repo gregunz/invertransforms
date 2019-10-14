@@ -21,32 +21,25 @@ transform = Normalize()
 Sub-modules
 -----------
 * invertransforms.affine
-* invertransforms.center_crop
-* invertransforms.color_jitter
-* invertransforms.compose
-* invertransforms.crop
-* invertransforms.five_crop
-* invertransforms.functions
-* invertransforms.grayscale
-* invertransforms.linear_transformation
-* invertransforms.normalize
-* invertransforms.pad
+* invertransforms.color
+* invertransforms.crop_pad
 * invertransforms.perpective
-* invertransforms.random_erasing
-* invertransforms.random_flip
-* invertransforms.random_resized_crop
-* invertransforms.random_transforms
 * invertransforms.resize
-* invertransforms.rotation
-* invertransforms.ten_crop
-* invertransforms.to_tensor_pil_image
+* invertransforms.sequence
+* invertransforms.tensors
 * invertransforms.util
+* invertransforms.util_functions
 
 Classes
 -------
 
 `Affine(matrix)`
-:   
+:   Apply affine transformation on the image.
+    
+    Args:
+        matrix (list of int): transformation matrix (from destination image to source)
+         because we want to interpolate the (discrete) destination pixel from the local
+         area around the (floating) source pixel.
 
     ### Ancestors (in MRO)
 
@@ -462,7 +455,7 @@ Classes
 
     ### Descendants
 
-    * invertransforms.random_resized_crop.RandomSizedCrop
+    * invertransforms.resize.RandomSizedCrop
 
 `RandomRotation(degrees, resample=False, expand=False, center=None)`
 :   Rotate the image by angle.
@@ -494,7 +487,7 @@ Classes
 
     ### Ancestors (in MRO)
 
-    * invertransforms.random_resized_crop.RandomResizedCrop
+    * invertransforms.resize.RandomResizedCrop
     * torchvision.transforms.transforms.RandomResizedCrop
     * invertransforms.util.invertible.Invertible
 
