@@ -4,9 +4,15 @@ Resize Module
 This modules contains transformations which resize images.
 
 """
+
+import warnings
+
 from torchvision import transforms
 
+import invertransforms as T
+import invertransforms.sequence
 from invertransforms.util import Invertible
+from invertransforms.util.invertible import InvertibleError
 
 
 class Resize(transforms.Resize, Invertible):
@@ -45,16 +51,6 @@ class Scale(Resize):
         warnings.warn("The use of the invertransforms.Scale transform is deprecated, " +
                       "please use invertransforms.Resize instead.")
         super().__init__(*args, **kwargs)
-
-
-import warnings
-
-from torchvision import transforms
-
-import invertransforms as T
-import invertransforms.sequence
-from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleError
 
 
 class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
