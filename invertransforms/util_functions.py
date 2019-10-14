@@ -25,12 +25,12 @@ class Lambda(transforms.Lambda, Invertible):
         if isinstance(self.tf_inv, Invertible):
             return self.tf_inv
         else:
-            repr_str = repr(self)
-            suffix = 'Invert()'
+            repr_str = repr(self).split('()')[0]
+            suffix = 'Inverse'
             if suffix in repr_str:
                 repr_str = repr_str[:-len(suffix)]
             else:
-                repr_str += suffix
+                repr_str += suffix + '()'
             return Lambda(
                 lambd=self.tf_inv,
                 tf_inv=self.lambd,
