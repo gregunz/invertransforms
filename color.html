@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.1" />
 <title>invertransforms.color API documentation</title>
-<meta name="description" content="Color Module …" />
+<meta name="description" content="This modules contains transformations on the image channels (RGB, grayscale) …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +20,24 @@
 <h1 class="title">Module <code>invertransforms.color</code></h1>
 </header>
 <section id="section-intro">
-<p>Color Module</p>
-<p>This modules contains transformations on the image channels (RBG, grayscale).
-Generally this transformation cannot be reversed or it simply makes not much sense.</p>
+<p>This modules contains transformations on the image channels (RGB, grayscale).</p>
+<p>Technically these transformations cannot be inverted or it simply makes not much sense,
+hence the inverse is usually the identity function.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Color Module
+This modules contains transformations on the image channels (RGB, grayscale).
 
-This modules contains transformations on the image channels (RBG, grayscale).
-Generally this transformation cannot be reversed or it simply makes not much sense.
-
+Technically these transformations cannot be inverted or it simply makes not much sense,
+hence the inverse is usually the identity function.
 &#34;&#34;&#34;
 from torchvision import transforms
 from torchvision.transforms import functional as F
 
 import invertransforms as T
-from invertransforms.util import Invertible, flip_coin, InvertibleError
+from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class ColorJitter(transforms.ColorJitter, Invertible):
@@ -179,16 +178,18 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.ColorJitter</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -233,16 +234,18 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Grayscale</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -299,16 +302,18 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomGrayscale</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>

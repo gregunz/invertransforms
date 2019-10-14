@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.1" />
 <title>invertransforms.resize API documentation</title>
-<meta name="description" content="Resize Module …" />
+<meta name="description" content="This modules contains transformations which resize images." />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,17 +20,13 @@
 <h1 class="title">Module <code>invertransforms.resize</code></h1>
 </header>
 <section id="section-intro">
-<p>Resize Module</p>
 <p>This modules contains transformations which resize images.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Resize Module
-
 This modules contains transformations which resize images.
-
 &#34;&#34;&#34;
 
 import warnings
@@ -38,9 +34,7 @@ import warnings
 from torchvision import transforms
 
 import invertransforms as T
-import invertransforms.sequence
-from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleError
+from invertransforms.lib import InvertibleError, Invertible
 
 
 class Resize(transforms.Resize, Invertible):
@@ -93,7 +87,7 @@ class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
             PIL Image: Randomly cropped and resized image.
         &#34;&#34;&#34;
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self._transform = invertransforms.sequence.Compose([
+        self._transform = T.Compose([
             T.Crop(location=(i, j), size=(h, w)),
             T.Resize(size=self.size, interpolation=self.interpolation),
         ])
@@ -166,7 +160,7 @@ This is popularly used to train the Inception networks.</p>
             PIL Image: Randomly cropped and resized image.
         &#34;&#34;&#34;
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self._transform = invertransforms.sequence.Compose([
+        self._transform = T.Compose([
             T.Crop(location=(i, j), size=(h, w)),
             T.Resize(size=self.size, interpolation=self.interpolation),
         ])
@@ -184,7 +178,7 @@ This is popularly used to train the Inception networks.</p>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomResizedCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -192,12 +186,14 @@ This is popularly used to train the Inception networks.</p>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -226,16 +222,18 @@ This is popularly used to train the Inception networks.</p>
 <ul class="hlist">
 <li><a title="invertransforms.resize.RandomResizedCrop" href="#invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></li>
 <li>torchvision.transforms.transforms.RandomResizedCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="invertransforms.resize.RandomResizedCrop" href="#invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.resize.RandomResizedCrop.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.resize.RandomResizedCrop.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.resize.RandomResizedCrop.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.resize.RandomResizedCrop.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -291,7 +289,7 @@ i.e, if height &gt; width, then image will be rescaled to
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Resize</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -299,12 +297,14 @@ i.e, if height &gt; width, then image will be rescaled to
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -333,16 +333,18 @@ i.e, if height &gt; width, then image will be rescaled to
 <ul class="hlist">
 <li><a title="invertransforms.resize.Resize" href="#invertransforms.resize.Resize">Resize</a></li>
 <li>torchvision.transforms.transforms.Resize</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="invertransforms.resize.Resize" href="#invertransforms.resize.Resize">Resize</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.resize.Resize.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.resize.Resize.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.resize.Resize.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.resize.Resize.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>

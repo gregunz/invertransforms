@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.1" />
 <title>invertransforms API documentation</title>
-<meta name="description" content="Root module …" />
+<meta name="description" content="This module exports all the transformation classes …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,8 +20,7 @@
 <h1 class="title">Module <code>invertransforms</code></h1>
 </header>
 <section id="section-intro">
-<p>Root module.</p>
-<p>This modules contains all the transformations classes.</p>
+<p>This module exports all the transformation classes.</p>
 <p>There are two typical practices to import them into your project:</p>
 <pre><code class="python">import invertransforms as T
 
@@ -31,14 +30,29 @@ transform = T.Normalize()
 
 transform = Normalize()
 </code></pre>
+<p>All transformations have an <code>inverse</code> transformation attached to it.</p>
+<pre><code class="python">inv_transform = transform.inverse()
+img_inv = inv_transform(img)
+</code></pre>
+<p>If a transformation is random, it is necessary to apply it once before calling <code>invert</code> or <code>inverse()</code>.
+Otherwise it will raise <code>InvertibleError</code>.
+On the otherhand, <code>replay</code> can be called before, it will simply set the randomness on its first call.</p>
+<p>One can create its own invertible transforms either by using the
+practical <code>Lambda</code> class function or by extending the <code>Invertible</code> class available
+in the <code>invertransforms.lib</code> module.</p>
+<p>For convenience, you can also import the following torchvision useful functions from this library:</p>
+<pre><code># from torchvision.transforms import functional as F
+# becomes:
+
+from invertransforms import functional as F
+</code></pre>
+<p>Such that more functions could be added in the future.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Root module.
-
-This modules contains all the transformations classes.
+This module exports all the transformation classes.
 
 There are two typical practices to import them into your project:
 
@@ -54,23 +68,50 @@ from invertransforms import Normalize
 transform = Normalize()
 ```
 
+All transformations have an `inverse` transformation attached to it.
+
+```python
+inv_transform = transform.inverse()
+img_inv = inv_transform(img)
+```
+
+If a transformation is random, it is necessary to apply it once before calling `invert` or `inverse()`.
+Otherwise it will raise `InvertibleError`.
+On the otherhand, `replay` can be called before, it will simply set the randomness on its first call.
+
+
+One can create its own invertible transforms either by using the
+practical `Lambda` class function or by extending the `Invertible` class available
+in the `invertransforms.lib` module.
+
+
+For convenience, you can also import the following torchvision useful functions from this library:
+```
+# from torchvision.transforms import functional as F
+# becomes:
+
+from invertransforms import functional as F
+```
+Such that more functions could be added in the future.
 &#34;&#34;&#34;
 from torchvision.transforms import functional
 
 from .affine import Affine, RandomAffine, RandomRotation, Rotation
 from .color import ColorJitter, Grayscale, RandomGrayscale
 from .crop_pad import Crop, RandomCrop, Pad, FiveCrop, TenCrop, CenterCrop
-from .perpective import Perspective, RandomPerspective, RandomHorizontalFlip, RandomVerticalFlip
+from .perpective import Perspective, VerticalFlip, HorizontalFlip, RandomHorizontalFlip, RandomVerticalFlip, \
+    RandomPerspective
 from .resize import Resize, Scale, RandomResizedCrop, RandomSizedCrop
 from .sequence import Compose, RandomOrder, RandomChoice, RandomApply
 from .tensors import LinearTransformation, Normalize, RandomErasing
 from .util_functions import Identity, Lambda, TransformIf, ToPILImage, ToTensor
 
 __all__ = [&#39;Affine&#39;, &#39;CenterCrop&#39;, &#39;ColorJitter&#39;, &#39;Compose&#39;, &#39;Crop&#39;, &#39;FiveCrop&#39;, &#39;Grayscale&#39;, &#39;Identity&#39;, &#39;Lambda&#39;,
-           &#39;LinearTransformation&#39;, &#39;Normalize&#39;, &#39;Pad&#39;, &#39;Perspective&#39;, &#39;RandomAffine&#39;, &#39;RandomApply&#39;, &#39;RandomChoice&#39;,
-           &#39;RandomCrop&#39;, &#39;RandomErasing&#39;, &#39;RandomGrayscale&#39;, &#39;RandomHorizontalFlip&#39;, &#39;RandomOrder&#39;,
-           &#39;RandomPerspective&#39;, &#39;RandomResizedCrop&#39;, &#39;RandomRotation&#39;, &#39;RandomSizedCrop&#39;, &#39;RandomVerticalFlip&#39;,
-           &#39;Resize&#39;, &#39;Rotation&#39;, &#39;Scale&#39;, &#39;TenCrop&#39;, &#39;ToPILImage&#39;, &#39;ToTensor&#39;, &#39;TransformIf&#39;, &#39;functional&#39;]</code></pre>
+           &#39;LinearTransformation&#39;, &#39;Normalize&#39;, &#39;Pad&#39;, &#39;Perspective&#39;, &#39;RandomAffine&#39;, &#39;HorizontalFlip&#39;, &#39;VerticalFlip&#39;,
+           &#39;RandomApply&#39;, &#39;RandomChoice&#39;, &#39;RandomCrop&#39;, &#39;RandomErasing&#39;, &#39;RandomGrayscale&#39;, &#39;RandomHorizontalFlip&#39;,
+           &#39;RandomOrder&#39;, &#39;RandomPerspective&#39;, &#39;RandomResizedCrop&#39;, &#39;RandomRotation&#39;, &#39;RandomSizedCrop&#39;,
+           &#39;RandomVerticalFlip&#39;, &#39;Resize&#39;, &#39;Rotation&#39;, &#39;Scale&#39;, &#39;TenCrop&#39;, &#39;ToPILImage&#39;, &#39;ToTensor&#39;, &#39;TransformIf&#39;,
+           &#39;functional&#39;]</code></pre>
 </details>
 </section>
 <section>
@@ -78,39 +119,46 @@ __all__ = [&#39;Affine&#39;, &#39;CenterCrop&#39;, &#39;ColorJitter&#39;, &#39;C
 <dl>
 <dt><code class="name"><a title="invertransforms.affine" href="affine.html">invertransforms.affine</a></code></dt>
 <dd>
-<section class="desc"><p>Affine Module …</p></section>
+<section class="desc"><p>This module contains transform classes to apply affine transformations to images.
+The transformation can be random or fixed.
+Including specific …</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.color" href="color.html">invertransforms.color</a></code></dt>
 <dd>
-<section class="desc"><p>Color Module …</p></section>
+<section class="desc"><p>This modules contains transformations on the image channels (RGB, grayscale) …</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.crop_pad" href="crop_pad.html">invertransforms.crop_pad</a></code></dt>
 <dd>
-<section class="desc"><p>Crop and Pad module …</p></section>
+<section class="desc"><p>This modules contains multiple transformations about creating crops.
+Generally, their inverse is/or involves <a title="invertransforms.Pad" href="#invertransforms.Pad"><code>Pad</code></a>, and respectively is <a title="invertransforms.Crop" href="#invertransforms.Crop"><code>Crop</code></a> for …</p></section>
+</dd>
+<dt><code class="name"><a title="invertransforms.lib" href="lib.html">invertransforms.lib</a></code></dt>
+<dd>
+<section class="desc"><p>This module contains the basic building blocks of this library.
+It contains the abstract class all transformations should extend
+and utility functions.</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.perpective" href="perpective.html">invertransforms.perpective</a></code></dt>
 <dd>
-<section class="desc"><p>Perspective Module …</p></section>
+<section class="desc"><p>This module contains transformations for perspective transformation and flipping vertically or horizontally images.
+These transformations can be …</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.resize" href="resize.html">invertransforms.resize</a></code></dt>
 <dd>
-<section class="desc"><p>Resize Module …</p></section>
+<section class="desc"><p>This modules contains transformations which resize images.</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.sequence" href="sequence.html">invertransforms.sequence</a></code></dt>
 <dd>
-<section class="desc"><p>Sequence Module …</p></section>
+<section class="desc"><p>This module contains transformations that are applied to a list of transformations.
+It can apply them in order, in random order, pick one randomly, or …</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.tensors" href="tensors.html">invertransforms.tensors</a></code></dt>
 <dd>
-<section class="desc"><p>Tensors Module …</p></section>
-</dd>
-<dt><code class="name"><a title="invertransforms.util" href="util/index.html">invertransforms.util</a></code></dt>
-<dd>
-<section class="desc"></section>
+<section class="desc"><p>This module contains transformations on torch tensors.</p></section>
 </dd>
 <dt><code class="name"><a title="invertransforms.util_functions" href="util_functions.html">invertransforms.util_functions</a></code></dt>
 <dd>
-<section class="desc"><p>Util Functions Module …</p></section>
+<section class="desc"><p>This modules contains utility transformations for building a clean pipeline.</p></section>
 </dd>
 </dl>
 </section>
@@ -170,16 +218,18 @@ area around the (floating) source pixel.</p></section>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -232,16 +282,18 @@ made.</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.CenterCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -300,16 +352,18 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.ColorJitter</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -344,16 +398,18 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Compose</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -363,12 +419,25 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 <span>(</span><span>location, size)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Crop an image.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>location</code></strong> :&ensp;<code>int</code>, <code>tuple</code></dt>
+<dd>upper left coordinates of the crop area (top, left)</dd>
+<dt><strong><code>size</code></strong> :&ensp;<code>int</code>, <code>tuple</code></dt>
+<dd>size of the crop (height, width)</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Crop(Invertible):
+    &#34;&#34;&#34;
+    Crop an image.
+    Args:
+        location (int, tuple): upper left coordinates of the crop area (top, left)
+        size (int, tuple): size of the crop (height, width)
+    &#34;&#34;&#34;
     _img_h = _img_w = None
 
     def __init__(self, location, size):
@@ -413,16 +482,18 @@ Should have 0&lt;= hue &lt;= 0.5 or -0.5 &lt;= min &lt;= max &lt;= 0.5.</p></sec
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -510,16 +581,18 @@ instead of sequence like (h, w), a square crop of size (size, size) is made.</dd
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.FiveCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -564,32 +637,99 @@ instead of sequence like (h, w), a square crop of size (size, size) is made.</dd
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Grayscale</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="invertransforms.HorizontalFlip"><code class="flex name class">
+<span>class <span class="ident">HorizontalFlip</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Flip the image horizontally.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HorizontalFlip(Invertible):
+    &#34;&#34;&#34;
+    Flip the image horizontally.
+    &#34;&#34;&#34;
+
+    def __call__(self, img):
+        return F.hflip(img)
+
+    def inverse(self):
+        return HorizontalFlip()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
+<ul class="hlist">
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
 </dd>
 <dt id="invertransforms.Identity"><code class="flex name class">
 <span>class <span class="ident">Identity</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>log_fn=&lt;function Identity.&lt;lambda&gt;&gt;)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns its input image without changes.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>log_fn</code></strong> :&ensp;<code>function</code></dt>
+<dd>optional, function useful for logging/debugging.</dd>
+</dl>
+<p>Returns its input.
+Output = Input</p>
+<p>Can be use for debugging/logging if a log_fn is provided.
+It is used throughout the library when inverse transformation is identity.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Identity(Invertible):
+    &#34;&#34;&#34;
+    Returns its input image without changes.
+
+    Args:
+        log_fn (function): optional, function useful for logging/debugging.
+
+    Returns its input.
+    Output = Input
+
+    Can be use for debugging/logging if a log_fn is provided.
+    It is used throughout the library when inverse transformation is identity.
+    &#34;&#34;&#34;
+
+    def __init__(self, log_fn=lambda img: None):
+        self.log_fn = log_fn
+
     def __call__(self, img):
+        self.log_fn(img)
         return img
 
     def inverse(self):
@@ -597,16 +737,18 @@ instead of sequence like (h, w), a square crop of size (size, size) is made.</dd
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -620,13 +762,25 @@ instead of sequence like (h, w), a square crop of size (size, size) is made.</dd
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>lambd</code></strong> :&ensp;<code>function</code></dt>
-<dd>Lambda/function to be used for transform.</dd>
+<dd>Lambda/function to be used for transform</dd>
+<dt><strong><code>tf_inv</code></strong> :&ensp;<code>function</code> or <code>Invertible</code></dt>
+<dd>Invertible transform or Lambda/function to be returned by the <code>inverse</code> method</dd>
+<dt><strong><code>repr_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>optional, overriding the output of <strong>repr</strong>.</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Lambda(transforms.Lambda, Invertible):
+    &#34;&#34;&#34;Apply a user-defined lambda as a transform.
+
+    Args:
+        lambd (function): Lambda/function to be used for transform
+        tf_inv (function or Invertible): Invertible transform or Lambda/function to be returned by the `inverse` method
+        repr_str (str): optional, overriding the output of __repr__.
+    &#34;&#34;&#34;
+
     def __init__(self, lambd, tf_inv=None, repr_str=None):
         super().__init__(lambd=lambd)
         assert repr_str is None or isinstance(repr_str, str), &#39;Expecting a string for repr_str argument&#39;
@@ -660,16 +814,18 @@ instead of sequence like (h, w), a square crop of size (size, size) is made.</dd
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Lambda</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -714,16 +870,18 @@ perform SVD on this matrix and pass it as transformation_matrix.</p>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.LinearTransformation</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -764,16 +922,18 @@ will normalize each channel of the input <code>torch.*Tensor</code> i.e.
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Normalize</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -872,16 +1032,18 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Pad</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -917,16 +1079,18 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -999,16 +1163,18 @@ outside the transform in the output image.(Pillow&gt;=5.0.0)</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomAffine</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1065,16 +1231,18 @@ outside the transform in the output image.(Pillow&gt;=5.0.0)</dd>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomApply</li>
 <li>torchvision.transforms.transforms.RandomTransforms</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1110,16 +1278,18 @@ outside the transform in the output image.(Pillow&gt;=5.0.0)</dd>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomChoice</li>
 <li>torchvision.transforms.transforms.RandomTransforms</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1205,7 +1375,7 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -1240,12 +1410,14 @@ will result in [2, 1, 1, 2, 3, 4, 4, 3]
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1320,16 +1492,18 @@ If a str of 'random', erasing each pixel with random values.</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomErasing</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1386,16 +1560,18 @@ If a str of 'random', erasing each pixel with random values.</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomGrayscale</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1443,16 +1619,18 @@ If a str of 'random', erasing each pixel with random values.</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomHorizontalFlip</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1490,16 +1668,18 @@ If a str of 'random', erasing each pixel with random values.</dd>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomOrder</li>
 <li>torchvision.transforms.transforms.RandomTransforms</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1556,16 +1736,18 @@ If a str of 'random', erasing each pixel with random values.</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomPerspective</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1607,7 +1789,7 @@ This is popularly used to train the Inception networks.</p>
             PIL Image: Randomly cropped and resized image.
         &#34;&#34;&#34;
         i, j, h, w = super().get_params(img, self.scale, self.ratio)
-        self._transform = invertransforms.sequence.Compose([
+        self._transform = T.Compose([
             T.Crop(location=(i, j), size=(h, w)),
             T.Resize(size=self.size, interpolation=self.interpolation),
         ])
@@ -1625,7 +1807,7 @@ This is popularly used to train the Inception networks.</p>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomResizedCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -1633,12 +1815,14 @@ This is popularly used to train the Inception networks.</p>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1706,16 +1890,18 @@ Default is the center of the image.
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomRotation</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1744,16 +1930,18 @@ Default is the center of the image.
 <ul class="hlist">
 <li><a title="invertransforms.resize.RandomResizedCrop" href="resize.html#invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></li>
 <li>torchvision.transforms.transforms.RandomResizedCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="invertransforms.resize.RandomResizedCrop" href="resize.html#invertransforms.resize.RandomResizedCrop">RandomResizedCrop</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.resize.RandomResizedCrop.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.resize.RandomResizedCrop.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.resize.RandomResizedCrop.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.resize.RandomResizedCrop.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.resize.RandomResizedCrop.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1801,16 +1989,18 @@ Default is the center of the image.
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.RandomVerticalFlip</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1866,7 +2056,7 @@ i.e, if height &gt; width, then image will be rescaled to
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Resize</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -1874,12 +2064,14 @@ i.e, if height &gt; width, then image will be rescaled to
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1889,12 +2081,45 @@ i.e, if height &gt; width, then image will be rescaled to
 <span>(</span><span>angle, resample=False, expand=False, center=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Rotate the image given an angle (in degrees).</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>angle</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>degrees of the angle</dd>
+<dt>resample ({PIL.Image.NEAREST, PIL.Image.BILINEAR, PIL.Image.BICUBIC}, optional):</dt>
+<dt>An optional resampling filter. See <code>filters</code>_ for more information.</dt>
+<dt>If omitted, or if the image has mode "1" or "P", it is set to PIL.Image.NEAREST.</dt>
+<dt><strong><code>expand</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Optional expansion flag.
+If true, expands the output to make it large enough to hold the entire rotated image.
+If false or omitted, make the output image the same size as the input image.
+Note that the expand flag assumes rotation around the center and no translation.</dd>
+</dl>
+<p>center (2-tuple, optional): Optional center of rotation.
+Origin is the upper left corner.
+Default is the center of the image.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Rotation(Invertible):
+    &#34;&#34;&#34;
+    Rotate the image given an angle (in degrees).
+
+    Args:
+        angle (float or int): degrees of the angle
+        resample ({PIL.Image.NEAREST, PIL.Image.BILINEAR, PIL.Image.BICUBIC}, optional):
+            An optional resampling filter. See `filters`_ for more information.
+            If omitted, or if the image has mode &#34;1&#34; or &#34;P&#34;, it is set to PIL.Image.NEAREST.
+        expand (bool, optional): Optional expansion flag.
+            If true, expands the output to make it large enough to hold the entire rotated image.
+            If false or omitted, make the output image the same size as the input image.
+            Note that the expand flag assumes rotation around the center and no translation.
+        center (2-tuple, optional): Optional center of rotation.
+            Origin is the upper left corner.
+            Default is the center of the image.
+    &#34;&#34;&#34;
+
     def __init__(self, angle, resample=False, expand=False, center=None):
         self.angle = angle
         self.resample = resample
@@ -1936,16 +2161,18 @@ i.e, if height &gt; width, then image will be rescaled to
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1974,16 +2201,18 @@ i.e, if height &gt; width, then image will be rescaled to
 <ul class="hlist">
 <li><a title="invertransforms.resize.Resize" href="resize.html#invertransforms.resize.Resize">Resize</a></li>
 <li>torchvision.transforms.transforms.Resize</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="invertransforms.resize.Resize" href="resize.html#invertransforms.resize.Resize">Resize</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.resize.Resize.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.resize.Resize.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.resize.Resize.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.resize.Resize.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.resize.Resize.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2066,16 +2295,18 @@ made.</dd>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.TenCrop</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2108,16 +2339,18 @@ If <code>mode</code> is <code>None</code> (default) there are some assumptions m
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.ToPILImage</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2144,16 +2377,18 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.ToTensor</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2163,12 +2398,30 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 <span>(</span><span>transform, condition)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Apply a transformation if the condition is met.
+Otherwise, returns its input.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>transform</code></strong></dt>
+<dd>a transformation</dd>
+<dt><strong><code>condition</code></strong> :&ensp;<code>bool</code></dt>
+<dd>a boolean</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TransformIf(Invertible):
+    &#34;&#34;&#34;
+    Apply a transformation if the condition is met.
+    Otherwise, returns its input.
+
+    Args:
+          transform: a transformation
+          condition (bool): a boolean
+
+    &#34;&#34;&#34;
+
     def __init__(self, transform, condition: bool):
         if condition:
             self.transform = transform
@@ -2189,16 +2442,57 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="invertransforms.VerticalFlip"><code class="flex name class">
+<span>class <span class="ident">VerticalFlip</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Flip the image vertically.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VerticalFlip(Invertible):
+    &#34;&#34;&#34;
+    Flip the image vertically.
+    &#34;&#34;&#34;
+
+    def __call__(self, img):
+        return F.vflip(img)
+
+    def inverse(self):
+        return VerticalFlip()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
+<ul class="hlist">
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2217,11 +2511,11 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 <li><code><a title="invertransforms.affine" href="affine.html">invertransforms.affine</a></code></li>
 <li><code><a title="invertransforms.color" href="color.html">invertransforms.color</a></code></li>
 <li><code><a title="invertransforms.crop_pad" href="crop_pad.html">invertransforms.crop_pad</a></code></li>
+<li><code><a title="invertransforms.lib" href="lib.html">invertransforms.lib</a></code></li>
 <li><code><a title="invertransforms.perpective" href="perpective.html">invertransforms.perpective</a></code></li>
 <li><code><a title="invertransforms.resize" href="resize.html">invertransforms.resize</a></code></li>
 <li><code><a title="invertransforms.sequence" href="sequence.html">invertransforms.sequence</a></code></li>
 <li><code><a title="invertransforms.tensors" href="tensors.html">invertransforms.tensors</a></code></li>
-<li><code><a title="invertransforms.util" href="util/index.html">invertransforms.util</a></code></li>
 <li><code><a title="invertransforms.util_functions" href="util_functions.html">invertransforms.util_functions</a></code></li>
 </ul>
 </li>
@@ -2247,6 +2541,9 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 </li>
 <li>
 <h4><code><a title="invertransforms.Grayscale" href="#invertransforms.Grayscale">Grayscale</a></code></h4>
+</li>
+<li>
+<h4><code><a title="invertransforms.HorizontalFlip" href="#invertransforms.HorizontalFlip">HorizontalFlip</a></code></h4>
 </li>
 <li>
 <h4><code><a title="invertransforms.Identity" href="#invertransforms.Identity">Identity</a></code></h4>
@@ -2328,6 +2625,9 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 </li>
 <li>
 <h4><code><a title="invertransforms.TransformIf" href="#invertransforms.TransformIf">TransformIf</a></code></h4>
+</li>
+<li>
+<h4><code><a title="invertransforms.VerticalFlip" href="#invertransforms.VerticalFlip">VerticalFlip</a></code></h4>
 </li>
 </ul>
 </li>

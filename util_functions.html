@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.1" />
 <title>invertransforms.util_functions API documentation</title>
-<meta name="description" content="Util Functions Module …" />
+<meta name="description" content="This modules contains utility transformations for building a clean pipeline." />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +20,38 @@
 <h1 class="title">Module <code>invertransforms.util_functions</code></h1>
 </header>
 <section id="section-intro">
-<p>Util Functions Module</p>
 <p>This modules contains utility transformations for building a clean pipeline.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Util Functions Module
-
 This modules contains utility transformations for building a clean pipeline.
-
 &#34;&#34;&#34;
 from torchvision import transforms
 
-from invertransforms.util import Invertible, InvertibleError
+from invertransforms.lib import InvertibleError, Invertible
 
 
 class Identity(Invertible):
+    &#34;&#34;&#34;
+    Returns its input image without changes.
+
+    Args:
+        log_fn (function): optional, function useful for logging/debugging.
+
+    Returns its input.
+    Output = Input
+
+    Can be use for debugging/logging if a log_fn is provided.
+    It is used throughout the library when inverse transformation is identity.
+    &#34;&#34;&#34;
+
+    def __init__(self, log_fn=lambda img: None):
+        self.log_fn = log_fn
+
     def __call__(self, img):
+        self.log_fn(img)
         return img
 
     def inverse(self):
@@ -46,6 +59,14 @@ class Identity(Invertible):
 
 
 class Lambda(transforms.Lambda, Invertible):
+    &#34;&#34;&#34;Apply a user-defined lambda as a transform.
+
+    Args:
+        lambd (function): Lambda/function to be used for transform
+        tf_inv (function or Invertible): Invertible transform or Lambda/function to be returned by the `inverse` method
+        repr_str (str): optional, overriding the output of __repr__.
+    &#34;&#34;&#34;
+
     def __init__(self, lambd, tf_inv=None, repr_str=None):
         super().__init__(lambd=lambd)
         assert repr_str is None or isinstance(repr_str, str), &#39;Expecting a string for repr_str argument&#39;
@@ -78,6 +99,16 @@ class Lambda(transforms.Lambda, Invertible):
 
 
 class TransformIf(Invertible):
+    &#34;&#34;&#34;
+    Apply a transformation if the condition is met.
+    Otherwise, returns its input.
+
+    Args:
+          transform: a transformation
+          condition (bool): a boolean
+
+    &#34;&#34;&#34;
+
     def __init__(self, transform, condition: bool):
         if condition:
             self.transform = transform
@@ -118,16 +149,42 @@ class ToTensor(transforms.ToTensor, Invertible):
 <dl>
 <dt id="invertransforms.util_functions.Identity"><code class="flex name class">
 <span>class <span class="ident">Identity</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<span>(</span><span>log_fn=&lt;function Identity.&lt;lambda&gt;&gt;)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns its input image without changes.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>log_fn</code></strong> :&ensp;<code>function</code></dt>
+<dd>optional, function useful for logging/debugging.</dd>
+</dl>
+<p>Returns its input.
+Output = Input</p>
+<p>Can be use for debugging/logging if a log_fn is provided.
+It is used throughout the library when inverse transformation is identity.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Identity(Invertible):
+    &#34;&#34;&#34;
+    Returns its input image without changes.
+
+    Args:
+        log_fn (function): optional, function useful for logging/debugging.
+
+    Returns its input.
+    Output = Input
+
+    Can be use for debugging/logging if a log_fn is provided.
+    It is used throughout the library when inverse transformation is identity.
+    &#34;&#34;&#34;
+
+    def __init__(self, log_fn=lambda img: None):
+        self.log_fn = log_fn
+
     def __call__(self, img):
+        self.log_fn(img)
         return img
 
     def inverse(self):
@@ -135,16 +192,18 @@ class ToTensor(transforms.ToTensor, Invertible):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -158,13 +217,25 @@ class ToTensor(transforms.ToTensor, Invertible):
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>lambd</code></strong> :&ensp;<code>function</code></dt>
-<dd>Lambda/function to be used for transform.</dd>
+<dd>Lambda/function to be used for transform</dd>
+<dt><strong><code>tf_inv</code></strong> :&ensp;<code>function</code> or <code>Invertible</code></dt>
+<dd>Invertible transform or Lambda/function to be returned by the <code>inverse</code> method</dd>
+<dt><strong><code>repr_str</code></strong> :&ensp;<code>str</code></dt>
+<dd>optional, overriding the output of <strong>repr</strong>.</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Lambda(transforms.Lambda, Invertible):
+    &#34;&#34;&#34;Apply a user-defined lambda as a transform.
+
+    Args:
+        lambd (function): Lambda/function to be used for transform
+        tf_inv (function or Invertible): Invertible transform or Lambda/function to be returned by the `inverse` method
+        repr_str (str): optional, overriding the output of __repr__.
+    &#34;&#34;&#34;
+
     def __init__(self, lambd, tf_inv=None, repr_str=None):
         super().__init__(lambd=lambd)
         assert repr_str is None or isinstance(repr_str, str), &#39;Expecting a string for repr_str argument&#39;
@@ -198,16 +269,18 @@ class ToTensor(transforms.ToTensor, Invertible):
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.Lambda</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -240,16 +313,18 @@ If <code>mode</code> is <code>None</code> (default) there are some assumptions m
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.ToPILImage</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -276,16 +351,18 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>torchvision.transforms.transforms.ToTensor</li>
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
@@ -295,12 +372,30 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 <span>(</span><span>transform, condition)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Apply a transformation if the condition is met.
+Otherwise, returns its input.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>transform</code></strong></dt>
+<dd>a transformation</dd>
+<dt><strong><code>condition</code></strong> :&ensp;<code>bool</code></dt>
+<dd>a boolean</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TransformIf(Invertible):
+    &#34;&#34;&#34;
+    Apply a transformation if the condition is met.
+    Otherwise, returns its input.
+
+    Args:
+          transform: a transformation
+          condition (bool): a boolean
+
+    &#34;&#34;&#34;
+
     def __init__(self, transform, condition: bool):
         if condition:
             self.transform = transform
@@ -321,16 +416,18 @@ or if the numpy.ndarray has dtype = np.uint8</p>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></li>
+<li><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="invertransforms.util.invertible.Invertible" href="util/invertible.html#invertransforms.util.invertible.Invertible">Invertible</a></b></code>:
+<li><code><b><a title="invertransforms.lib.Invertible" href="lib.html#invertransforms.lib.Invertible">Invertible</a></b></code>:
 <ul class="hlist">
-<li><code><a title="invertransforms.util.invertible.Invertible.apply" href="util/invertible.html#invertransforms.util.invertible.Invertible.apply">apply</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.inverse" href="util/invertible.html#invertransforms.util.invertible.Invertible.inverse">inverse</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.invert" href="util/invertible.html#invertransforms.util.invertible.Invertible.invert">invert</a></code></li>
-<li><code><a title="invertransforms.util.invertible.Invertible.replay" href="util/invertible.html#invertransforms.util.invertible.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.get_inverse" href="lib.html#invertransforms.lib.Invertible.get_inverse">get_inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.inverse" href="lib.html#invertransforms.lib.Invertible.inverse">inverse</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.invert" href="lib.html#invertransforms.lib.Invertible.invert">invert</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.replay" href="lib.html#invertransforms.lib.Invertible.replay">replay</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.track" href="lib.html#invertransforms.lib.Invertible.track">track</a></code></li>
+<li><code><a title="invertransforms.lib.Invertible.tracked_inverses" href="lib.html#invertransforms.lib.Invertible.tracked_inverses">tracked_inverses</a></code></li>
 </ul>
 </li>
 </ul>
