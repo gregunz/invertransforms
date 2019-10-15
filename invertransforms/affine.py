@@ -112,7 +112,7 @@ class Rotation(Invertible):
         first_call = self._img_h is None or self._img_w is None
         if first_call:
             self._img_w, self._img_h = img.size
-        img = F.rotate(img, -self.angle, self.resample, self.expand, self.center)
+        img = F.rotate(img, self.angle, self.resample, self.expand, self.center)
         if not first_call and self.expand:
             img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
         return img
