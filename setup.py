@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='invertransforms',
-    version='0.2.0',
+    version='0.2.1',
     license='BSD 3-Clause',
     description='A library which turns torchvision transformations invertible and replayable.',
     packages=find_packages(),
