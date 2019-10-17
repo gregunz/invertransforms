@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.extract import extract_transforms
+from invertransforms.lib import extract_transforms
 from tests.invertible_test_case import InvertibleTestCase
 
 
