@@ -1,5 +1,5 @@
 import invertransforms as T
-from invertransforms.filters import extract_transforms
+from invertransforms.extract import extract_transforms
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -37,9 +37,9 @@ class TestCrop(InvertibleTestCase):
 
     def test_flatten_nested(self):
         print(self.crazy_tf)
-        all_tf = extract_transforms(self.crazy_tf, only_if_applied=False)
+        all_tf = extract_transforms(self.crazy_tf, filter_random=False)
         print(all_tf)
 
         self.crazy_tf(self.img_pil)
-        only_applied_tf = extract_transforms(self.crazy_tf, only_if_applied=True)
+        only_applied_tf = extract_transforms(self.crazy_tf, filter_random=True)
         print(only_applied_tf)

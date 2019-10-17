@@ -6,6 +6,9 @@ and utility functions.
 """
 import random
 from abc import abstractmethod
+from typing import List
+
+from invertransforms.extract import extract_transforms
 
 
 class Invertible:
@@ -94,9 +97,38 @@ class Invertible:
         try:
             # hack: because inverse fixes the randomness,
             #       we can replay for free with double inverse
-            return self.inverse().inverse()(img)
+            return self.inverse().invert(img)
         except InvertibleError:
             return self.__call__(img)
+
+    def flatten(self, flat_random=True) -> List['Invertible']:
+        """
+        Flatten all the transformations in this transform to return only
+        the ones that really changes the input in a list.
+
+        It keeps the order transformations would have been applied (if possible, e.g. if
+        flat_random is set to False and it contains `RandomOrder`, applied order might
+        be different).
+
+        Can be useful when we want to extract a specific transformation or want to
+        check if it was actually applied.
+
+        Note that transformation builders are filtered. E.g. `Identity` will be filtered, `TransformIf`
+        will be extracted, `Compose` transformations will be extracted...
+
+        Args:
+            flat_random (bool): Whether to flat out all the random transform and turn them into their
+            non-random counterpart. (E.g. `RandomCrop` -> `Crop`, `RandomOrder` order will be defined,
+            `RandomApply` transformations are filtered out if not applied, etc...)
+
+        Returns (list[Invertible]):
+
+        """
+        return extract_transforms(
+            transform=self,
+            filter_random=flat_random,
+            filter_identity=True,
+        )
 
     def __repr__(self):
         return f'{self.__class__.__name__}()'
