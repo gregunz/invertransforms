@@ -58,11 +58,11 @@ class Lambda(transforms.Lambda, Invertible):
             if suffix in repr_str:
                 repr_str = repr_str[:-len(suffix)]
             else:
-                repr_str += suffix + '()'
+                repr_str += suffix
             return Lambda(
                 lambd=self.tf_inv,
                 tf_inv=self.lambd,
-                repr_str=repr_str,
+                repr_str=repr_str + '()',
             )
 
     def __repr__(self):
