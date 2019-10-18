@@ -24,7 +24,7 @@ class Resize(transforms.Resize, Invertible):
         self._img_w, self._img_h = img.size
         return super().__call__(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size before resizing is unknown).')
@@ -66,7 +66,7 @@ class RandomResizedCrop(transforms.RandomResizedCrop, Invertible):
         ])
         return self._transform(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

@@ -20,7 +20,7 @@ class Perspective(Invertible):
     def __call__(self, img):
         return F.perspective(img, self.startpoints, self.endpoints, self.interpolation)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return Perspective(
             startpoints=self.endpoints,
             endpoints=self.startpoints,
@@ -53,7 +53,7 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
             )
         return self._transform(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
@@ -71,7 +71,7 @@ class HorizontalFlip(Invertible):
     def __call__(self, img):
         return F.hflip(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return HorizontalFlip()
 
 
@@ -91,7 +91,7 @@ class RandomHorizontalFlip(transforms.RandomHorizontalFlip, Invertible):
             self._transform = HorizontalFlip()
         return self._transform(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
@@ -109,7 +109,7 @@ class VerticalFlip(Invertible):
     def __call__(self, img):
         return F.vflip(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return VerticalFlip()
 
 
@@ -129,7 +129,7 @@ class RandomVerticalFlip(transforms.RandomVerticalFlip, Invertible):
             self._transform = VerticalFlip()
         return self._transform(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

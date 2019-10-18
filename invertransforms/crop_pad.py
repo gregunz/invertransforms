@@ -42,7 +42,7 @@ class Crop(Invertible):
         self._img_w, self._img_h = img.size
         return F.crop(img, self.tl_i, self.tl_j, self.crop_h, self.crop_w)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size before cropping is unknown).')
@@ -76,7 +76,7 @@ class CenterCrop(transforms.CenterCrop, Invertible):
         self._img_w, self._img_h = img.size
         return F.center_crop(img, self.size)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size before cropping is unknown).')
@@ -100,7 +100,7 @@ class RandomCrop(transforms.RandomCrop, Invertible):
         self._tl_i, self._tl_j, _, _ = params
         return params
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied')
 
@@ -129,7 +129,7 @@ class Pad(transforms.Pad, Invertible):
         self._img_w, self._img_h = img.size
         return super().__call__(img=img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size of image before padding unknown).')
@@ -166,7 +166,7 @@ class FiveCrop(transforms.FiveCrop, Invertible):
         self._img_w, self._img_h = img.size
         return F.five_crop(img, self.size)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size before the cropping is unknown).')
@@ -228,7 +228,7 @@ class TenCrop(transforms.TenCrop, Invertible):
 
         return first_five + second_five
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a transformation before it is applied'
                                   ' (size before cropping is unknown).')
