@@ -7,7 +7,7 @@ setup(
     version='0.2.1',
     license='BSD 3-Clause',
     description='A library which turns torchvision transformations invertible and replayable.',
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     keywords=['invertible', 'transforms', 'transformations', 'torchvision', 'data', 'augmentation',
               'replay', 'replayable', 'invertransforms'],
     install_requires=[
