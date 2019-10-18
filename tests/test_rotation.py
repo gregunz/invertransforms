@@ -36,3 +36,11 @@ class TestRotation(InvertibleTestCase):
         img = tf_inv(img_inv)
         self.assertEqual(img.size, self.img_pil.size)
         self.assertIsInstance(tf_inv, T.Rotation)
+
+    def test_rot90_180_270_360(self):
+        for angle in [90, 180, 270, 360]:
+            tf = T.Rotation(angle, expand=True)
+            tf_img_size = tf(self.img_pil).size
+            if angle / 90 % 2 == 1:  # inverse size
+                tf_img_size = tf_img_size[::-1]
+            self.assertEqual(tf_img_size, self.img_pil.size)
