@@ -58,3 +58,15 @@ class RandomErasing(transforms.RandomErasing, Invertible):
 
     def _can_invert(self):
         return self._transform is not None
+
+
+class RGBToClasses(Invertible):
+    def __init__(self):
+        self._classes = None
+
+    def __call__(self, img_tensor):
+        pass
+        # self._classes =
+
+    def inverse(self) -> Invertible:
+        pass
