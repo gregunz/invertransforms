@@ -3,8 +3,7 @@ import random
 import warnings
 
 import invertransforms as T
-from invertransforms.util import Invertible
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.lib import Invertible, InvertibleError
 
 
 class RandomRotCrop(Invertible):
@@ -24,7 +23,6 @@ class RandomRotCrop(Invertible):
 
         if crop_size is None:
             self.out_h, self.out_w = None, None
-            warnings.warn('only square image are handled properly, doing a center crop of max size')
         elif isinstance(crop_size, int):
             self.out_h, self.out_w = (crop_size, crop_size)
         else:
@@ -107,11 +105,11 @@ class RandomRotCrop(Invertible):
                f'crop_size=({self.out_h}, {self.out_w})' \
                f')'
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return T.Compose(self.transforms).invert()
+        return T.Compose(self.transforms).inverse()
 
     def _can_invert(self):
         return len(self.transforms) > 0
