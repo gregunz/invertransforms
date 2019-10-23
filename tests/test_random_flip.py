@@ -1,13 +1,13 @@
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.lib import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
 class TestRandomFlip(InvertibleTestCase):
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
-            T.RandomVerticalFlip().invert()
+        with self.assertRaises(InvertibleError):
+            T.RandomVerticalFlip().inverse()
 
-        with self.assertRaises(InvertibleException):
-            T.RandomHorizontalFlip().invert()
+        with self.assertRaises(InvertibleError):
+            T.RandomHorizontalFlip().inverse()

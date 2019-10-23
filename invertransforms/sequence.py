@@ -1,11 +1,14 @@
+"""
+This module contains transformations that are applied to a list of transformations.
+It can apply them in order, in random order, pick one randomly, or apply none, ...
+"""
 import random
 from typing import Union
 
 from torchvision import transforms
 
 import invertransforms as T
-from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class RandomApply(transforms.RandomApply, Invertible):
@@ -27,14 +30,14 @@ class RandomApply(transforms.RandomApply, Invertible):
 
         self._transform = T.Identity()
         if flip_coin(self.p):
-            self._transform = T.Compose(self.transforms)
+            self._transform = Compose(self.transforms)
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None
@@ -48,11 +51,11 @@ class RandomChoice(transforms.RandomChoice, Invertible):
         self._transform = self.transforms[i]
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return self._transform.invert()
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None
@@ -68,11 +71,21 @@ class RandomOrder(transforms.RandomOrder, Invertible):
             img = self.transforms[i](img)
         return img
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return T.Compose(transforms=[self.transforms[i].invert() for i in self._order[::-1]])
+        return Compose(transforms=[self.transforms[i].inverse() for i in self._order[::-1]])
 
     def _can_invert(self):
         return self._order is not None
+
+
+class Compose(transforms.Compose, Invertible):
+    def inverse(self):
+        transforms_inv = []
+        for t in self.transforms[::-1]:
+            if not isinstance(t, Invertible):
+                raise InvertibleError(f'{t} ({t.__class__.__name__}) is not an invertible object')
+            transforms_inv.append(t.inverse())
+        return Compose(transforms=transforms_inv)

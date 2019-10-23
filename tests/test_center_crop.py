@@ -1,20 +1,20 @@
-import invertransforms as T
-from invertransforms.util import InvertibleException
+import invertransforms.crop_pad
+from invertransforms.lib import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
 class TestCenterCrop(InvertibleTestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.tf = T.CenterCrop(self.crop_size)
+        self.tf = invertransforms.crop_pad.CenterCrop(self.crop_size)
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
-            self.tf.invert()
+        with self.assertRaises(InvertibleError):
+            self.tf.inverse()
 
     def test_inverse(self):
         img = self.tf(self.img_pil)
         self.assertEqual(img.size[::-1], self.crop_size)  # [::-1] because pil order is inversed
 
-        img2 = self.tf.inverse(img)
+        img2 = self.tf.invert(img)
         self.assertEqual(self.img_pil.size, img2.size)

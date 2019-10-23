@@ -11,5 +11,5 @@ class TestIdentity(InvertibleTestCase):
         self.assertEqual(self.n, self.tf(self.n))
 
     def test_invert_is_identity(self):
-        tf_inv = self.tf.invert()
+        tf_inv = self.tf.inverse()
         self.assertEqual(self.n, tf_inv(self.n))

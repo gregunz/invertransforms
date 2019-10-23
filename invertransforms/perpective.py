@@ -1,10 +1,14 @@
+"""
+This module contains transformations for perspective transformation and flipping vertically or horizontally images.
+These transformations can be applied deterministically or randomly.
+
+"""
 from PIL import Image
 from torchvision import transforms
 
 import invertransforms as T
 from invertransforms import functional as F
-from invertransforms.util import Invertible, flip_coin
-from invertransforms.util.invertible import InvertibleException
+from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class Perspective(Invertible):
@@ -16,7 +20,7 @@ class Perspective(Invertible):
     def __call__(self, img):
         return F.perspective(img, self.startpoints, self.endpoints, self.interpolation)
 
-    def invert(self):
+    def inverse(self):
         return Perspective(
             startpoints=self.endpoints,
             endpoints=self.startpoints,
@@ -49,11 +53,87 @@ class RandomPerspective(transforms.RandomPerspective, Invertible):
             )
         return self._transform(img)
 
-    def invert(self):
+    def inverse(self):
         if not self._can_invert():
-            raise InvertibleException('Cannot invert a random transformation before it is applied.')
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
-        return self._transform.invert()
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None
+
+
+class HorizontalFlip(Invertible):
+    """
+    Flip the image horizontally.
+    """
+
+    def __call__(self, img):
+        return F.hflip(img)
+
+    def inverse(self):
+        return HorizontalFlip()
+
+
+class RandomHorizontalFlip(transforms.RandomHorizontalFlip, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be flipped.
+
+        Returns:
+            PIL Image: Randomly flipped image.
+        """
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            self._transform = HorizontalFlip()
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
+
+        return self._transform.inverse()
+
+    def _can_invert(self):
+        return self._transform is not None
+
+
+class VerticalFlip(Invertible):
+    """
+    Flip the image vertically.
+    """
+
+    def __call__(self, img):
+        return F.vflip(img)
+
+    def inverse(self):
+        return VerticalFlip()
+
+
+class RandomVerticalFlip(transforms.RandomVerticalFlip, Invertible):
+    _transform = None
+
+    def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be flipped.
+
+        Returns:
+            PIL Image: Randomly flipped image.
+        """
+        self._transform = T.Identity()
+        if flip_coin(self.p):
+            self._transform = VerticalFlip()
+        return self._transform(img)
+
+    def inverse(self):
+        if not self._can_invert():
+            raise InvertibleError('Cannot invert a random transformation before it is applied.')
+
+        return self._transform.inverse()
 
     def _can_invert(self):
         return self._transform is not None

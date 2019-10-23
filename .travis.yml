@@ -1,0 +1,26 @@
+language: python
+cache:
+  pip: true
+branches:
+  only:
+    - master
+
+matrix:
+  fast_finish: true
+  include:
+    - python: '3.6'
+    - python: '3.7'
+      name: 'Lint, Coverage'
+      before_script:
+        - pip install flake8 coverage
+      script:
+        - flake8
+        - time catchsegv coverage run setup.py test
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+
+install:
+  - pip install .
+
+script:
+  - catchsegv python setup.py test
