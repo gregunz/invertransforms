@@ -26,7 +26,7 @@ class ColorJitter(transforms.ColorJitter, Invertible):
                                           self.saturation, self.hue)
         return self._transform(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
@@ -51,7 +51,7 @@ class Grayscale(transforms.Grayscale, Invertible):
         """
         return F.to_grayscale(img, num_output_channels=self.num_output_channels)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return T.Lambda(
             lambd=lambda x: x,
             tf_inv=Grayscale(self.num_output_channels),
@@ -76,7 +76,7 @@ class RandomGrayscale(transforms.RandomGrayscale, Invertible):
             self._transform = Grayscale(num_output_channels=num_output_channels)
         return self._transform(img)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

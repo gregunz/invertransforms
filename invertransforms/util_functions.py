@@ -27,7 +27,7 @@ class Identity(Invertible):
         self.log_fn(img)
         return img
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return Identity()
 
 
@@ -47,7 +47,7 @@ class Lambda(transforms.Lambda, Invertible):
         assert tf_inv is None or callable(tf_inv), repr(type(tf_inv).__name__) + " object is not callable"
         self.tf_inv = tf_inv
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if self.tf_inv is None:
             raise InvertibleError('Cannot invert transformation, tf_inv_builder is None')
         if isinstance(self.tf_inv, Invertible):
@@ -58,11 +58,11 @@ class Lambda(transforms.Lambda, Invertible):
             if suffix in repr_str:
                 repr_str = repr_str[:-len(suffix)]
             else:
-                repr_str += suffix + '()'
+                repr_str += suffix
             return Lambda(
                 lambd=self.tf_inv,
                 tf_inv=self.lambd,
-                repr_str=repr_str,
+                repr_str=repr_str + '()',
             )
 
     def __repr__(self):
@@ -94,7 +94,7 @@ class TransformIf(Invertible):
     def __repr__(self):
         return self.transform.__repr__()
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not isinstance(self.transform, Invertible):
             raise InvertibleError(
                 f'{self.transform} ({self.transform.__class__.__name__}) is not an invertible object')
@@ -102,10 +102,10 @@ class TransformIf(Invertible):
 
 
 class ToPILImage(transforms.ToPILImage, Invertible):
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return ToTensor()
 
 
 class ToTensor(transforms.ToTensor, Invertible):
-    def inverse(self):
+    def inverse(self) -> Invertible:
         return ToPILImage()

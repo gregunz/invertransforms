@@ -10,7 +10,7 @@ from invertransforms.lib import InvertibleError, Invertible, flip_coin
 
 
 class LinearTransformation(transforms.LinearTransformation, Invertible):
-    def inverse(self):
+    def inverse(self) -> Invertible:
         try:
             return LinearTransformation(
                 transformation_matrix=self.transformation_matrix.inverse(),
@@ -22,7 +22,7 @@ class LinearTransformation(transforms.LinearTransformation, Invertible):
 
 
 class Normalize(transforms.Normalize, Invertible):
-    def inverse(self):
+    def inverse(self) -> Invertible:
         mean = torch.as_tensor(self.mean)
         std = torch.as_tensor(self.std)
         std_inv = torch.tensor(1.0) / std
@@ -33,25 +33,25 @@ class Normalize(transforms.Normalize, Invertible):
 class RandomErasing(transforms.RandomErasing, Invertible):
     _transform = None
 
-    def __call__(self, img):
+    def __call__(self, img_tensor):
         """
         Args:
-            img (Tensor): Tensor image of size (C, H, W) to be erased.
+            img_tensor (Tensor): Tensor image of size (C, H, W) to be erased.
 
         Returns:
             img (Tensor): Erased Tensor image.
         """
         self._transform = T.Identity()
         if flip_coin(self.p):
-            x, y, h, w, v = self.get_params(img, scale=self.scale, ratio=self.ratio, value=self.value)
+            x, y, h, w, v = self.get_params(img_tensor, scale=self.scale, ratio=self.ratio, value=self.value)
             self._transform = T.Lambda(
                 lambd=lambda img: F.erase(img, x, y, h, w, v, self.inplace),
                 tf_inv=lambda img: img,
                 repr_str='RandomErasing()'
             )
-        return img
+        return img_tensor
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
         return self._transform.inverse()

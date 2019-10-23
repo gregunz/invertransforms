@@ -26,7 +26,7 @@ class Affine(Invertible):
     def __init__(self, matrix):
         self.matrix = matrix
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         matrix_inv = _invert_affine_matrix(self.matrix)
         return Affine(matrix_inv)
 
@@ -60,7 +60,7 @@ class RandomAffine(transforms.RandomAffine, Invertible):
         self._matrix = _get_inverse_affine_matrix(center, *params)
         return F.affine(img, *params, resample=self.resample, fillcolor=self.fillcolor)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 
@@ -117,7 +117,7 @@ class Rotation(Invertible):
             img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
         return img
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if (self._img_h is None or self._img_w is None) and self.expand:
             raise InvertibleError(
                 'Cannot invert a transformation before it is applied'
@@ -156,7 +156,7 @@ class RandomRotation(transforms.RandomRotation, Invertible):
         self._img_w, self._img_h = img.size
         return F.rotate(img, self._angle, self.resample, self.expand, self.center)
 
-    def inverse(self):
+    def inverse(self) -> Invertible:
         if not self._can_invert():
             raise InvertibleError('Cannot invert a random transformation before it is applied.')
 

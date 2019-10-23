@@ -6,6 +6,11 @@ and utility functions.
 """
 import random
 from abc import abstractmethod
+from typing import List
+
+from torchvision.transforms import transforms
+
+import invertransforms as T
 
 
 class Invertible:
@@ -94,9 +99,38 @@ class Invertible:
         try:
             # hack: because inverse fixes the randomness,
             #       we can replay for free with double inverse
-            return self.inverse().inverse()(img)
+            return self.inverse().invert(img)
         except InvertibleError:
             return self.__call__(img)
+
+    def flatten(self, flat_random=True) -> List['Invertible']:
+        """
+        Flatten all the transformations in this transform to return only
+        the ones that really changes the input in a list.
+
+        It keeps the order transformations would have been applied (if possible, e.g. if
+        flat_random is set to False and it contains `RandomOrder`, applied order might
+        be different).
+
+        Can be useful when we want to extract a specific transformation or want to
+        check if it was actually applied.
+
+        Note that transformation builders are filtered. E.g. `Identity` will be filtered, `TransformIf`
+        will be extracted, `Compose` transformations will be extracted...
+
+        Args:
+            flat_random (bool): Whether to flat out all the random transform and turn them into their
+            non-random counterpart. (E.g. `RandomCrop` -> `Crop`, `RandomOrder` order will be defined,
+            `RandomApply` transformations are filtered out if not applied, etc...)
+
+        Returns (list[Invertible]):
+
+        """
+        return extract_transforms(
+            transform=self,
+            filter_random=flat_random,
+            filter_identity=True,
+        )
 
     def __repr__(self):
         return f'{self.__class__.__name__}()'
@@ -128,3 +162,42 @@ def flip_coin(p):
 
     assert 0 <= p <= 1, 'A probability should be between 0 and 1'
     return random.random() < p
+
+
+def extract_transforms(transform: Invertible, filter_random=True, filter_identity=True) -> List[Invertible]:
+    """
+
+    Args:
+        transform:
+        filter_random:
+        filter_identity:
+
+    Returns:
+
+    """
+    if filter_random and not isinstance(transform, Invertible):
+        raise ValueError('This function is only defined over Invertible transforms when filter_random is True')
+
+    if isinstance(transform, T.TransformIf):
+        transform = transform.transform
+
+    # transforms that might not be applied when called:
+    # rdm_tf = (T.RandomChoice, T.RandomApply, T.RandomOrder, T.RandomHorizontalFlip, T.RandomVerticalFlip,
+    #          T.RandomGrayscale, T.RandomErasing, T.Random)
+    if filter_random:  # and isinstance(transform, rdm_tf):
+        try:
+            transform = transform.inverse().inverse()
+        except InvertibleError:
+            raise InvertibleError(f'Cannot extract {transform.__class__.__name__} before it has been applied.')
+
+    # only RandomTransforms and Compose contain multiple transforms
+    if isinstance(transform, transforms.RandomTransforms) or isinstance(transform, transforms.Compose):
+        list_transforms = []
+        for tf in transform.transforms:
+            list_transforms += extract_transforms(tf, filter_random=filter_random, filter_identity=filter_identity)
+        return list_transforms
+
+    if filter_identity and isinstance(transform, T.Identity):
+        return []
+
+    return [transform]
