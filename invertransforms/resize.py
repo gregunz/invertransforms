@@ -30,7 +30,10 @@ class Resize(transforms.Resize, Invertible):
                                   ' (size before resizing is unknown).')
 
         inverse = Resize(size=(self._img_h, self._img_w), interpolation=self.interpolation)
-        inverse._img_h, inverse.tw = self.size
+        if isinstance(self.size, int):
+            inverse._img_h, inverse._img_w = self.size, self.size
+        else:
+            inverse._img_h, inverse._img_w = self.size
         return inverse
 
     def _can_invert(self):
