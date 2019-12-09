@@ -150,7 +150,7 @@ def pil_wrap(img, use_mean_std):
 
 def pil_wrap2(img, mean_std=None):
     if mean_std is not None:
-        img = T.Normalize(*mean_std)(img)
+        img = T.Normalize(*mean_std).invert(img)
     return T.ToPILImage()(img)
 
 
