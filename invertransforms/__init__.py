@@ -44,7 +44,7 @@ Such that more functions could be added in the future.
 from torchvision.transforms import functional
 
 from .affine import Affine, RandomAffine, RandomRotation, Rotation
-from .color import ColorJitter, Grayscale, RandomGrayscale
+from .color import ColorJitter, Grayscale, RandomGrayscale, GrayscaleTensor
 from .crop_pad import Crop, RandomCrop, Pad, FiveCrop, TenCrop, CenterCrop
 from .perpective import Perspective, VerticalFlip, HorizontalFlip, RandomHorizontalFlip, RandomVerticalFlip, \
     RandomPerspective
@@ -59,4 +59,4 @@ __all__ = ['Affine', 'CenterCrop', 'ColorJitter', 'Compose', 'Crop', 'FiveCrop',
            'RandomApply', 'RandomChoice', 'RandomCrop', 'RandomErasing', 'RandomGrayscale', 'RandomHorizontalFlip',
            'RandomOrder', 'RandomPerspective', 'RandomResizedCrop', 'RandomRotation', 'RandomRotCrop',
            'RandomSizedCrop', 'RandomVerticalFlip', 'Resize', 'Rotation', 'Scale', 'TenCrop', 'ToPILImage', 'ToTensor',
-           'TransformIf', 'functional']
+           'TransformIf', 'functional', 'GrayscaleTensor']

@@ -3,6 +3,7 @@ This modules contains multiple transformations about creating crops.
 Generally, their inverse is/or involves `Pad`, and respectively is `Crop` for `Pad` transformation.
 
 """
+import random
 from typing import Sequence
 
 from torchvision import transforms
@@ -93,12 +94,21 @@ class CenterCrop(transforms.CenterCrop, Invertible):
 
 class RandomCrop(transforms.RandomCrop, Invertible):
     _img_h = _img_w = _tl_i = _tl_j = None
+    _sample_pixel_uniformly = False
+
+    def set_pixel_uniformly(self, value=True):
+        self._sample_pixel_uniformly = value
 
     def get_params(self, img, output_size):
         self._img_w, self._img_h = img.size
-        params = super().get_params(img, output_size)
-        self._tl_i, self._tl_j, _, _ = params
-        return params
+        self._tl_i, self._tl_j, th, tw = super().get_params(img, output_size)
+        if self._sample_pixel_uniformly and self._img_h > th and self._img_w > tw:
+            def clamp(v, min_, max_):
+                return max(min_, min(max_, v))
+
+            self._tl_i = clamp(random.randint(- th, self._img_h), 0, self._img_h - th)
+            self._tl_j = clamp(random.randint(- tw, self._img_w), 0, self._img_w - tw)
+        return self._tl_i, self._tl_j, th, tw
 
     def inverse(self) -> Invertible:
         if not self._can_invert():

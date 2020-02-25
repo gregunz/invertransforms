@@ -187,8 +187,8 @@ def extract_transforms(transform: Invertible, filter_random=True, filter_identit
     if filter_random:  # and isinstance(transform, rdm_tf):
         try:
             transform = transform.inverse().inverse()
-        except InvertibleError:
-            raise InvertibleError(f'Cannot extract {transform.__class__.__name__} before it has been applied.')
+        except InvertibleError as e:
+            raise e  # InvertibleError(f'Cannot extract {transform.__class__.__name__} before it has been applied.')
 
     # only RandomTransforms and Compose contain multiple transforms
     if isinstance(transform, transforms.RandomTransforms) or isinstance(transform, transforms.Compose):

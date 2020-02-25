@@ -11,7 +11,8 @@ class RandomRotCrop(Invertible):
     Rotate and image and extract a crop withing the rotated region.
     """
 
-    def __init__(self, degrees=(0, 360), crop_size=None):
+    def __init__(self, degrees=(0, 360), crop_size=None, resample=False):
+        self.resample = resample
         if isinstance(degrees, int) or isinstance(degrees, float):
             if degrees < 0:
                 raise ValueError("If degrees is a single number, it must be positive.")
@@ -79,13 +80,13 @@ class RandomRotCrop(Invertible):
         i_crop_center_rot, j_crop_center_rot = \
             _rotate_coordinates((i_crop_center, j_crop_center), angle, (i_img_center, j_img_center))
 
-        rotate = T.Rotation(angle, expand=True)
+        rotate = T.Rotation(angle, expand=True, resample=self.resample)
         img = rotate(img)
         self.transforms.append(rotate)
         w_rot, h_rot = img.size
 
         i = round(i_crop_center_rot + (h_rot - h - out_h) / 2)
-        j = round(j_crop_center_rot + (w_rot - h - out_w) / 2)
+        j = round(j_crop_center_rot + (w_rot - w - out_w) / 2)
 
         crop = T.Crop(location=(j, i), size=(int(out_h), int(out_w)))
         img = crop(img)

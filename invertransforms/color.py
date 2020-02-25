@@ -4,6 +4,8 @@ This modules contains transformations on the image channels (RGB, grayscale).
 Technically these transformations cannot be inverted or it simply makes not much sense,
 hence the inverse is usually the identity function.
 """
+import torch
+from torch import nn
 from torchvision import transforms
 from torchvision.transforms import functional as F
 
@@ -56,6 +58,31 @@ class Grayscale(transforms.Grayscale, Invertible):
             lambd=lambda x: x,
             tf_inv=Grayscale(self.num_output_channels),
             repr_str='GrayscaleInverse()'
+        )
+
+
+class GrayscaleTensor(Invertible, nn.Module):
+    def __init__(self, requires_grad=False):
+        super().__init__()
+        self.conv = nn.Conv2d(3, 1, kernel_size=1, bias=False)
+        self.conv.weight.data = torch.tensor([0.299, 0.587, 0.114]).view(1, 3, 1, 1)
+        self.conv.requires_grad_(requires_grad)
+
+    def __call__(self, img):
+        if img.dim() == 4:  # has the batch dimension
+            if img.size(1) == 1:  # already single channel
+                return img
+            return self.conv(img)
+
+        if img.size(0) == 1:  # already single channel
+            return img
+        return self.conv(img.unsqueeze(0)).squeeze(0)
+
+    def inverse(self) -> 'Invertible':
+        return T.Lambda(
+            lambd=lambda x: x,
+            tf_inv=GrayscaleTensor(),
+            repr_str='GrayscaleTensorInverse()'
         )
 
 

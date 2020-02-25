@@ -1,7 +1,7 @@
 import math
 
 import invertransforms as T
-from invertransforms.util import InvertibleException
+from invertransforms.lib import InvertibleError
 from tests.invertible_test_case import InvertibleTestCase
 
 
@@ -22,7 +22,7 @@ class TestRandomRotCrop(InvertibleTestCase):
         self.assertGreaterEqual(max(self.img_pil.size), max(tf(self.img_pil).size))
 
     def test_invert_before_apply(self):
-        with self.assertRaises(InvertibleException):
+        with self.assertRaises(InvertibleError):
             T.RandomRotCrop(crop_size=self.crop_size).invert()
 
     def test_invert(self):

@@ -106,14 +106,16 @@ class Rotation(Invertible):
         self.resample = resample
         self.expand = expand
         self.center = center
+        self._do_center_crop = False
         self._img_h = self._img_w = None
 
     def __call__(self, img):
-        first_call = self._img_h is None or self._img_w is None
+        first_call = self._img_h is None  # or self._img_w is None
         if first_call:
             self._img_w, self._img_h = img.size
+            self._do_center_crop = False
         img = F.rotate(img, self.angle, self.resample, self.expand, self.center)
-        if not first_call and self.expand:
+        if self._do_center_crop and self.expand:
             img = F.center_crop(img=img, output_size=(self._img_h, self._img_w))
         return img
 
@@ -123,12 +125,13 @@ class Rotation(Invertible):
                 'Cannot invert a transformation before it is applied'
                 ' (size of image before expanded rotation unknown).')  # note: the size could be computed
         rot = Rotation(
-            angle=-self.angle,
+            angle=(-1) * self.angle,
             resample=self.resample,
             expand=self.expand,
             center=self.center,
         )
         rot._img_h, rot._img_w = self._img_h, self._img_w
+        rot._do_center_crop = not self._do_center_crop
         return rot
 
     def __repr__(self):
