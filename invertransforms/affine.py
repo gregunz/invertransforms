@@ -72,7 +72,7 @@ class RandomAffine(transforms.RandomAffine, Invertible):
 
 
 def _affine_with_matrix(img, matrix, resample=0, fillcolor=None):
-    kwargs = {"fillcolor": fillcolor} if PILLOW_VERSION[0] >= '5' else {}
+    kwargs = {"fillcolor": fillcolor}
     return img.transform(img.size, Image.AFFINE, matrix, resample, **kwargs)
 
 
