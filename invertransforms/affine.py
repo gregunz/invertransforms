@@ -5,7 +5,7 @@ Including specific transformations for rotations.
 
 """
 import torch
-from PIL import Image, PILLOW_VERSION
+from PIL import Image
 from torchvision import transforms
 from torchvision.transforms.functional import _get_inverse_affine_matrix
 
